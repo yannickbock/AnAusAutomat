@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <sensors>
+    <sensor name="GUI">
+      <parameter name="StartMinimized">True</parameter>
+    </sensor>
+  </sensors>
+  <controllers>
+    <controller id="1" type="Arduino" name="Frodo">
+      <pin socketID="1" name="Relay" logic="Negative">2</pin>
+      <pin socketID="1" name="LED" logic="Positive">9</pin>
+      <pin socketID="2" name="Relay" logic="Positive">3</pin>
+      <pin socketID="2" name="LED" logic="Positive">10</pin>
+      <pin socketID="3" name="Relay" logic="Positive">4</pin>
+      <pin socketID="3" name="LED" logic="Positive">11</pin>
+      <pin socketID="4" name="Relay" logic="Positive">5</pin>
+      <pin socketID="4" name="LED" logic="Positive">12</pin>
+    </controller>
+    <controller id="2" type="Arduino" name="Sam">
+      <!--Old AnAusAutomat Board for testing purpose-->
+      <pin socketID="1" name="Relay" logic="Negative">5</pin>
+      <pin socketID="1" name="LED" logic="Positive">9</pin>
+      <pin socketID="2" name="Relay" logic="Positive">6</pin>
+      <pin socketID="2" name="LED" logic="Positive">10</pin>
+      <pin socketID="3" name="Relay" logic="Positive">7</pin>
+      <pin socketID="3" name="LED" logic="Positive">11</pin>
+      <pin socketID="4" name="Relay" logic="Positive">8</pin>
+      <pin socketID="4" name="LED" logic="Positive">12</pin>
+    </controller>
+  </controllers>
+  <sockets defaultMode="Musik">
+    <socket id="1" name="Monitor">
+      <sensors>
+        <sensor name="SoundDetector">
+          <parameter name="MinimumSignalSeconds">5</parameter>
+          <parameter name="OffDelaySeconds">600</parameter>
+        </sensor>
+        <sensor name="UserInputDetector">
+          <parameter name="OffDelaySeconds">600</parameter>
+        </sensor>
+        <sensor name="GUI" />
+      </sensors>
+      <controlConditions startupState="On" shutdownState="On">
+        <powerOn>!Socket.IsOn AND (UserInputDetector.PowerOn OR GUI.PowerOn)</powerOn>
+        <powerOff mode="Arbeit">Socket.IsOn AND UserInputDetector.PowerOff</powerOff>
+        <powerOff mode="Musik">Socket.IsOn AND UserInputDetector.PowerOff AND (SoundDetector.PowerOff OR SoundDetector.Undefined)</powerOff>
+        <powerOff mode="Video">Socket.IsOn AND UserInputDetector.PowerOff AND (SoundDetector.PowerOff OR SoundDetector.Undefined)</powerOff>
+        <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
+      </controlConditions>
+    </socket>
+    <socket id="2" name="Verstärker">
+      <sensors>
+        <sensor name="SoundDetector">
+          <parameter name="MinimumSignalSeconds">5</parameter>
+          <parameter name="OffDelaySeconds">900</parameter>
+        </sensor>
+        <sensor name="GUI" />
+      </sensors>
+      <controlConditions startupState="Off" shutdownState="Off">
+        <powerOn>!Socket.IsOn AND SoundDetector.PowerOn AND GUI.Undefined</powerOn>
+        <powerOff>Socket.IsOn AND SoundDetector.PowerOff AND GUI.Undefined</powerOff>
+        <powerOn>!Socket.IsOn AND GUI.PowerOn</powerOn>
+        <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
+      </controlConditions>
+    </socket>
+    <socket id="3" name="Lampe">
+      <sensors>
+        <sensor name="UserInputDetector">
+          <parameter name="OffDelaySeconds">570</parameter>
+        </sensor>
+        <sensor name="GUI" />
+      </sensors>
+      <controlConditions startupState="On" shutdownState="Off">
+        <powerOn>!Socket.IsOn AND UserInputDetector.PowerOn AND GUI.Undefined</powerOn>
+        <powerOff>Socket.IsOn AND UserInputDetector.PowerOff AND GUI.Undefined</powerOff>
+        <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
+      </controlConditions>
+    </socket>
+    <socket id="4" name="Externe HDDs">
+      <sensors>
+        <sensor name="GUI" />
+        <sensor name="SoundDetector">
+          <parameter name="MinimumSignalSeconds">5</parameter>
+          <parameter name="OffDelaySeconds">600</parameter>
+        </sensor>
+        <sensor name="TimeClock">
+          <parameter name="On">17:45:00</parameter>
+          <parameter name="Off">18:00:00</parameter>
+          <parameter name="On">18:15:00</parameter>
+          <parameter name="Off">18:30:00</parameter>
+        </sensor>
+      </sensors>
+      <controlConditions startupState="Off" shutdownState="Off">
+        <powerOn>!Socket.IsOn AND GUI.PowerOn</powerOn>
+        <powerOn>!Socket.IsOn AND TimeClock.PowerOn</powerOn>
+        <powerOff mode="Arbeit">Socket.IsOn AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
+        <powerOff mode="Musik">Socket.IsOn AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
+        <powerOff mode="Video">Socket.IsOn AND SoundDetector.PowerOff AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
+      </controlConditions>
+    </socket>
+  </sockets>
+</configuration>

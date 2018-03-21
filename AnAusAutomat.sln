@@ -1,0 +1,94 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Core", "AnAusAutomat.Core\AnAusAutomat.Core.csproj", "{635BEE61-2E2B-4362-B80E-6F96F3635FCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.ConsoleApp", "AnAusAutomat.ConsoleApp\AnAusAutomat.ConsoleApp.csproj", "{AA9A7241-0DC1-4A6B-A7F1-63DA64241D26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Contracts", "AnAusAutomat.Contracts\AnAusAutomat.Contracts.csproj", "{7AFB88F5-83CC-4B32-87D6-2B45F26570BD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sensors", "Sensors", "{7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundDetector", "Sensors\SoundDetector\SoundDetector.csproj", "{7D78F0A5-7AB9-4FC9-9D5D-4BADB58EF5FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Controllers", "AnAusAutomat.Controllers\AnAusAutomat.Controllers.csproj", "{0BA6C13F-6B25-49D6-9F1E-7C2F3C5F29B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserInputDetector", "Sensors\UserInputDetector\UserInputDetector.csproj", "{DB640126-3C04-4458-84F2-7CDA7A06C055}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI", "Sensors\GUI\GUI.csproj", "{6683DBE4-ADCF-43A6-9870-10002B8D85D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeClock", "Sensors\TimeClock\TimeClock.csproj", "{9F1CB193-D1F4-4152-97CD-0699968E51FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{27B56E65-129A-4C60-BBDE-94E8FA5D47D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Core.Tests", "Tests\AnAusAutomat.Core.Tests\AnAusAutomat.Core.Tests.csproj", "{7B65AAA1-A146-4E9D-8B91-09808D3A9D97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sensors", "Sensors", "{5D93CFC2-FB41-40C9-9D19-A4B506BE4584}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundDetector.Tests", "Tests\Sensors\SoundDetector.Tests\SoundDetector.Tests.csproj", "{14467931-B8C5-45AD-A725-C52A0E52EDEA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{635BEE61-2E2B-4362-B80E-6F96F3635FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{635BEE61-2E2B-4362-B80E-6F96F3635FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{635BEE61-2E2B-4362-B80E-6F96F3635FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{635BEE61-2E2B-4362-B80E-6F96F3635FCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA9A7241-0DC1-4A6B-A7F1-63DA64241D26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA9A7241-0DC1-4A6B-A7F1-63DA64241D26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA9A7241-0DC1-4A6B-A7F1-63DA64241D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA9A7241-0DC1-4A6B-A7F1-63DA64241D26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AFB88F5-83CC-4B32-87D6-2B45F26570BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AFB88F5-83CC-4B32-87D6-2B45F26570BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AFB88F5-83CC-4B32-87D6-2B45F26570BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AFB88F5-83CC-4B32-87D6-2B45F26570BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D78F0A5-7AB9-4FC9-9D5D-4BADB58EF5FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D78F0A5-7AB9-4FC9-9D5D-4BADB58EF5FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D78F0A5-7AB9-4FC9-9D5D-4BADB58EF5FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D78F0A5-7AB9-4FC9-9D5D-4BADB58EF5FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BA6C13F-6B25-49D6-9F1E-7C2F3C5F29B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BA6C13F-6B25-49D6-9F1E-7C2F3C5F29B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BA6C13F-6B25-49D6-9F1E-7C2F3C5F29B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BA6C13F-6B25-49D6-9F1E-7C2F3C5F29B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB640126-3C04-4458-84F2-7CDA7A06C055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB640126-3C04-4458-84F2-7CDA7A06C055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB640126-3C04-4458-84F2-7CDA7A06C055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB640126-3C04-4458-84F2-7CDA7A06C055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6683DBE4-ADCF-43A6-9870-10002B8D85D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6683DBE4-ADCF-43A6-9870-10002B8D85D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6683DBE4-ADCF-43A6-9870-10002B8D85D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6683DBE4-ADCF-43A6-9870-10002B8D85D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F1CB193-D1F4-4152-97CD-0699968E51FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F1CB193-D1F4-4152-97CD-0699968E51FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F1CB193-D1F4-4152-97CD-0699968E51FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F1CB193-D1F4-4152-97CD-0699968E51FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B65AAA1-A146-4E9D-8B91-09808D3A9D97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B65AAA1-A146-4E9D-8B91-09808D3A9D97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B65AAA1-A146-4E9D-8B91-09808D3A9D97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B65AAA1-A146-4E9D-8B91-09808D3A9D97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14467931-B8C5-45AD-A725-C52A0E52EDEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14467931-B8C5-45AD-A725-C52A0E52EDEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14467931-B8C5-45AD-A725-C52A0E52EDEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14467931-B8C5-45AD-A725-C52A0E52EDEA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7D78F0A5-7AB9-4FC9-9D5D-4BADB58EF5FD} = {7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}
+		{DB640126-3C04-4458-84F2-7CDA7A06C055} = {7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}
+		{6683DBE4-ADCF-43A6-9870-10002B8D85D2} = {7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}
+		{9F1CB193-D1F4-4152-97CD-0699968E51FB} = {7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}
+		{7B65AAA1-A146-4E9D-8B91-09808D3A9D97} = {27B56E65-129A-4C60-BBDE-94E8FA5D47D4}
+		{5D93CFC2-FB41-40C9-9D19-A4B506BE4584} = {27B56E65-129A-4C60-BBDE-94E8FA5D47D4}
+		{14467931-B8C5-45AD-A725-C52A0E52EDEA} = {5D93CFC2-FB41-40C9-9D19-A4B506BE4584}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {98FB91DA-8377-4531-B65D-986E71B016AA}
+	EndGlobalSection
+EndGlobal

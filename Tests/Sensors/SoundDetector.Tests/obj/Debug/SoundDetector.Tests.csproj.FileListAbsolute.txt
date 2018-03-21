@@ -1,0 +1,30 @@
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.abstractions.dll
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.runner.visualstudio.testadapter.dll
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.runner.reporters.net452.dll
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.runner.utility.net452.dll
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\SoundDetector.Tests.dll
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\SoundDetector.Tests.pdb
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.assert.dll
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.core.dll
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.execution.desktop.dll
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.assert.xml
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.core.xml
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.execution.desktop.xml
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\obj\Debug\SoundDetector.Tests.csproj.CoreCompileInputs.cache
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\obj\Debug\SoundDetector.Tests.csproj.CopyComplete
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\obj\Debug\SoundDetector.Tests.dll
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\obj\Debug\SoundDetector.Tests.pdb
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.runner.visualstudio.testadapter.dll
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.runner.reporters.net452.dll
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.runner.utility.net452.dll
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.abstractions.dll
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\SoundDetector.Tests.dll
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\SoundDetector.Tests.pdb
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.assert.dll
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.core.dll
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.execution.desktop.dll
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.assert.xml
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.core.xml
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.execution.desktop.xml
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\obj\Debug\SoundDetector.Tests.dll
+D:\Neuer Ordner\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\obj\Debug\SoundDetector.Tests.pdb

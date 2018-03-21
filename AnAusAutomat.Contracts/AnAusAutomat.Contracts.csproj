@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7AFB88F5-83CC-4B32-87D6-2B45F26570BD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AnAusAutomat.Contracts</RootNamespace>
+    <AssemblyName>Contracts</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\_bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controller\Device.cs" />
+    <Compile Include="Controller\IController.cs" />
+    <Compile Include="Controller\Pin.cs" />
+    <Compile Include="Controller\PinLogic.cs" />
+    <Compile Include="Controller\SocketWithPins.cs" />
+    <Compile Include="Sensor\Events\ApplicationExitEventArgs.cs" />
+    <Compile Include="Sensor\Events\ModeChangedEventArgs.cs" />
+    <Compile Include="Sensor\Events\StatusChangedEventArgs.cs" />
+    <Compile Include="Sensor\Events\StatusChangesInEventArgs.cs" />
+    <Compile Include="Sensor\Extensions\ISensorExtensions.cs" />
+    <Compile Include="Sensor\Features\IReceiveExit.cs" />
+    <Compile Include="Sensor\Features\IReceiveStatusChangesIn.cs" />
+    <Compile Include="Sensor\Features\IReceiveModeChanged.cs" />
+    <Compile Include="Sensor\Features\IReceiveStatusChanged.cs" />
+    <Compile Include="Sensor\Features\ISendExit.cs" />
+    <Compile Include="Sensor\Features\ISendModeChanged.cs" />
+    <Compile Include="Sensor\Features\ISendStatusChangesIn.cs" />
+    <Compile Include="Sensor\Features\SensorCapabilities.cs" />
+    <Compile Include="Sensor\ISensor.cs" />
+    <Compile Include="Sensor\Metadata\ISensorMetadata.cs" />
+    <Compile Include="Sensor\Metadata\SensorMetadata.cs" />
+    <Compile Include="Sensor\Metadata\SensorMetadataAttribute.cs" />
+    <Compile Include="Sensor\PowerStatus.cs" />
+    <Compile Include="Sensor\SensorParameter.cs" />
+    <Compile Include="Sensor\SensorSettings.cs" />
+    <Compile Include="Sensor\SocketWithSensorParameters.cs" />
+    <Compile Include="Socket.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

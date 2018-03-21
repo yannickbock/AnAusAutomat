@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="configuration">
+    <xs:complexType>
+      <xs:all>
+
+        <xs:element name="sensors">
+          <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="sensor">
+                <xs:complexType>
+                  <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="parameter"/>
+                  </xs:sequence>
+                  <xs:attribute name="name" type="xs:string"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="controllers">
+          <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+              <xs:element name="controller">
+                <xs:complexType>
+
+                  <xs:sequence minOccurs="0" maxOccurs="unbounded">
+
+                    <xs:element name="pin" minOccurs="0">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:integer">
+                            <xs:attribute name="socketID" type="xs:integer"/>
+                            <xs:attribute name="name" type="xs:string"/>
+                            <xs:attribute name="logic">
+                              <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                  <xs:enumeration value="positive"/>
+                                  <xs:enumeration value="negative"/>
+                                  <xs:enumeration value="Positive"/>
+                                  <xs:enumeration value="Negative"/>
+                                </xs:restriction>
+                              </xs:simpleType>
+                            </xs:attribute>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+
+                  </xs:sequence>
+                  
+                  <xs:attribute name="id" type="xs:integer"/>
+                  <xs:attribute name="type" type="xs:string"/>
+                  <xs:attribute name="name" type="xs:string"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        
+        
+        <xs:element name="sockets">
+          <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+              <xs:element name="socket">
+                <xs:complexType>
+                  <xs:all>
+                    
+                    <xs:element name="sensors">
+                      <xs:complexType>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                          <xs:element name="sensor">
+                            <xs:complexType>
+                              <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                                <xs:element name="parameter"/>
+                              </xs:sequence>
+                              <xs:attribute name="name" type="xs:string"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+
+                    <xs:element name="controlConditions">
+                      <xs:complexType>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                          
+                          <xs:element name="powerOn" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                  <xs:attribute name="mode" type="xs:string"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+
+                          <xs:element name="powerOff" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:simpleContent>
+                                <xs:extension base="xs:string">
+                                  <xs:attribute name="mode" type="xs:string"/>
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                          
+                        </xs:sequence>
+
+                        <xs:attribute name="startupState">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                              <xs:enumeration value="on"/>
+                              <xs:enumeration value="off"/>
+                              <xs:enumeration value="On"/>
+                              <xs:enumeration value="Off"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="shutdownState">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                              <xs:enumeration value="on"/>
+                              <xs:enumeration value="off"/>
+                              <xs:enumeration value="On"/>
+                              <xs:enumeration value="Off"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:attribute>
+                        
+                      </xs:complexType>
+                    </xs:element>
+
+                  </xs:all>
+
+                  <xs:attribute name="id" type="xs:integer"/>
+                  <xs:attribute name="name" type="xs:string"/>
+                  
+
+                  
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+
+            <xs:attribute name="defaultMode" type="xs:string"/>
+          </xs:complexType>
+        </xs:element>
+        
+      </xs:all>    
+      
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
