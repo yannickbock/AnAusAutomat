@@ -41,11 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\Device.cs" />
     <Compile Include="Controller\IController.cs" />
-    <Compile Include="Controller\Pin.cs" />
-    <Compile Include="Controller\PinLogic.cs" />
-    <Compile Include="Controller\SocketWithPins.cs" />
+    <Compile Include="Controller\IControllerFactory.cs" />
+    <Compile Include="Sensor\Attributes\ParameterAttribute.cs" />
     <Compile Include="Sensor\Events\ApplicationExitEventArgs.cs" />
     <Compile Include="Sensor\Events\ModeChangedEventArgs.cs" />
     <Compile Include="Sensor\Events\StatusChangedEventArgs.cs" />
@@ -60,9 +58,6 @@
     <Compile Include="Sensor\Features\ISendStatusChangesIn.cs" />
     <Compile Include="Sensor\Features\SensorCapabilities.cs" />
     <Compile Include="Sensor\ISensor.cs" />
-    <Compile Include="Sensor\Metadata\ISensorMetadata.cs" />
-    <Compile Include="Sensor\Metadata\SensorMetadata.cs" />
-    <Compile Include="Sensor\Metadata\SensorMetadataAttribute.cs" />
     <Compile Include="Sensor\PowerStatus.cs" />
     <Compile Include="Sensor\SensorParameter.cs" />
     <Compile Include="Sensor\SensorSettings.cs" />

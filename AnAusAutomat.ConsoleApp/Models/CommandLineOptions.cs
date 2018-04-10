@@ -8,8 +8,8 @@ namespace AnAusAutomat.ConsoleApplication.Models
         [Option('c', "config", Required = false, DefaultValue = "config.xml", HelpText = "")]
         public string ConfigurationFile { get; set; }
 
-        [Option('l', "loglevel", Required = false, DefaultValue = LogLevel.Information, HelpText = "")]
-        public LogLevel LogLevel { get; set; }
+        [Option('l', "minimumLogLevel", Required = false, DefaultValue = LogLevel.Information, HelpText = "")]
+        public LogLevel MinimumLogLevel { get; set; }
 
         [Option('f', "logfile", Required = false, DefaultValue = "log.txt", HelpText = "")]
         public string LogFile { get; set; }

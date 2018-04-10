@@ -1,14 +1,12 @@
-﻿using AnAusAutomat.Contracts.Sensor.Metadata;
-using System;
+﻿using System;
 
 namespace AnAusAutomat.Contracts.Sensor.Events
 {
     public class StatusChangesInEventArgs : EventArgs
     {
-        public StatusChangesInEventArgs(string message, ISensorMetadata triggeredBy, TimeSpan countDown, Socket socket, PowerStatus status)
+        public StatusChangesInEventArgs(string message, TimeSpan countDown, Socket socket, PowerStatus status)
         {
             Message = message;
-            TriggeredBy = triggeredBy;
             CountDown = countDown;
             Socket = socket;
             Status = status;
@@ -16,8 +14,6 @@ namespace AnAusAutomat.Contracts.Sensor.Events
         }
 
         public string Message { get; private set; }
-
-        public ISensorMetadata TriggeredBy { get; private set; }
 
         public DateTime TimeStamp { get; private set; }
 

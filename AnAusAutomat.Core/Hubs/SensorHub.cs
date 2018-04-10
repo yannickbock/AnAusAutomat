@@ -5,8 +5,6 @@ using AnAusAutomat.Contracts.Sensor.Features;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition.Hosting;
-using System.IO;
 using System.Linq;
 
 namespace AnAusAutomat.Core.Hubs
@@ -14,14 +12,14 @@ namespace AnAusAutomat.Core.Hubs
     // chain of responsibility pattern?
     public class SensorHub
     {
-        private string _path;
+        // outsource all the event handling to an eventbroker?
         private IEnumerable<ISensor> _sensors;
         private IEnumerable<string> _modes;
         private string _currentMode;
 
-        public SensorHub(string path, IEnumerable<string> modes, string defaultMode)
+        public SensorHub(IEnumerable<ISensor> sensors, IEnumerable<string> modes, string defaultMode)
         {
-            _path = path;
+            _sensors = sensors;
             _modes = modes;
             _currentMode = defaultMode;
         }
@@ -29,27 +27,14 @@ namespace AnAusAutomat.Core.Hubs
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
         public event EventHandler<ApplicationExitEventArgs> ApplicationExit;
 
-        public void LoadSensors()
-        {
-            Log.Information(string.Format("Loading sensors in directory \"{0}\" ...", _path));
-
-            var directories = Directory.GetDirectories(_path, "*", SearchOption.AllDirectories);
-            var catalogs = directories.Select(x => new DirectoryCatalog(x));
-
-            var catalog = new AggregateCatalog(catalogs);
-            var container = new CompositionContainer(catalog);
-
-            _sensors = container.GetExportedValues<ISensor>();
-        }
-
         public void Initialize(IEnumerable<SensorSettings> settings)
         {
             // Do Not Use AsParallel! Thread Problems ...
             foreach (var sensor in _sensors)
             {
-                var metadata = sensor.GetMetadata();
+                string sensorName = sensor.GetType().Name;
 
-                var s = settings.FirstOrDefault(x => x.SensorName == metadata.Name);
+                var s = settings.FirstOrDefault(x => x.SensorName == sensorName);
 
                 if (s != null)
                 {
@@ -95,8 +80,7 @@ namespace AnAusAutomat.Core.Hubs
             var sensorsWithReceiveApplicationExitSupport = _sensors.Where(x => x.GetCapabilities().HasFlag(SensorCapabilities.ReceiveExit)).ToList();
             foreach (var sensor in sensorsWithReceiveApplicationExitSupport)
             {
-                var metadata = sensor.GetMetadata();
-                if (e.TriggeredBy.Name != metadata.Name)
+                if (sender.GetType().Name != sensor.GetType().Name)
                 {
                     var s = sensor as IReceiveExit;
                     s.OnApplicationExit(sender, e);
@@ -109,8 +93,7 @@ namespace AnAusAutomat.Core.Hubs
             var sensorsWithReceiveStatusChangesInSupport = _sensors.Where(x => x.GetCapabilities().HasFlag(SensorCapabilities.ReceiveStatusChangesIn)).ToList();
             foreach (var sensor in sensorsWithReceiveStatusChangesInSupport)
             {
-                var metadata = sensor.GetMetadata();
-                if (e.TriggeredBy.Name != metadata.Name)
+                if (sender.GetType().Name != sensor.GetType().Name)
                 {
                     var s = sensor as IReceiveStatusChangesIn;
                     s.OnStatusChangesIn(sender, e);
@@ -125,8 +108,7 @@ namespace AnAusAutomat.Core.Hubs
             var sensorsWithReceiveModeChangedSupport = _sensors.Where(x => x.GetCapabilities().HasFlag(SensorCapabilities.ReceiveModeChanged)).ToList();
             foreach (var sensor in sensorsWithReceiveModeChangedSupport)
             {
-                var metadata = sensor.GetMetadata();
-                if (e.TriggeredBy.Name != metadata.Name)
+                if (sender.GetType().Name != sensor.GetType().Name)
                 {
                     var s = sensor as IReceiveModeChanged;
                     s.OnModeHasChanged(sender, e);
@@ -141,8 +123,7 @@ namespace AnAusAutomat.Core.Hubs
             var sensorsWithReceiveStatusChangedSupport = _sensors.Where(x => x.GetCapabilities().HasFlag(SensorCapabilities.ReceiveStatusChanged)).ToList();
             foreach (var sensor in sensorsWithReceiveStatusChangedSupport)
             {
-                var metadata = sensor.GetMetadata();
-                if (e.TriggeredBy.Name != metadata.Name)
+                if (sender.GetType().Name != sensor.GetType().Name)
                 {
                     var s = sensor as IReceiveStatusChanged;
                     s.OnSensorStatusHasChanged(sender, e);
@@ -166,9 +147,8 @@ namespace AnAusAutomat.Core.Hubs
             // Do Not Use AsParallel! Thread Problems ...
             foreach (var sensor in _sensors)
             {
-                var metadata = sensor.GetMetadata();
-
-                Log.Information(string.Format("Starting sensor {0} ...", metadata.Name));
+                string sensorName = sensor.GetType().Name;
+                Log.Information(string.Format("Starting sensor {0} ...", sensorName));
                 sensor.Start();
             }
         }
@@ -178,9 +158,9 @@ namespace AnAusAutomat.Core.Hubs
             // Do Not Use AsParallel! Thread Problems ...
             foreach (var sensor in _sensors)
             {
-                var metadata = sensor.GetMetadata();
+                string sensorName = sensor.GetType().Name;
 
-                Log.Information(string.Format("Stopping sensor {0} ...", metadata.Name));
+                Log.Information(string.Format("Stopping sensor {0} ...", sensorName));
                 sensor.Stop();
             }
         }

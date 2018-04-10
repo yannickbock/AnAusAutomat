@@ -1,6 +1,5 @@
 ﻿using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Contracts.Sensor.Events;
-using AnAusAutomat.Contracts.Sensor.Metadata;
 using AnAusAutomat.Core.Conditions;
 using AnAusAutomat.Core.Configuration;
 using AnAusAutomat.Core.Hubs;
@@ -14,21 +13,16 @@ namespace AnAusAutomat.Core
 {
     public class App
     {
-        private AppConfig _config;
-
+        private AppConfig _appConfig;
         private SensorHub _sensorHub;
         private ControllerHub _controllerHub;
         private ConditionTester _conditionTester;
 
         public App(AppConfig appConfig)
         {
-            _config = appConfig;
+            _appConfig = appConfig;
 
-            _controllerHub = new ControllerHub(appConfig.Devices);
-            _conditionTester = new ConditionTester(appConfig.Conditions);
-            _sensorHub = new SensorHub("sensors", appConfig.Modes, appConfig.DefaultMode);
-            _sensorHub.StatusChanged += _sensorHub_StatusChanged;
-            _sensorHub.ApplicationExit += _sensorHub_ApplicationExit;
+            // Bootstrapper ?
         }
 
         private void _sensorHub_ApplicationExit(object sender, ApplicationExitEventArgs e)
@@ -38,9 +32,10 @@ namespace AnAusAutomat.Core
 
         private void _sensorHub_StatusChanged(object sender, StatusChangedEventArgs e)
         {
-            _conditionTester.UpdateSensorStatus(e.Socket, e.TriggeredBy.Name, e.Status);
+            string triggeredBy = sender.GetType().Name;
+            _conditionTester.UpdateSensorStatus(e.Socket, triggeredBy, e.Status);
 
-            var condition = _conditionTester.CheckConditions(e.Socket, e.TriggeredBy.Name, _config.DefaultMode);
+            var condition = _conditionTester.CheckConditions(e.Socket, triggeredBy, _appConfig.DefaultMode);
             if (condition != null)
             {
                 switch (condition.ResultingStatus)
@@ -48,12 +43,12 @@ namespace AnAusAutomat.Core
                     case PowerStatus.On:
                         _conditionTester.UpdatePhysicalStatus(e.Socket, PowerStatus.On);
                         _controllerHub.TurnOn(e.Socket);
-                        _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Command, e.TriggeredBy, e.Socket, PowerStatus.On));
+                        _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Command, e.Socket, PowerStatus.On));
                         break;
                     case PowerStatus.Off:
                         _conditionTester.UpdatePhysicalStatus(e.Socket, PowerStatus.Off);
                         _controllerHub.TurnOff(e.Socket);
-                        _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Command, e.TriggeredBy, e.Socket, PowerStatus.Off));
+                        _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Command, e.Socket, PowerStatus.Off));
                         break;
                 }
             }
@@ -61,9 +56,18 @@ namespace AnAusAutomat.Core
 
         public void Initialize()
         {
+            _conditionTester = new ConditionTester(_appConfig.Conditions);
+
+            var controllers = new Resolver().LoadControllers();
+            _controllerHub = new ControllerHub(controllers);
+
+            var sensors = new Resolver().LoadSensors();
+            _sensorHub = new SensorHub(sensors, _appConfig.Modes, _appConfig.DefaultMode);
+            _sensorHub.StatusChanged += _sensorHub_StatusChanged;
+            _sensorHub.ApplicationExit += _sensorHub_ApplicationExit;
+
             _controllerHub.Connect();
-            _sensorHub.LoadSensors();
-            _sensorHub.Initialize(_config.Sensors);
+            _sensorHub.Initialize(_appConfig.Sensors);
             _conditionTester.Compile();
         }
 
@@ -71,13 +75,13 @@ namespace AnAusAutomat.Core
         {
             _sensorHub.Start();
 
-            var startupStates = _config.Conditions.Where(x => x.Type == ConditionType.Startup);
+            var startupStates = _appConfig.Conditions.Where(x => x.Type == ConditionType.Startup);
             applyStartupOrShutdownStates(startupStates);
         }
 
         public void Stop()
         {
-            var shutdownStates = _config.Conditions.Where(x => x.Type == ConditionType.Shutdown);
+            var shutdownStates = _appConfig.Conditions.Where(x => x.Type == ConditionType.Shutdown);
             applyStartupOrShutdownStates(shutdownStates);
 
             _sensorHub.Stop();
@@ -94,19 +98,18 @@ namespace AnAusAutomat.Core
             foreach (var status in startupOrShutdownConditions)
             {
                 _conditionTester.UpdatePhysicalStatus(status.Socket, status.ResultingStatus);
-                var triggeredBy = new SensorMetadata("AppCore", "", "");
 
                 switch (status.ResultingStatus)
                 {
                     case PowerStatus.On:
                         _conditionTester.UpdatePhysicalStatus(status.Socket, PowerStatus.On);
                         _controllerHub.TurnOn(status.Socket);
-                        _sensorHub.OnPhysicalStatusHasChanged(this, new StatusChangedEventArgs("", status.Type.ToString(), triggeredBy, status.Socket, PowerStatus.On));
+                        _sensorHub.OnPhysicalStatusHasChanged(this, new StatusChangedEventArgs("", status.Type.ToString(), status.Socket, PowerStatus.On));
                         break;
                     case PowerStatus.Off:
                         _conditionTester.UpdatePhysicalStatus(status.Socket, PowerStatus.Off);
                         _controllerHub.TurnOff(status.Socket);
-                        _sensorHub.OnPhysicalStatusHasChanged(this, new StatusChangedEventArgs("", status.Type.ToString(), triggeredBy, status.Socket, PowerStatus.Off));
+                        _sensorHub.OnPhysicalStatusHasChanged(this, new StatusChangedEventArgs("", status.Type.ToString(), status.Socket, PowerStatus.Off));
                         break;
                 }
             }

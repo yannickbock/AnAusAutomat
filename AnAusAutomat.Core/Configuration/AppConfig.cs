@@ -7,8 +7,6 @@ namespace AnAusAutomat.Core.Configuration
 {
     public abstract class AppConfig
     {
-        public IEnumerable<Device> Devices { get; protected set; }
-
         public IEnumerable<SensorSettings> Sensors { get; protected set; }
 
         public IEnumerable<Condition> Conditions { get; protected set; }

@@ -2,7 +2,7 @@
 {
     public interface IController
     {
-        Device Device { get; set; }
+        string DeviceIdentifier { get; }
 
         void Connect();
 

@@ -1,102 +1,60 @@
 ﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Contracts.Controller;
 using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Core.Conditions;
+using AnAusAutomat.Toolbox.Xml;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using System.Xml.Schema;
 
 namespace AnAusAutomat.Core.Configuration
 {
     public class XmlAppConfigReader : AppConfig
     {
+        private string _schemaFilePath;
+        private string _configFilePath;
+        private XmlSchemaValidator _xmlSchemaValidator;
         private XDocument _xDocument;
-        private string _filePath;
+
         private Dictionary<int, string> _socketIDsAndNames;
 
         private IEnumerable<XElement> _socketNodes;
-        private IEnumerable<XElement> _controllerNodes;
         private IEnumerable<XElement> _globalSensorNodes;
 
-        public XmlAppConfigReader(string filePath)
+        public XmlAppConfigReader()
         {
-            _filePath = filePath;
+            string currentAssemblyFilePath = new Uri(typeof(XmlAppConfigReader).Assembly.CodeBase).LocalPath;
+            string currentAssemblyDirectoryPath = Path.GetDirectoryName(currentAssemblyFilePath);
 
-            if (!File.Exists(filePath))
-            {
-                throw new FileNotFoundException("", filePath);
-            }
-            _xDocument = XDocument.Load(filePath);
+            _schemaFilePath = currentAssemblyDirectoryPath + "\\config.xsd";
+            _configFilePath = currentAssemblyDirectoryPath + "\\config.xml";
+            _xmlSchemaValidator = new XmlSchemaValidator(_schemaFilePath, _configFilePath);
+        }
+
+        public XmlAppConfigReader(string configFilePath)
+        {
+            string currentAssemblyFilePath = new Uri(typeof(XmlAppConfigReader).Assembly.CodeBase).LocalPath;
+            string currentAssemblyDirectoryPath = Path.GetDirectoryName(currentAssemblyFilePath);
+
+            _schemaFilePath = currentAssemblyDirectoryPath + "\\config.xsd";
+            _configFilePath = configFilePath;
+            _xmlSchemaValidator = new XmlSchemaValidator(_schemaFilePath, _configFilePath);
         }
 
         public bool Validate()
         {
-            bool isOK = true;
-            var schemas = loadAndValidateSchema();
-
-            Log.Debug(string.Format("Validating configuration file {0} ...", _filePath));
-            try
-            {
-                _xDocument.Validate(schemas, (sender, e) =>
-                {
-                    string message = string.Format("The configuration file {0} is not valid.", _filePath);
-                    var exception = new ConfigurationErrorsException(message, e.Exception, _filePath, 0);
-
-                    Log.Error(message, exception);
-
-                    // exception or not?
-                    isOK = false;
-                });
-            }
-            catch (XmlSchemaValidationException e)
-            {
-                Log.Error(e.Message);
-                isOK = false;
-            }
-
-            return isOK;
-        }
-
-        private XmlSchemaSet loadAndValidateSchema()
-        {
-            string xsdFile = "config.xsd";
-            var schemas = new XmlSchemaSet();
-
-            Log.Debug(string.Format("Loading configuration schema file {0} ...", xsdFile));
-            try
-            {
-                schemas.Add(null, xsdFile);
-            }
-            catch (XmlSchemaException e)
-            {
-                string message = string.Format("The configuration schema file {0} is corrupted.", xsdFile);
-                var exception = new ConfigurationErrorsException(message, e, xsdFile, e.LineNumber);
-
-                Log.Error(message, exception);
-                throw exception;
-            }
-            catch (ArgumentNullException)
-            {
-                // Should not be possible. File name is hardcoded.
-            }
-
-            return schemas;
+            return _xmlSchemaValidator.Validate();
         }
 
         public void Load()
         {
-            Log.Information(string.Format("Loading settings from {0} ...", _filePath));
+            Log.Information(string.Format("Loading settings from {0} ...", _configFilePath));
+            _xDocument = XDocument.Load(_configFilePath);
 
             readNodes();
             readSocketIDsAndNames();
-
-            Log.Information("Loading controller settings ...");
-            Devices = readDevices();
 
             Log.Information("Loading sensor settings ...");
             Sensors = readSensorSettings();
@@ -194,54 +152,6 @@ namespace AnAusAutomat.Core.Configuration
                 value: sensorNode.Value);
         }
 
-        private IEnumerable<Device> readDevices()
-        {
-            var devices = _controllerNodes.Select(controllerNode =>
-            {
-                var socketIDs = readSocketIDsFromControllerNode(controllerNode);
-                var sockets = socketIDs.Select(socketID =>
-                {
-                    return new SocketWithPins(
-                        id: socketID,
-                        name: _socketIDsAndNames[socketID],
-                        pins: readPins(controllerNode, socketID));
-                });
-
-                return new Device(
-                    id: int.Parse(controllerNode.Attribute("id").Value),
-                    name: controllerNode.Attribute("name").Value,
-                    type: controllerNode.Attribute("type").Value,
-                    sockets: sockets);
-            });
-
-            return devices.ToList();
-        }
-
-        private IEnumerable<Pin> readPins(XElement controllerNode, int socketID)
-        {
-            var pinNodes = controllerNode.Elements("pin").Where(x => x.Attribute("socketID").Value == socketID.ToString());
-
-            var pins = pinNodes.Select(pinNode =>
-            {
-                return new Pin(
-                    address: int.Parse(pinNode.Value),
-                    name: pinNode.Attribute("name").Value,
-                    logic: convertStringToPinLogic(pinNode.Attribute("logic").Value));
-            });
-
-            return pins;
-        }
-
-        private PinLogic convertStringToPinLogic(string value)
-        {
-            return value.ToLower() == "negative" ? PinLogic.Negative : PinLogic.Positive;
-        }
-
-        private IEnumerable<int> readSocketIDsFromControllerNode(XElement controllerNode)
-        {
-            return controllerNode.Elements("pin").Attributes("socketID").Select(x => int.Parse(x.Value)).Distinct();
-        }
-
         private IEnumerable<Condition> readConditions(XElement socketNode)
         {
             var socket = new Socket(
@@ -309,7 +219,6 @@ namespace AnAusAutomat.Core.Configuration
         private void readNodes()
         {
             _socketNodes = _xDocument.Root.Element("sockets").Elements("socket");
-            _controllerNodes = _xDocument.Root.Element("controllers").Elements("controller");
             _globalSensorNodes = _xDocument.Root.Element("sensors").Elements("sensor");
         }
 

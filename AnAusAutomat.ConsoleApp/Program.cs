@@ -5,7 +5,6 @@ using AnAusAutomat.Core.Configuration;
 using Serilog;
 using Serilog.Events;
 using System;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace AnAusAutomat.ConsoleApplication
@@ -16,8 +15,7 @@ namespace AnAusAutomat.ConsoleApplication
         {
             var commandLineOptions = parseCommandLineOptions(args);
             setConsoleOptions(commandLineOptions.HideConsoleWindow);
-            //initializeLogger(commandLineOptions.LogLevel, commandLineOptions.LogFile);
-            initializeLogger(LogLevel.Verbose, commandLineOptions.LogFile);
+            initializeLogger(commandLineOptions.MinimumLogLevel, commandLineOptions.LogFile);
 
             var configuration = loadConfigurationAndExitApplicationOnError(commandLineOptions.ConfigurationFile);
 
@@ -55,14 +53,13 @@ namespace AnAusAutomat.ConsoleApplication
             return options;
         }
 
-        private static AppConfig loadConfigurationAndExitApplicationOnError(string configurationFile)
+        private static AppConfig loadConfigurationAndExitApplicationOnError(string configFilePath)
         {
-            var configuration = new XmlAppConfigReader(configurationFile);
+            var configuration = new XmlAppConfigReader(configFilePath);
 
             if (!configuration.Validate())
             {
                 Log.Fatal("Invalid configuration. Exit application.");
-                Thread.Sleep(2000);
                 Application.Exit();
 
                 return null;
@@ -73,9 +70,9 @@ namespace AnAusAutomat.ConsoleApplication
             return configuration;
         }
 
-        private static void initializeLogger(LogLevel logLevel, string logFile)
+        private static void initializeLogger(LogLevel minimumLogLevel, string logFile)
         {
-            var logEventLevel = (LogEventLevel)Enum.Parse(typeof(LogEventLevel), logLevel.ToString(), true);
+            var logEventLevel = (LogEventLevel)Enum.Parse(typeof(LogEventLevel), minimumLogLevel.ToString(), true);
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Is(logEventLevel)

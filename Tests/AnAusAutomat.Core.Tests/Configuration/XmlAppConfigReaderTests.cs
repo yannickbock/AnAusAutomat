@@ -1,5 +1,4 @@
-﻿using AnAusAutomat.Contracts.Controller;
-using AnAusAutomat.Contracts.Sensor;
+﻿using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Core.Conditions;
 using AnAusAutomat.Core.Configuration;
 using System.Linq;
@@ -9,64 +8,6 @@ namespace AnAusAutomat.Core.Tests.Configuration
 {
     public class XmlAppConfigReaderTests
     {
-        [Fact]
-        public void Load_TestDevicesTopLevel()
-        {
-            var config = getConfig();
-
-            Assert.Equal(2, config.Devices.Count());
-
-            Assert.Equal(1, config.Devices.Count(a => a.ID == 1 && a.Name == "Frodo" && a.Type == "Arduino"));
-            Assert.Equal(1, config.Devices.Count(a => a.ID == 99 && a.Name == "Banane" && a.Type == "Probe"));
-        }
-
-        [Fact]
-        public void Load_TestDevicesSockets()
-        {
-            var config = getConfig();
-
-            var frodoDevice = config.Devices.First(a => a.Name == "Frodo");
-            var bananeDevice = config.Devices.First(a => a.Name == "Banane");
-
-            Assert.Equal(4, frodoDevice.Sockets.Count());
-            Assert.Equal(1, frodoDevice.Sockets.Count(a => a.ID == 1 && a.Name == "Monitor"));
-            Assert.Equal(1, frodoDevice.Sockets.Count(a => a.ID == 2 && a.Name == "Verstärker"));
-            Assert.Equal(1, frodoDevice.Sockets.Count(a => a.ID == 3 && a.Name == "Lampe"));
-            Assert.Equal(1, frodoDevice.Sockets.Count(a => a.ID == 4 && a.Name == "Externe HDDs"));
-            Assert.Equal(1, bananeDevice.Sockets.Count(a => a.ID == 4 && a.Name == "Externe HDDs"));
-        }
-
-        [Fact]
-        public void Load_TestDevicesSocketsPins()
-        {
-            var config = getConfig();
-
-            var frodoDevice = config.Devices.First(a => a.Name == "Frodo");
-            var bananeDevice = config.Devices.First(a => a.Name == "Banane");
-
-            var monitorFrodo = frodoDevice.Sockets.First(a => a.Name == "Monitor");
-            var amplifierFrodo = frodoDevice.Sockets.First(a => a.Name == "Verstärker");
-            var bulbFrodo = frodoDevice.Sockets.First(a => a.Name == "Lampe");
-            var hddsFrodo = frodoDevice.Sockets.First(a => a.Name == "Externe HDDs");
-            var hddsBanane = bananeDevice.Sockets.First(a => a.Name == "Externe HDDs");
-
-            Assert.Equal(2, monitorFrodo.Pins.Count());
-            Assert.Equal(2, amplifierFrodo.Pins.Count());
-            Assert.Equal(2, bulbFrodo.Pins.Count());
-            Assert.Equal(2, hddsFrodo.Pins.Count());
-            Assert.Single(hddsBanane.Pins);
-
-            Assert.Equal(1, monitorFrodo.Pins.Count(a => a.Name == "Relay" && a.Address == 2 && a.Logic == PinLogic.Negative));
-            Assert.Equal(1, monitorFrodo.Pins.Count(a => a.Name == "LED" && a.Address == 9 && a.Logic == PinLogic.Positive));
-            Assert.Equal(1, amplifierFrodo.Pins.Count(a => a.Name == "Relay" && a.Address == 3 && a.Logic == PinLogic.Positive));
-            Assert.Equal(1, amplifierFrodo.Pins.Count(a => a.Name == "LED" && a.Address == 10 && a.Logic == PinLogic.Positive));
-            Assert.Equal(1, bulbFrodo.Pins.Count(a => a.Name == "Relay" && a.Address == 4 && a.Logic == PinLogic.Positive));
-            Assert.Equal(1, bulbFrodo.Pins.Count(a => a.Name == "LED" && a.Address == 11 && a.Logic == PinLogic.Positive));
-            Assert.Equal(1, hddsFrodo.Pins.Count(a => a.Name == "Relay" && a.Address == 5 && a.Logic == PinLogic.Positive));
-            Assert.Equal(1, hddsFrodo.Pins.Count(a => a.Name == "LED" && a.Address == 12 && a.Logic == PinLogic.Positive));
-            Assert.Equal(1, hddsBanane.Pins.Count(a => a.Name == "Pferd" && a.Address == 66 && a.Logic == PinLogic.Positive));
-        }
-
         [Fact]
         public void Load_TestSensorsTopLevel()
         {
