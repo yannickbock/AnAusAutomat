@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Core", "AnAusAutomat.Core\AnAusAutomat.Core.csproj", "{635BEE61-2E2B-4362-B80E-6F96F3635FCE}"
 EndProject
@@ -34,6 +34,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Sensors.SoundDetector", "AnAusAutomat.Sensors.SoundDetector\AnAusAutomat.Sensors.SoundDetector.csproj", "{53DD49C7-DE34-4289-A8D3-5533C2369723}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Sensors.GUI", "AnAusAutomat.Sensors.GUI\AnAusAutomat.Sensors.GUI.csproj", "{A34959ED-EAB3-4046-8D25-B7B502D28A4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Controllers.Proprietary", "AnAusAutomat.Controllers.Proprietary\AnAusAutomat.Controllers.Proprietary.csproj", "{784B3D9E-6E49-41EF-BDD2-3557B58DE162}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +91,10 @@ Global
 		{A34959ED-EAB3-4046-8D25-B7B502D28A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A34959ED-EAB3-4046-8D25-B7B502D28A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A34959ED-EAB3-4046-8D25-B7B502D28A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{784B3D9E-6E49-41EF-BDD2-3557B58DE162}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{784B3D9E-6E49-41EF-BDD2-3557B58DE162}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{784B3D9E-6E49-41EF-BDD2-3557B58DE162}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{784B3D9E-6E49-41EF-BDD2-3557B58DE162}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +109,7 @@ Global
 		{49EBFA52-6A97-4997-AE8A-E163BF00B727} = {7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}
 		{53DD49C7-DE34-4289-A8D3-5533C2369723} = {7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}
 		{A34959ED-EAB3-4046-8D25-B7B502D28A4A} = {7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}
+		{784B3D9E-6E49-41EF-BDD2-3557B58DE162} = {799E796C-1AB6-4829-B3A0-33D6F307FE0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98FB91DA-8377-4531-B65D-986E71B016AA}
