@@ -44,3 +44,17 @@ C:\Users\ybock\Desktop\Neuer Ordner (2)\AnAusAutomat\Tests\Sensors\SoundDetector
 C:\Users\ybock\Desktop\Neuer Ordner (2)\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\obj\Debug\SoundDetector.Tests.csproj.CopyComplete
 C:\Users\ybock\Desktop\Neuer Ordner (2)\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\obj\Debug\SoundDetector.Tests.dll
 C:\Users\ybock\Desktop\Neuer Ordner (2)\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\obj\Debug\SoundDetector.Tests.pdb
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.abstractions.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.runner.visualstudio.testadapter.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.runner.reporters.net452.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.runner.utility.net452.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\SoundDetector.Tests.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\SoundDetector.Tests.pdb
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.assert.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.core.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.execution.desktop.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.assert.xml
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.core.xml
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\bin\Debug\xunit.execution.desktop.xml
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\obj\Debug\SoundDetector.Tests.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\Sensors\SoundDetector.Tests\obj\Debug\SoundDetector.Tests.pdb

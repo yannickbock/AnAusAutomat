@@ -2,7 +2,6 @@
 using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Contracts.Sensor.Attributes;
 using AnAusAutomat.Contracts.Sensor.Events;
-using AnAusAutomat.Contracts.Sensor.Extensions;
 using AnAusAutomat.Contracts.Sensor.Features;
 using AnAusAutomat.Sensors.SoundDetector.Internals;
 using CSCore.CoreAudioAPI;

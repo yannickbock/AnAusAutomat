@@ -1,6 +1,5 @@
 ﻿using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Contracts.Sensor.Events;
-using AnAusAutomat.Contracts.Sensor.Extensions;
 using AnAusAutomat.Contracts.Sensor.Features;
 using Serilog;
 using System;
@@ -29,7 +28,6 @@ namespace AnAusAutomat.Core.Hubs
 
         public void Initialize(IEnumerable<SensorSettings> settings)
         {
-            // Do Not Use AsParallel! Thread Problems ...
             foreach (var sensor in _sensors)
             {
                 string sensorName = sensor.GetType().Name;
@@ -48,28 +46,30 @@ namespace AnAusAutomat.Core.Hubs
 
         private void initializeFeatures(ISensor sensor)
         {
-            var capabilities = sensor.GetCapabilities();
+            bool hasSendModeChangedSupport = sensor as ISendModeChanged != null;
+            bool hasReceiveModeChangedSupport = sensor as IReceiveModeChanged != null;
 
-            if (capabilities.HasFlag(SensorCapabilities.ReceiveModeChanged) || capabilities.HasFlag(SensorCapabilities.SendModeChanged))
+            if (hasSendModeChangedSupport || hasReceiveModeChangedSupport)
             {
-                var s = sensor as ISendModeChanged; // or as IReceiveModeChanged
-                s.InitializeModes(_modes, _currentMode);
-
-                if (capabilities.HasFlag(SensorCapabilities.SendModeChanged))
+                // Call InitializeModes() only once.
+                if (hasSendModeChangedSupport)
                 {
-                    s.ModeChanged += sensor_ModeChanged;
+                    ((ISendModeChanged)sensor).InitializeModes(_modes, _currentMode);
+                    ((ISendModeChanged)sensor).ModeChanged += sensor_ModeChanged;
+                }
+                else if (hasReceiveModeChangedSupport)
+                {
+                    ((IReceiveModeChanged)sensor).InitializeModes(_modes, _currentMode);
                 }
             }
 
-            if (capabilities.HasFlag(SensorCapabilities.SendStatusChangesIn))
+            if (sensor as ISendStatusChangesIn != null)
             {
-                var s = sensor as ISendStatusChangesIn;
-                s.StatusChangesIn += sensor_StatusChangesIn;
+                ((ISendStatusChangesIn)sensor).StatusChangesIn += sensor_StatusChangesIn;
             }
-            if (capabilities.HasFlag(SensorCapabilities.SendExit))
+            if (sensor as ISendExit != null)
             {
-                var s = sensor as ISendExit;
-                s.ApplicationExit += sensor_ApplicationExit; ;
+                ((ISendExit)sensor).ApplicationExit += sensor_ApplicationExit;
             }
         }
 
@@ -77,26 +77,26 @@ namespace AnAusAutomat.Core.Hubs
         {
             ApplicationExit?.Invoke(sender, e);
 
-            var sensorsWithReceiveApplicationExitSupport = _sensors.Where(x => x.GetCapabilities().HasFlag(SensorCapabilities.ReceiveExit)).ToList();
+            var sensorsWithReceiveApplicationExitSupport = _sensors.Where(x => x as IReceiveExit != null).Select(x => (IReceiveExit)x).ToList();
             foreach (var sensor in sensorsWithReceiveApplicationExitSupport)
             {
-                if (sender.GetType().Name != sensor.GetType().Name)
+                bool sensorIsSender = sender.GetType().Name == sensor.GetType().Name;
+                if (!sensorIsSender)
                 {
-                    var s = sensor as IReceiveExit;
-                    s.OnApplicationExit(sender, e);
+                    sensor.OnApplicationExit(sender, e);
                 }
             }
         }
 
         private void sensor_StatusChangesIn(object sender, StatusChangesInEventArgs e)
         {
-            var sensorsWithReceiveStatusChangesInSupport = _sensors.Where(x => x.GetCapabilities().HasFlag(SensorCapabilities.ReceiveStatusChangesIn)).ToList();
+            var sensorsWithReceiveStatusChangesInSupport = _sensors.Where(x => x as IReceiveStatusChangesIn != null).Select(x => (IReceiveStatusChangesIn)x).ToList();
             foreach (var sensor in sensorsWithReceiveStatusChangesInSupport)
             {
-                if (sender.GetType().Name != sensor.GetType().Name)
+                bool sensorIsSender = sender.GetType().Name == sensor.GetType().Name;
+                if (!sensorIsSender)
                 {
-                    var s = sensor as IReceiveStatusChangesIn;
-                    s.OnStatusChangesIn(sender, e);
+                    sensor.OnStatusChangesIn(sender, e);
                 }
             }
         }
@@ -105,13 +105,13 @@ namespace AnAusAutomat.Core.Hubs
         {
             _currentMode = e.Mode;
 
-            var sensorsWithReceiveModeChangedSupport = _sensors.Where(x => x.GetCapabilities().HasFlag(SensorCapabilities.ReceiveModeChanged)).ToList();
+            var sensorsWithReceiveModeChangedSupport = _sensors.Where(x => x as IReceiveModeChanged != null).Select(x => (IReceiveModeChanged)x).ToList();
             foreach (var sensor in sensorsWithReceiveModeChangedSupport)
             {
-                if (sender.GetType().Name != sensor.GetType().Name)
+                bool sensorIsSender = sender.GetType().Name == sensor.GetType().Name;
+                if (!sensorIsSender)
                 {
-                    var s = sensor as IReceiveModeChanged;
-                    s.OnModeHasChanged(sender, e);
+                    sensor.OnModeHasChanged(sender, e);
                 }
             }
         }
@@ -120,31 +120,28 @@ namespace AnAusAutomat.Core.Hubs
         {
             StatusChanged?.Invoke(sender, e);
 
-            var sensorsWithReceiveStatusChangedSupport = _sensors.Where(x => x.GetCapabilities().HasFlag(SensorCapabilities.ReceiveStatusChanged)).ToList();
+            var sensorsWithReceiveStatusChangedSupport = _sensors.Where(x => x as IReceiveStatusChanged != null).Select(x => (IReceiveStatusChanged)x).ToList();
             foreach (var sensor in sensorsWithReceiveStatusChangedSupport)
             {
-                if (sender.GetType().Name != sensor.GetType().Name)
+                bool sensorIsSender = sender.GetType().Name == sensor.GetType().Name;
+                if (!sensorIsSender)
                 {
-                    var s = sensor as IReceiveStatusChanged;
-                    s.OnSensorStatusHasChanged(sender, e);
+                    sensor.OnSensorStatusHasChanged(sender, e);
                 }
             }
         }
 
         public void OnPhysicalStatusHasChanged(object sender, StatusChangedEventArgs e)
         {
-            var sensorsWithReceiveStatusChangedSupport = _sensors.Where(x => x.GetCapabilities().HasFlag(SensorCapabilities.ReceiveStatusChanged)).ToList();
-
+            var sensorsWithReceiveStatusChangedSupport = _sensors.Where(x => x as IReceiveStatusChanged != null).Select(x => (IReceiveStatusChanged)x).ToList();
             foreach (var sensor in sensorsWithReceiveStatusChangedSupport)
             {
-                var s = sensor as IReceiveStatusChanged;
-                s.OnPhysicalStatusHasChanged(sender, e);
+                sensor.OnPhysicalStatusHasChanged(sender, e);
             }
         }
 
         public void Start()
         {
-            // Do Not Use AsParallel! Thread Problems ...
             foreach (var sensor in _sensors)
             {
                 string sensorName = sensor.GetType().Name;
@@ -155,7 +152,6 @@ namespace AnAusAutomat.Core.Hubs
 
         public void Stop()
         {
-            // Do Not Use AsParallel! Thread Problems ...
             foreach (var sensor in _sensors)
             {
                 string sensorName = sensor.GetType().Name;

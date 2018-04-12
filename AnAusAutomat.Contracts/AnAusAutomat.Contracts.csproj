@@ -48,7 +48,6 @@
     <Compile Include="Sensor\Events\ModeChangedEventArgs.cs" />
     <Compile Include="Sensor\Events\StatusChangedEventArgs.cs" />
     <Compile Include="Sensor\Events\StatusChangesInEventArgs.cs" />
-    <Compile Include="Sensor\Extensions\ISensorExtensions.cs" />
     <Compile Include="Sensor\Features\IReceiveExit.cs" />
     <Compile Include="Sensor\Features\IReceiveStatusChangesIn.cs" />
     <Compile Include="Sensor\Features\IReceiveModeChanged.cs" />

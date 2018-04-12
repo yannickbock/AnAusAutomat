@@ -28,7 +28,7 @@ namespace AnAusAutomat.Controllers.Proprietary
 
         public ProprietaryController(DeviceSettings settings)
         {
-            _logMessagePrefix = string.Format("ProprietaryController: [ {0} ] ", DeviceIdentifier);
+            _logMessagePrefix = string.Format("ProprietaryController: [ {0} ] ", settings.Name);
             _settings = settings;
 
             _timer = new TimersTimer(200);

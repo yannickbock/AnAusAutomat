@@ -76,3 +76,29 @@ C:\Users\ybock\Desktop\Neuer Ordner (2)\AnAusAutomat\Tests\AnAusAutomat.Core.Tes
 C:\Users\ybock\Desktop\Neuer Ordner (2)\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\obj\Debug\AnAusAutomat.Core.Tests.csproj.CopyComplete
 C:\Users\ybock\Desktop\Neuer Ordner (2)\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\obj\Debug\AnAusAutomat.Core.Tests.dll
 C:\Users\ybock\Desktop\Neuer Ordner (2)\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\obj\Debug\AnAusAutomat.Core.Tests.pdb
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\xunit.abstractions.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\xunit.runner.visualstudio.testadapter.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\xunit.runner.reporters.net452.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\xunit.runner.utility.net452.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\config.xml
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\config.xsd
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\_TestData\config_valid.xml
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\AnAusAutomat.Core.Tests.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\AnAusAutomat.Core.Tests.pdb
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\Contracts.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\Core.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\xunit.assert.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\xunit.core.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\xunit.execution.desktop.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\Toolbox.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\Serilog.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\Contracts.pdb
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\xunit.assert.xml
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\xunit.core.xml
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\xunit.execution.desktop.xml
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\Toolbox.pdb
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\Serilog.xml
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\obj\Debug\AnAusAutomat.Core.Tests.csprojResolveAssemblyReference.cache
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\obj\Debug\AnAusAutomat.Core.Tests.dll
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\obj\Debug\AnAusAutomat.Core.Tests.pdb
+C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\Core.pdb

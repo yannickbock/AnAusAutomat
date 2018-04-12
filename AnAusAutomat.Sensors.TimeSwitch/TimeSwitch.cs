@@ -1,7 +1,6 @@
 ﻿using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Contracts.Sensor.Attributes;
 using AnAusAutomat.Contracts.Sensor.Events;
-using AnAusAutomat.Contracts.Sensor.Extensions;
 using AnAusAutomat.Sensors.TimeSwitch.Internals;
 using System;
 using System.Collections.Generic;
