@@ -6,7 +6,7 @@
 
         <xs:element name="devices">
           <xs:complexType>
-            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
               <xs:element name="device">
                 <xs:complexType>
 

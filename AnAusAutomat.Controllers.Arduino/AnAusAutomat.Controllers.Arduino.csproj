@@ -50,7 +50,7 @@
   <ItemGroup>
     <Compile Include="ArduinoController.cs" />
     <Compile Include="ArduinoControllerFactory.cs" />
-    <Compile Include="Internals\Device.cs" />
+    <Compile Include="Internals\ControllerSettings.cs" />
     <Compile Include="Internals\DeviceNotFoundException.cs" />
     <Compile Include="Internals\Pin.cs" />
     <Compile Include="Internals\PinLogic.cs" />

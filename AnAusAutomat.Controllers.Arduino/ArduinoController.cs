@@ -6,28 +6,26 @@ using Serilog;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using ArduinoDevice = ArduinoMajoro.Arduino;
 
 namespace AnAusAutomat.Controllers.Arduino
 {
     public class ArduinoController : IController
     {
-        private Majoro _majoro;
+        private IMajoro _majoro;
         private IEnumerable<Pin> _pins;
 
         public string DeviceIdentifier { get; private set; }
 
-        public ArduinoController(Device device)
+        public ArduinoController(IMajoro majoro, ControllerSettings settings)
         {
-            DeviceIdentifier = device.Name;
-            _pins = device.Pins;
+            _majoro = majoro;
+            DeviceIdentifier = settings.DeviceName;
+            _pins = settings.Pins;
         }
 
         public void Connect()
         {
-            _majoro = findConnection();
             _majoro.Connect();
-
             Thread.Sleep(100);
         }
 
@@ -36,54 +34,38 @@ namespace AnAusAutomat.Controllers.Arduino
             _majoro.Disconnect();
         }
 
-        private Majoro findConnection()
-        {
-            int numberOfRetries = 10;
-            ArduinoDevice arduino = null;
-
-            Log.Information(string.Format("Searching for {0}", DeviceIdentifier));
-            for (int i = 0; i < numberOfRetries && arduino == null; i++)
-            {
-                Log.Debug(string.Format("Try {0} / {1}", i + 1, numberOfRetries));
-                arduino = Majoro.Hello(DeviceIdentifier);
-            }
-
-            if (arduino == null)
-            {
-                throwDeviceNotFoundException(DeviceIdentifier);
-            }
-
-            return new Majoro(arduino);
-        }
-
-        private void throwDeviceNotFoundException(string name)
-        {
-            string message = "Cannot establish connection to controller. " +
-                "Maybe the device is not properly connected, the wire is to long or the wrong sketch is uploaded.";
-            var exception = new DeviceNotFoundException(name, message);
-
-            Log.Error(exception, message);
-            throw exception;
-        }
-
         public bool TurnOff(Socket socket)
         {
-            var pins = _pins.Where(x => x.SocketID == socket.ID);
-            bool allSuccessful = pins.Select(x => switchPinOff(x)).Any(x => x);
+            bool socketIsDefined = _pins.Any(x => x.SocketID == socket.ID);
 
-            return allSuccessful;
+            if (socketIsDefined)
+            {
+                var pins = _pins.Where(x => x.SocketID == socket.ID);
+                bool allSuccessful = pins.Select(x => switchPinOff(x)).Any(x => x);
+                return allSuccessful;
+            }
+
+            return true;
         }
 
         public bool TurnOn(Socket socket)
         {
-            var pins = _pins.Where(x => x.SocketID == socket.ID);
-            bool allSuccessful = pins.Select(x => switchPinOn(x)).Any(x => x);
+            bool socketIsDefined = _pins.Any(x => x.SocketID == socket.ID);
 
-            return allSuccessful;
+            if (socketIsDefined)
+            {
+                var pins = _pins.Where(x => x.SocketID == socket.ID);
+                bool allSuccessful = pins.Select(x => switchPinOn(x)).Any(x => x);
+                return allSuccessful;
+            }
+
+            return true;
         }
 
         private bool switchPinOn(Pin pin)
         {
+            logSwitchPin(pin, pin.Logic == PinLogic.Positive);
+
             switch (pin.Logic)
             {
                 case PinLogic.Positive:
@@ -97,6 +79,8 @@ namespace AnAusAutomat.Controllers.Arduino
 
         private bool switchPinOff(Pin pin)
         {
+            logSwitchPin(pin, pin.Logic == PinLogic.Negative);
+
             switch (pin.Logic)
             {
                 case PinLogic.Positive:
@@ -106,6 +90,11 @@ namespace AnAusAutomat.Controllers.Arduino
             }
 
             return false;
+        }
+
+        private void logSwitchPin(Pin pin, bool writeHigh)
+        {
+            Log.Debug(string.Format("{0} @ Arduino [ {1} ] => {2}", pin, DeviceIdentifier, writeHigh ? "High" : "Low"));
         }
     }
 }

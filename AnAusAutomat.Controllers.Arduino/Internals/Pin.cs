@@ -1,6 +1,8 @@
-﻿namespace AnAusAutomat.Controllers.Arduino.Internals
+﻿using System;
+
+namespace AnAusAutomat.Controllers.Arduino.Internals
 {
-    public class Pin
+    public class Pin : IEquatable<Pin>
     {
         public Pin(int socketID, int address, string name, PinLogic logic)
         {
@@ -21,6 +23,11 @@
         public override string ToString()
         {
             return string.Format("Pin [ SocketID: {0} | Address: {1} | Name: {2} | Logic: {3} ]", SocketID, Address, Name, Logic);
+        }
+
+        public bool Equals(Pin other)
+        {
+            return this.ToString() == other.ToString();
         }
     }
 }

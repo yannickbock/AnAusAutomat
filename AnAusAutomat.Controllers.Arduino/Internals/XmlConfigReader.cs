@@ -1,57 +1,32 @@
-﻿using AnAusAutomat.Toolbox.Xml;
-using Serilog;
-using System;
+﻿using Serilog;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Linq;
 
 namespace AnAusAutomat.Controllers.Arduino.Internals
 {
     public class XmlConfigReader
     {
-        private string _schemaFilePath;
-        private string _configFilePath;
-        private XmlSchemaValidator _xmlSchemaValidator;
         private XDocument _xDocument;
 
-        public XmlConfigReader()
+        public XmlConfigReader(string configFilePath)
         {
-            string currentAssemblyFilePath = new Uri(typeof(XmlConfigReader).Assembly.CodeBase).LocalPath;
-            string currentAssemblyDirectoryPath = Path.GetDirectoryName(currentAssemblyFilePath);
-
-            _schemaFilePath = currentAssemblyDirectoryPath + "\\config.xsd";
-            _configFilePath = currentAssemblyDirectoryPath + "\\config.xml";
-
-            _xmlSchemaValidator = new XmlSchemaValidator(_schemaFilePath, _configFilePath)
-            {
-                SchemaNotValidLogMessage = string.Format("Arduino controller schema file {0} is corrupted.", _schemaFilePath),
-                ConfigNotValidLogMessage = string.Format("Arduino controller config file {0} is not valid.", _configFilePath),
-                SchemaFileNotFoundLogMessage = string.Format("Arduino controller schema file {0} does not exist.", _schemaFilePath),
-                ConfigFileNotFoundLogMessage = string.Format("Arduino controller config file {0} does not exist.", _configFilePath)
-            };
+            _xDocument = XDocument.Load(configFilePath);
         }
 
-        public bool Validate()
-        {
-            return _xmlSchemaValidator.Validate();
-        }
-
-        public IEnumerable<Device> Read()
+        public IEnumerable<ControllerSettings> Read()
         {
             Log.Information("Loading arduino controller settings ...");
-            _xDocument = XDocument.Load(_configFilePath);
 
             return readDevices();
         }
 
-        private IEnumerable<Device> readDevices()
+        private IEnumerable<ControllerSettings> readDevices()
         {
             return _xDocument.Root.Element("devices").Elements("device").Select(deviceNode =>
             {
-                return new Device(
-                    name: deviceNode.Attribute("name").Value,
+                return new ControllerSettings(
+                    deviceName: deviceNode.Attribute("name").Value,
                     pins: readPins(deviceNode));
             }).ToList();
         }

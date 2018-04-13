@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <config>
   <devices>
-    <device name="Bilbo">
-    <!--TODO: numberOfConectRetries, ignoreConnectionLost(do not throw exception)-->
+    <device name="Sam">
       <pin socketId="1" name="Relay + LED" logic="Negative">6</pin>
       <pin socketId="2" name="Relay + LED" logic="Positive">8</pin>
       <pin socketId="3" name="Relay + LED" logic="Positive">10</pin>

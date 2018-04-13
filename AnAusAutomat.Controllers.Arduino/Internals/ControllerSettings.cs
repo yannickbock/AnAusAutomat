@@ -2,21 +2,21 @@
 
 namespace AnAusAutomat.Controllers.Arduino.Internals
 {
-    public class Device
+    public class ControllerSettings
     {
-        public Device(string name, IEnumerable<Pin> pins)
+        public ControllerSettings(string deviceName, IEnumerable<Pin> pins)
         {
-            Name = name;
+            DeviceName = deviceName;
             Pins = pins;
         }
 
-        public string Name { get; private set; }
+        public string DeviceName { get; private set; }
 
         public IEnumerable<Pin> Pins { get; private set; }
 
         public override string ToString()
         {
-            return string.Format("Device [ Name: {0} ]", Name);
+            return DeviceName;
         }
     }
 }
