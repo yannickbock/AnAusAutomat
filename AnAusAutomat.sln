@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Controllers.Ar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AnAusAutomat.Controllers.Tests", "AnAusAutomat.Controllers.Tests", "{17CA8184-7B21-4EE5-AB9B-7216022368F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Controllers.Probe.Tests", "AnAusAutomat.Controllers.Probe.Tests\AnAusAutomat.Controllers.Probe.Tests.csproj", "{00F69A17-D5D0-449B-8F80-D8FCD2F1528B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{0B94BB3E-CF81-418B-9BBB-34C5C74F52F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B94BB3E-CF81-418B-9BBB-34C5C74F52F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B94BB3E-CF81-418B-9BBB-34C5C74F52F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00F69A17-D5D0-449B-8F80-D8FCD2F1528B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00F69A17-D5D0-449B-8F80-D8FCD2F1528B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00F69A17-D5D0-449B-8F80-D8FCD2F1528B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00F69A17-D5D0-449B-8F80-D8FCD2F1528B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +118,7 @@ Global
 		{A34959ED-EAB3-4046-8D25-B7B502D28A4A} = {7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}
 		{784B3D9E-6E49-41EF-BDD2-3557B58DE162} = {799E796C-1AB6-4829-B3A0-33D6F307FE0B}
 		{0B94BB3E-CF81-418B-9BBB-34C5C74F52F5} = {17CA8184-7B21-4EE5-AB9B-7216022368F0}
+		{00F69A17-D5D0-449B-8F80-D8FCD2F1528B} = {17CA8184-7B21-4EE5-AB9B-7216022368F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98FB91DA-8377-4531-B65D-986E71B016AA}
