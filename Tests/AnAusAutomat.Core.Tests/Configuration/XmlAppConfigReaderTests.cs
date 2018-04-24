@@ -132,9 +132,7 @@ namespace AnAusAutomat.Core.Tests.Configuration
         {
             var reader = new XmlAppConfigReader("_TestData\\config_valid.xml");
             reader.Validate();
-            reader.Load();
-
-            return reader;
+            return reader.Load();
         }
     }
 }

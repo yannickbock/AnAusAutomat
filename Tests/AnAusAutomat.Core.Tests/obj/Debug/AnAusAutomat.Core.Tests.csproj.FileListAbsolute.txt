@@ -102,3 +102,5 @@ C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\obj\Deb
 C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\obj\Debug\AnAusAutomat.Core.Tests.dll
 C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\obj\Debug\AnAusAutomat.Core.Tests.pdb
 C:\Users\Yannick\Source\Repos\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\Core.pdb
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\Toolbox.dll
+C:\Users\ybock\Desktop\AnAusAutomat\Tests\AnAusAutomat.Core.Tests\bin\Debug\Toolbox.pdb

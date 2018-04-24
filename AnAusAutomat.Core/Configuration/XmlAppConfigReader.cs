@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace AnAusAutomat.Core.Configuration
 {
-    public class XmlAppConfigReader : AppConfig
+    public class XmlAppConfigReader
     {
         private string _schemaFilePath;
         private string _configFilePath;
@@ -48,7 +48,7 @@ namespace AnAusAutomat.Core.Configuration
             return _xmlSchemaValidator.Validate();
         }
 
-        public void Load()
+        public AppConfig Load()
         {
             Log.Information(string.Format("Loading settings from {0} ...", _configFilePath));
             _xDocument = XDocument.Load(_configFilePath);
@@ -57,14 +57,16 @@ namespace AnAusAutomat.Core.Configuration
             readSocketIDsAndNames();
 
             Log.Information("Loading sensor settings ...");
-            Sensors = readSensorSettings();
+            var sensors = readSensorSettings();
 
             Log.Information("Loading conditions ...");
-            Conditions = _socketNodes.Select(x => readConditions(x)).SelectMany(x => x);
+            var conditions = _socketNodes.Select(x => readConditions(x)).SelectMany(x => x);
 
             Log.Information("Loading modes ...");
-            Modes = readModes();
-            DefaultMode = readDefaultMode();
+            var modes = readModes();
+            string defaultMode = readDefaultMode();
+
+            return new AppConfig(sensors, conditions, modes, defaultMode);
         }
 
         private IEnumerable<SensorSettings> readSensorSettings()

@@ -1,18 +1,25 @@
-﻿using AnAusAutomat.Contracts.Controller;
-using AnAusAutomat.Contracts.Sensor;
+﻿using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Core.Conditions;
 using System.Collections.Generic;
 
 namespace AnAusAutomat.Core.Configuration
 {
-    public abstract class AppConfig
+    public class AppConfig
     {
-        public IEnumerable<SensorSettings> Sensors { get; protected set; }
+        public AppConfig(IEnumerable<SensorSettings> sensors, IEnumerable<Condition> conditions, IEnumerable<string> modes, string defaultMode)
+        {
+            Sensors = sensors;
+            Conditions = conditions;
+            Modes = modes;
+            DefaultMode = defaultMode;
+        }
 
-        public IEnumerable<Condition> Conditions { get; protected set; }
+        public IEnumerable<SensorSettings> Sensors { get; private set; }
 
-        public IEnumerable<string> Modes { get; protected set; }
+        public IEnumerable<Condition> Conditions { get; private set; }
 
-        public string DefaultMode { get; protected set; }
+        public IEnumerable<string> Modes { get; private set; }
+
+        public string DefaultMode { get; private set; }
     }
 }

@@ -65,9 +65,7 @@ namespace AnAusAutomat.ConsoleApplication
                 return null;
             }
 
-            configuration.Load();
-
-            return configuration;
+            return configuration.Load();
         }
 
         private static void initializeLogger(LogLevel minimumLogLevel, string logFile)
