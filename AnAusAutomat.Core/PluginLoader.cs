@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace AnAusAutomat.Core
 {
-    public class Resolver
+    public class PluginLoader
     {
         public IEnumerable<ISensor> LoadSensors()
         {

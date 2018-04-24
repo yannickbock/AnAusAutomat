@@ -58,10 +58,10 @@ namespace AnAusAutomat.Core
         {
             _conditionTester = new ConditionTester(_appConfig.Conditions);
 
-            var controllers = new Resolver().LoadControllers();
+            var controllers = new PluginLoader().LoadControllers();
             _controllerHub = new ControllerHub(controllers);
 
-            var sensors = new Resolver().LoadSensors();
+            var sensors = new PluginLoader().LoadSensors();
             _sensorHub = new SensorHub(sensors, _appConfig.Modes, _appConfig.DefaultMode);
             _sensorHub.StatusChanged += _sensorHub_StatusChanged;
             _sensorHub.ApplicationExit += _sensorHub_ApplicationExit;
