@@ -5,16 +5,16 @@ namespace AnAusAutomat.Core.Conditions
 {
     public class Condition
     {
-        public Condition(string command, PowerStatus resultingStatus, ConditionType type, string mode, Socket socket)
+        public Condition(string text, PowerStatus resultingStatus, ConditionType type, string mode, Socket socket)
         {
-            Command = command;
+            Text = text;
             ResultingStatus = resultingStatus;
             Type = type;
             Mode = mode;
             Socket = socket;
         }
 
-        public string Command { get; private set; }
+        public string Text { get; private set; }
 
         public PowerStatus ResultingStatus { get; private set; }
 
@@ -26,7 +26,7 @@ namespace AnAusAutomat.Core.Conditions
 
         public override string ToString()
         {
-            return string.Format("Condition [ {0} => {1} ]", Command, ResultingStatus);
+            return string.Format("Condition [ {0} => {1} ]", Text, ResultingStatus);
         }
     }
 }

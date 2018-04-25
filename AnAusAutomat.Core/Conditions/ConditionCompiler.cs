@@ -9,56 +9,11 @@ namespace AnAusAutomat.Core.Conditions
 {
     public class ConditionCompiler
     {
-        private string _commandText;
-        private string _sourceCode;
-
-        public ConditionCompiler(string commandText)
+        public IConditionChecker Compile(string conditionText)
         {
-            _commandText = commandText;
-        }
+            string sourceCode = buildSourceCode(conditionText);
 
-        public string BuildSourceCode()
-        {
-            Log.Debug(string.Format("Generate SourceCode for {0}", _commandText));
-
-            //Example: Socket.IsOn AND UserInputDetector.PowerOff AND SoundDetector.PowerOff AND TrayIcon.Undefined
-            string condition = _commandText.Trim().Replace("AND", "&&").Replace("OR", "||")
-                .Replace("!Socket.IsOn", "states.PhysicalStatus == PowerStatus.Off")
-                .Replace("!Socket.IsOff", "states.PhysicalStatus == PowerStatus.On")
-                .Replace("Socket.IsOff", "states.PhysicalStatus == PowerStatus.Off")
-                .Replace("Socket.IsOn", "states.PhysicalStatus == PowerStatus.On")
-                .Replace(".PowerOn", " == PowerStatus.On")
-                .Replace(".PowerOff", " == PowerStatus.Off")
-                .Replace(".Undefined", " == PowerStatus.Undefined");
-
-            var sensorNames = getSensorNames();
-            foreach (string sensorName in sensorNames)
-            {
-                //condition = condition.Replace(sensorName, string.Format("states.SensorStates[\"{0}\"]", sensorName));
-                condition = condition.Replace(sensorName,
-                    string.Format("(states.SensorStates.ContainsKey(\"{0}\") ? states.SensorStates[\"{0}\"] : PowerStatus.Undefined)", sensorName));
-            }
-
-            string sourceCode =
-                "using AnAusAutomat.Contracts.Sensor;\n" +
-                "using AnAusAutomat.Core;\n" +
-                "\n" +
-                "public class Magic\n" +
-                "{\n" +
-                "  public static bool Check(SocketStates states)\n" +
-                "  {\n" +
-                "    return " + condition.Replace("&&", "\n      &&") + ";\n" +
-                "  }\n" +
-                "\n" +
-                "}";
-
-            _sourceCode = sourceCode;
-            return sourceCode;
-        }
-
-        public Type Compile()
-        {
-            Log.Debug(string.Format("Compile SourceCode for {0}", _commandText));
+            Log.Debug(string.Format("Compile SourceCode for {0}", conditionText));
             CSharpCodeProvider provider = new CSharpCodeProvider();
             CompilerParameters options = new CompilerParameters();
             options.GenerateExecutable = false;
@@ -66,31 +21,75 @@ namespace AnAusAutomat.Core.Conditions
             options.ReferencedAssemblies.Add("System.Core.dll");
             options.ReferencedAssemblies.Add("Contracts.dll");
             options.ReferencedAssemblies.Add("Core.dll");
+            options.ReferencedAssemblies.Add("Toolbox.dll");
 
             try
             {
-                CompilerResults results = provider.CompileAssemblyFromSource(options, _sourceCode);
-                if (results.Errors.Count > 0)
+                var results = provider.CompileAssemblyFromSource(options, sourceCode);
+
+                if (results.Errors.Count == 0)
                 {
-                    Log.Error(string.Format("Can not compile condition: {0} ...", _commandText));
+                    return Activator.CreateInstance(results.CompiledAssembly.DefinedTypes.FirstOrDefault()) as IConditionChecker;
+                }
+                else
+                {
+                    Log.Error(string.Format("Can not compile condition: {0} ...", conditionText));
                     foreach (CompilerError error in results.Errors)
                     {
                         Log.Error(error.ErrorText);
                     }
                 }
-
-                return results.Errors.Count == 0 ? results.CompiledAssembly.DefinedTypes.FirstOrDefault() : null;
             }
             catch (Exception e)
             {
-                Log.Error(e, string.Format("Can not parse condition: {0}", _commandText));
-                return null;
+                Log.Error(e, string.Format("Can not parse condition: {0}", conditionText));
             }
+
+            return null;
         }
 
-        private IEnumerable<string> getSensorNames()
+        private string buildSourceCode(string commandText)
         {
-            string temp = _commandText
+            Log.Debug(string.Format("Generate SourceCode for {0}", commandText));
+
+            //Example: Socket.IsOn AND UserInputDetector.PowerOff AND SoundDetector.PowerOff AND TrayIcon.Undefined
+            string condition = commandText.Trim().Replace("AND", "&&").Replace("OR", "||")
+                .Replace("!Socket.IsOn", "physicalStatus == PowerStatus.Off")
+                .Replace("!Socket.IsOff", "physicalStatus == PowerStatus.On")
+                .Replace("Socket.IsOff", "physicalStatus == PowerStatus.Off")
+                .Replace("Socket.IsOn", "physicalStatus == PowerStatus.On")
+                .Replace(".PowerOn", " == PowerStatus.On")
+                .Replace(".PowerOff", " == PowerStatus.Off")
+                .Replace(".Undefined", " == PowerStatus.Undefined");
+
+            var sensorNames = getSensorNames(commandText);
+            foreach (string sensorName in sensorNames)
+            {
+                condition = condition.Replace(sensorName,
+                    string.Format("sensorStates.GetValueOrDefault(\"{0}\", PowerStatus.Undefined)", sensorName));
+            }
+
+            string interfaceName = nameof(IConditionChecker);
+            string sourceCode =
+                "using AnAusAutomat.Contracts.Sensor;\n" +
+                "using AnAusAutomat.Core.Conditions;\n" +
+                "using AnAusAutomat.Toolbox.Extensions;\n" +
+                "using System.Collections.Generic;\n" +
+                "\n" +
+                "public class Magic : " + interfaceName + "\n" +
+                "{\n" +
+                "  public bool IsTrue(PowerStatus physicalStatus, Dictionary<string, PowerStatus> sensorStates)\n" +
+                "  {\n" +
+                "    return " + condition.Replace("&&", "\n      &&") + ";\n" +
+                "  }\n" +
+                "}";
+
+            return sourceCode;
+        }
+
+        private IEnumerable<string> getSensorNames(string commandText)
+        {
+            string temp = commandText
                 .Replace("Socket.IsOn", "").Replace("Socket.IsOff", "")
                 .Replace("AND", "").Replace("OR", "")
                 .Replace("(", "").Replace(")", "")

@@ -43,12 +43,12 @@ namespace AnAusAutomat.Core
                     case PowerStatus.On:
                         _conditionTester.UpdatePhysicalStatus(e.Socket, PowerStatus.On);
                         _controllerHub.TurnOn(e.Socket);
-                        _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Command, e.Socket, PowerStatus.On));
+                        _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Text, e.Socket, PowerStatus.On));
                         break;
                     case PowerStatus.Off:
                         _conditionTester.UpdatePhysicalStatus(e.Socket, PowerStatus.Off);
                         _controllerHub.TurnOff(e.Socket);
-                        _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Command, e.Socket, PowerStatus.Off));
+                        _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Text, e.Socket, PowerStatus.Off));
                         break;
                 }
             }

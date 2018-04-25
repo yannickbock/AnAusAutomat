@@ -162,7 +162,7 @@ namespace AnAusAutomat.Core.Configuration
 
             string startupAttributeValue = socketNode.Element("controlConditions").Attribute("startupState").Value.ToLower();
             var startupStatus = new Condition(
-                command: "",
+                text: "",
                 resultingStatus: convertStringToPowerStatus(startupAttributeValue),
                 type: ConditionType.Startup,
                 mode: "",
@@ -170,7 +170,7 @@ namespace AnAusAutomat.Core.Configuration
 
             string shutdownAttributeValue = socketNode.Element("controlConditions").Attribute("shutdownState").Value.ToLower();
             var shutdownStatus = new Condition(
-                command: "",
+                text: "",
                 resultingStatus: convertStringToPowerStatus(shutdownAttributeValue),
                 type: ConditionType.Shutdown,
                 mode: "",
@@ -179,7 +179,7 @@ namespace AnAusAutomat.Core.Configuration
             var regularConditions = socketNode.Element("controlConditions").Elements().Where(x => !string.IsNullOrEmpty(x.Value)).Select(x =>
             {
                 return new Condition(
-                    command: x.Value,
+                    text: x.Value,
                     resultingStatus: convertStringToPowerStatus(x.Name.ToString()),
                     type: ConditionType.Regular,
                     mode: x.Attribute("mode") == null ? "" : x.Attribute("mode").Value,

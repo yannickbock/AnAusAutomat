@@ -54,6 +54,7 @@
     <Compile Include="Conditions\ConditionCompiler.cs" />
     <Compile Include="Conditions\ConditionTester.cs" />
     <Compile Include="Conditions\ConditionType.cs" />
+    <Compile Include="Conditions\IConditionChecker.cs" />
     <Compile Include="Configuration\AppConfig.cs" />
     <Compile Include="Configuration\XmlAppConfigReader.cs" />
     <Compile Include="App.cs" />

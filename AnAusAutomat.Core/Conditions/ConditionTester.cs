@@ -1,21 +1,19 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Sensor;
 using Serilog;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace AnAusAutomat.Core.Conditions
 {
     public class ConditionTester
     {
         private IEnumerable<SocketStates> _states;
-        private Dictionary<Condition, Type> _compiledConditions;
+        private Dictionary<Condition, IConditionChecker> _compiledConditions;
 
         public ConditionTester(IEnumerable<Condition> conditions)
         {
-            _compiledConditions = conditions.Where(x => x.Type == ConditionType.Regular).ToDictionary(x => x, y => y.GetType()); // y => null | y.GetType() = placeholder
+            _compiledConditions = conditions.Where(x => x.Type == ConditionType.Regular).ToDictionary(x => x, y => null as IConditionChecker); // y => null | y.GetType() = placeholder
             _states = conditions.Select(x => x.Socket).Distinct().Select(x => new SocketStates(x)).ToList();
         }
 
@@ -25,11 +23,10 @@ namespace AnAusAutomat.Core.Conditions
             {
                 var key = _compiledConditions.ElementAt(i).Key;
 
-                var compiler = new ConditionCompiler(key.Command);
-                compiler.BuildSourceCode();
-                var method = compiler.Compile();
+                var compiler = new ConditionCompiler();
+                var conditionChecker = compiler.Compile(key.Text);
 
-                _compiledConditions[key] = method;
+                _compiledConditions[key] = conditionChecker;
             }
         }
 
@@ -56,13 +53,13 @@ namespace AnAusAutomat.Core.Conditions
             var possibleTrueConditions = _compiledConditions
                 .Where(x => x.Key.Socket.Equals(socket))
                 .Where(x => conditionHasCurrentModeOrNoMode(x.Key, currentMode))
-                .Where(x => x.Key.Command.Contains(affectedSensorName)).ToList();
+                .Where(x => x.Key.Text.Contains(affectedSensorName)).ToList();
             
             if (possibleTrueConditions.Count() > 0)
             {
                 var states = _states.First(x => x.Socket.Equals(socket));
 
-                var trueConditions = possibleTrueConditions.Where(x => executeConditionCheckMethod(x.Value, states)).ToList();
+                var trueConditions = possibleTrueConditions.Where(x => x.Value.IsTrue(states.PhysicalStatus, states.SensorStates)).ToList();
 
                 if (trueConditions.Count() > 1)
                 {
@@ -76,12 +73,6 @@ namespace AnAusAutomat.Core.Conditions
             }
 
             return result;
-        }
-
-        private bool executeConditionCheckMethod(Type type, SocketStates states)
-        {
-            bool conditionIsTrue = (bool)type.InvokeMember("Check", BindingFlags.InvokeMethod, null, null, new object[] { states });
-            return conditionIsTrue;
         }
 
         private bool conditionHasCurrentModeOrNoMode(Condition condition, string currentMode)

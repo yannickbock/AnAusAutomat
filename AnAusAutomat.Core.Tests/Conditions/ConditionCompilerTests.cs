@@ -1,29 +1,57 @@
-﻿using AnAusAutomat.Core.Conditions;
-using System.Linq;
+﻿using AnAusAutomat.Contracts.Sensor;
+using AnAusAutomat.Core.Conditions;
+using System.Collections.Generic;
 using Xunit;
 
 namespace AnAusAutomat.Core.Tests.Conditions
 {
     public class ConditionCompilerTests
     {
-        [Theory]
-        [InlineData("Socket.IsOn AND UserInputDetector.PowerOff")]
-        [InlineData("Socket.IsOn AND UserInputDetector.PowerOff AND (SoundDetector.PowerOff OR SoundDetector.Undefined)")]
-        [InlineData("Socket.IsOff AND UserInputDetector.PowerOn AND GUI.Undefined")]
-        [InlineData("!Socket.IsOn AND UserInputDetector.PowerOn AND GUI.Undefined")]
-        [InlineData("Socket.IsOn AND SoundDetector.PowerOff AND GUI.Undefined")]
-        public void BuildSourceCode_Compile_Test(string conditionCommandText)
+        [Fact]
+        public void Compile()
         {
-            var compiler = new ConditionCompiler(conditionCommandText);
-            string sourceCode = compiler.BuildSourceCode();
-            var type = compiler.Compile();
+            var condition = compile("Socket.IsOn AND InputDeviceObserver.PowerOff");
+            Assert.True(condition.IsTrue(
+                physicalStatus: PowerStatus.On,
+                sensorStates: new Dictionary<string, PowerStatus>()
+                {
+                    { "InputDeviceObserver", PowerStatus.Off }
+                }));
+            Assert.False(condition.IsTrue(
+                physicalStatus: PowerStatus.Off,
+                sensorStates: new Dictionary<string, PowerStatus>()
+                {
+                    { "InputDeviceObserver", PowerStatus.Off }
+                }));
+            Assert.False(condition.IsTrue(
+                physicalStatus: PowerStatus.On,
+                sensorStates: new Dictionary<string, PowerStatus>()
+                {
+                    { "InputDeviceObserver", PowerStatus.On }
+                }));
 
-            var foundMethods = type.GetMethods().Where(x => x.Name == "Check").ToList();
+            // ---
+            condition = compile("!Socket.IsOn AND SoundDetector.PowerOff AND GUI.Undefined");
+            Assert.True(condition.IsTrue(
+                physicalStatus: PowerStatus.Off,
+                sensorStates: new Dictionary<string, PowerStatus>()
+                {
+                    { "SoundDetector", PowerStatus.Off },
+                    { "GUI", PowerStatus.Undefined }
+                }));
+        }
 
-            Assert.NotEmpty(sourceCode);
-            Assert.Single(foundMethods);
-            Assert.Equal(typeof(bool), foundMethods.FirstOrDefault().ReturnParameter.ParameterType);
-            Assert.Single(foundMethods.FirstOrDefault().GetParameters());
+        [Fact]
+        public void Compile_Corrupted()
+        {
+            var condition = compile("Socket.IsOn == InputDeviceObserver.PowerOff");
+            Assert.Null(condition);
+        }
+
+        private IConditionChecker compile(string conditionText)
+        {
+            var compiler = new ConditionCompiler();
+            return compiler.Compile(conditionText);
         }
     }
 }
