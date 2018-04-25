@@ -6,7 +6,9 @@ using AnAusAutomat.Core.Hubs;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 namespace AnAusAutomat.Core
@@ -58,10 +60,15 @@ namespace AnAusAutomat.Core
         {
             _conditionTester = new ConditionTester(_appConfig.Conditions);
 
-            var controllers = new PluginLoader().LoadControllers();
+            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            var uri = new UriBuilder(codeBase);
+            var path = Uri.UnescapeDataString(uri.Path);
+            string baseDirectory = Path.GetDirectoryName(path);
+
+            var controllers = new PluginLoader().LoadControllers(baseDirectory + "\\Sensors");
             _controllerHub = new ControllerHub(controllers);
 
-            var sensors = new PluginLoader().LoadSensors();
+            var sensors = new PluginLoader().LoadSensors(baseDirectory + "\\Controllers");
             _sensorHub = new SensorHub(sensors, _appConfig.Modes, _appConfig.DefaultMode);
             _sensorHub.StatusChanged += _sensorHub_StatusChanged;
             _sensorHub.ApplicationExit += _sensorHub_ApplicationExit;

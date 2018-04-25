@@ -11,11 +11,11 @@ namespace AnAusAutomat.Core
 {
     public class PluginLoader
     {
-        public IEnumerable<ISensor> LoadSensors()
+        public IEnumerable<ISensor> LoadSensors(string directoryPath)
         {
-            Log.Information(string.Format("Loading sensors in directory \"{0}\" ...", SensorsDirectory));
+            Log.Information(string.Format("Loading sensors in directory \"{0}\" ...", directoryPath));
 
-            var directories = Directory.GetDirectories(SensorsDirectory, "*", SearchOption.AllDirectories);
+            var directories = Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories);
             var files = directories.SelectMany(x => Directory.GetFiles(x, "*.dll", SearchOption.TopDirectoryOnly));
 
             var sensors = new List<ISensor>();
@@ -25,9 +25,7 @@ namespace AnAusAutomat.Core
                 try
                 {
                     var types = Assembly.LoadFrom(file).GetTypes();
-                    var sensorType = types.FirstOrDefault(x => x.GetInterfaces().FirstOrDefault(y => y.AssemblyQualifiedName == sensorQualifiedName) != null);
-
-                    //var isaf = controllerFactoryType.IsAssignableFrom(typeof(IControllerFactory)); // false, why?
+                    var sensorType = types.FirstOrDefault(x => typeof(ISensor).IsAssignableFrom(x));
 
                     var sensor = Activator.CreateInstance(sensorType) as ISensor;
                     sensors.Add(sensor);
@@ -41,11 +39,11 @@ namespace AnAusAutomat.Core
             return sensors;
         }
 
-        public IEnumerable<IController> LoadControllers()
+        public IEnumerable<IController> LoadControllers(string directoryPath)
         {
-            Log.Information(string.Format("Loading controllers in directory \"{0}\" ...", ControllersDirectory));
+            Log.Information(string.Format("Loading controllers in directory \"{0}\" ...", directoryPath));
 
-            var directories = Directory.GetDirectories(ControllersDirectory, "*", SearchOption.AllDirectories);
+            var directories = Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories);
             var files = directories.SelectMany(x => Directory.GetFiles(x, "*.dll", SearchOption.TopDirectoryOnly));
 
             var controllers = new List<IController>();
@@ -55,9 +53,7 @@ namespace AnAusAutomat.Core
                 try
                 {
                     var types = Assembly.LoadFrom(file).GetTypes();
-                    var controllerFactoryType = types.FirstOrDefault(x => x.GetInterfaces().FirstOrDefault(y => y.AssemblyQualifiedName == controllerFactoryQualifiedName) != null);
-
-                    //var isaf = controllerFactoryType.IsAssignableFrom(typeof(IControllerFactory)); // false, why?
+                    var controllerFactoryType = types.FirstOrDefault(x => typeof(IControllerFactory).IsAssignableFrom(x));
 
                     var factory = Activator.CreateInstance(controllerFactoryType) as IControllerFactory;
                     controllers.AddRange(factory.Create());
@@ -69,34 +65,6 @@ namespace AnAusAutomat.Core
             }
 
             return controllers;
-        }
-
-        public static string BaseDirectory
-        {
-            get
-            {
-                var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-                var uri = new UriBuilder(codeBase);
-                var path = Uri.UnescapeDataString(uri.Path);
-
-                return Path.GetDirectoryName(path);
-            }
-        }
-
-        public static string SensorsDirectory
-        {
-            get
-            {
-                return BaseDirectory + "\\Sensors";
-            }
-        }
-
-        public static string ControllersDirectory
-        {
-            get
-            {
-                return BaseDirectory + "\\Controllers";
-            }
         }
     }
 }
