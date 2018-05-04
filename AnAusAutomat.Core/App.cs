@@ -58,24 +58,34 @@ namespace AnAusAutomat.Core
 
         public void Initialize()
         {
-            _conditionTester = new ConditionTester(_appConfig.Conditions);
+            string rootDirectoryPath = getRootDirectoryPath();
+            string sensorsDirectoryPath = rootDirectoryPath + "\\Sensors";
+            string controllersDirectoryPath = rootDirectoryPath + "\\Controllers";
 
-            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var uri = new UriBuilder(codeBase);
-            var path = Uri.UnescapeDataString(uri.Path);
-            string baseDirectory = Path.GetDirectoryName(path);
+            var pluginLoader = new PluginLoader();
+            var sensors = pluginLoader.LoadSensors(sensorsDirectoryPath);
+            var controllers = pluginLoader.LoadControllers(controllersDirectoryPath);
 
-            var controllers = new PluginLoader().LoadControllers(baseDirectory + "\\Sensors");
-            _controllerHub = new ControllerHub(controllers);
-
-            var sensors = new PluginLoader().LoadSensors(baseDirectory + "\\Controllers");
             _sensorHub = new SensorHub(sensors, _appConfig.Modes, _appConfig.DefaultMode);
             _sensorHub.StatusChanged += _sensorHub_StatusChanged;
             _sensorHub.ApplicationExit += _sensorHub_ApplicationExit;
 
+            _controllerHub = new ControllerHub(controllers);
+
+            _conditionTester = new ConditionTester(_appConfig.Conditions);
+            _conditionTester.Compile();
+
             _controllerHub.Connect();
             _sensorHub.Initialize(_appConfig.Sensors);
-            _conditionTester.Compile();
+        }
+
+        private string getRootDirectoryPath()
+        {
+            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            var uri = new UriBuilder(codeBase);
+            var path = Uri.UnescapeDataString(uri.Path);
+
+            return Path.GetDirectoryName(path);
         }
 
         public void Start()

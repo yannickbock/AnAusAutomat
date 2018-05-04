@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace AnAusAutomat.Core.Conditions
 {
+    // TODO: rename. irgendwas mit status & condition service oder store.
     public class ConditionTester
     {
         private IEnumerable<SocketStates> _states;
