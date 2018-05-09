@@ -110,7 +110,7 @@ namespace AnAusAutomat.Core
             Environment.Exit(0);
         }
 
-        private void applyStartupOrShutdownStates(IEnumerable<Condition> startupOrShutdownConditions)
+        private void applyStartupOrShutdownStates(IEnumerable<ConditionSettings> startupOrShutdownConditions)
         {
             foreach (var status in startupOrShutdownConditions)
             {

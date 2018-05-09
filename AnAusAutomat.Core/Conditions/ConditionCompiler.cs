@@ -9,11 +9,11 @@ namespace AnAusAutomat.Core.Conditions
 {
     public class ConditionCompiler
     {
-        public IConditionChecker Compile(string conditionText)
+        public Condition Compile(ConditionSettings settings)
         {
-            string sourceCode = buildSourceCode(conditionText);
+            string sourceCode = buildSourceCode(settings.Text);
 
-            Log.Debug(string.Format("Compile SourceCode for {0}", conditionText));
+            Log.Debug(string.Format("Compile SourceCode for {0}", settings.Text));
             CSharpCodeProvider provider = new CSharpCodeProvider();
             CompilerParameters options = new CompilerParameters();
             options.GenerateExecutable = false;
@@ -29,11 +29,13 @@ namespace AnAusAutomat.Core.Conditions
 
                 if (results.Errors.Count == 0)
                 {
-                    return Activator.CreateInstance(results.CompiledAssembly.DefinedTypes.FirstOrDefault()) as IConditionChecker;
+                    var checker = Activator.CreateInstance(results.CompiledAssembly.DefinedTypes.FirstOrDefault()) as IConditionChecker;
+
+                    return new Condition(settings, checker);
                 }
                 else
                 {
-                    Log.Error(string.Format("Can not compile condition: {0} ...", conditionText));
+                    Log.Error(string.Format("Can not compile condition: {0} ...", settings.Text));
                     foreach (CompilerError error in results.Errors)
                     {
                         Log.Error(error.ErrorText);
@@ -42,7 +44,7 @@ namespace AnAusAutomat.Core.Conditions
             }
             catch (Exception e)
             {
-                Log.Error(e, string.Format("Can not parse condition: {0}", conditionText));
+                Log.Error(e, string.Format("Can not parse condition: {0}", settings.Text));
             }
 
             return null;

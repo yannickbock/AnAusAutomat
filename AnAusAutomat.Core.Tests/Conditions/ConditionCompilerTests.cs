@@ -1,4 +1,5 @@
-﻿using AnAusAutomat.Contracts.Sensor;
+﻿using AnAusAutomat.Contracts;
+using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Core.Conditions;
 using System.Collections.Generic;
 using Xunit;
@@ -48,10 +49,11 @@ namespace AnAusAutomat.Core.Tests.Conditions
             Assert.Null(condition);
         }
 
-        private IConditionChecker compile(string conditionText)
+        private Condition compile(string conditionText)
         {
+            var condition = new ConditionSettings(conditionText, PowerStatus.Undefined, ConditionType.Regular, "", new Socket(0, ""));
             var compiler = new ConditionCompiler();
-            return compiler.Compile(conditionText);
+            return compiler.Compile(condition);
         }
     }
 }

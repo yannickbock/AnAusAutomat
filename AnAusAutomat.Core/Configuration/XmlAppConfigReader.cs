@@ -154,14 +154,14 @@ namespace AnAusAutomat.Core.Configuration
                 value: sensorNode.Value);
         }
 
-        private IEnumerable<Condition> readConditions(XElement socketNode)
+        private IEnumerable<ConditionSettings> readConditions(XElement socketNode)
         {
             var socket = new Socket(
                 id: int.Parse(socketNode.Attribute("id").Value),
                 name: socketNode.Attribute("name").Value);
 
             string startupAttributeValue = socketNode.Element("controlConditions").Attribute("startupState").Value.ToLower();
-            var startupStatus = new Condition(
+            var startupStatus = new ConditionSettings(
                 text: "",
                 resultingStatus: convertStringToPowerStatus(startupAttributeValue),
                 type: ConditionType.Startup,
@@ -169,7 +169,7 @@ namespace AnAusAutomat.Core.Configuration
                 socket: socket);
 
             string shutdownAttributeValue = socketNode.Element("controlConditions").Attribute("shutdownState").Value.ToLower();
-            var shutdownStatus = new Condition(
+            var shutdownStatus = new ConditionSettings(
                 text: "",
                 resultingStatus: convertStringToPowerStatus(shutdownAttributeValue),
                 type: ConditionType.Shutdown,
@@ -178,7 +178,7 @@ namespace AnAusAutomat.Core.Configuration
 
             var regularConditions = socketNode.Element("controlConditions").Elements().Where(x => !string.IsNullOrEmpty(x.Value)).Select(x =>
             {
-                return new Condition(
+                return new ConditionSettings(
                     text: x.Value,
                     resultingStatus: convertStringToPowerStatus(x.Name.ToString()),
                     type: ConditionType.Regular,
@@ -186,7 +186,7 @@ namespace AnAusAutomat.Core.Configuration
                     socket: socket);
             }).ToList();
 
-            var conditions = new List<Condition>();
+            var conditions = new List<ConditionSettings>();
             conditions.Add(startupStatus);
             conditions.Add(shutdownStatus);
             conditions.AddRange(regularConditions);

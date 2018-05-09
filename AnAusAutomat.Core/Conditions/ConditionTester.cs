@@ -10,9 +10,9 @@ namespace AnAusAutomat.Core.Conditions
     public class ConditionTester
     {
         private IEnumerable<SocketStates> _states;
-        private Dictionary<Condition, IConditionChecker> _compiledConditions;
+        private Dictionary<ConditionSettings, IConditionChecker> _compiledConditions;
 
-        public ConditionTester(IEnumerable<Condition> conditions)
+        public ConditionTester(IEnumerable<ConditionSettings> conditions)
         {
             _compiledConditions = conditions.Where(x => x.Type == ConditionType.Regular).ToDictionary(x => x, y => null as IConditionChecker); // y => null | y.GetType() = placeholder
             _states = conditions.Select(x => x.Socket).Distinct().Select(x => new SocketStates(x)).ToList();
@@ -25,7 +25,7 @@ namespace AnAusAutomat.Core.Conditions
                 var key = _compiledConditions.ElementAt(i).Key;
 
                 var compiler = new ConditionCompiler();
-                var conditionChecker = compiler.Compile(key.Text);
+                var conditionChecker = compiler.Compile(key);
 
                 _compiledConditions[key] = conditionChecker;
             }
@@ -47,9 +47,9 @@ namespace AnAusAutomat.Core.Conditions
         /// Returns the first true condition or null, if no condition is true.
         /// </summary>
         /// <returns></returns>
-        public Condition CheckConditions(Socket socket, string affectedSensorName, string currentMode)
+        public ConditionSettings CheckConditions(Socket socket, string affectedSensorName, string currentMode)
         {
-            Condition result = null;
+            ConditionSettings result = null;
 
             var possibleTrueConditions = _compiledConditions
                 .Where(x => x.Key.Socket.Equals(socket))
@@ -76,7 +76,7 @@ namespace AnAusAutomat.Core.Conditions
             return result;
         }
 
-        private bool conditionHasCurrentModeOrNoMode(Condition condition, string currentMode)
+        private bool conditionHasCurrentModeOrNoMode(ConditionSettings condition, string currentMode)
         {
             return condition.Mode == currentMode || string.IsNullOrEmpty(condition.Mode);
         }

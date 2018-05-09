@@ -1,32 +1,20 @@
-﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Contracts.Sensor;
+﻿using AnAusAutomat.Contracts.Sensor;
+using System.Collections.Generic;
 
 namespace AnAusAutomat.Core.Conditions
 {
-    public class Condition
+    public class Condition : ConditionSettings, IConditionChecker
     {
-        public Condition(string text, PowerStatus resultingStatus, ConditionType type, string mode, Socket socket)
+        private IConditionChecker _conditionChecker;
+
+        public Condition(ConditionSettings settings, IConditionChecker conditionChecker) : base(settings.Text, settings.ResultingStatus, settings.Type, settings.Mode, settings.Socket)
         {
-            Text = text;
-            ResultingStatus = resultingStatus;
-            Type = type;
-            Mode = mode;
-            Socket = socket;
+            _conditionChecker = conditionChecker;
         }
 
-        public string Text { get; private set; }
-
-        public PowerStatus ResultingStatus { get; private set; }
-
-        public ConditionType Type { get; private set; }
-
-        public string Mode { get; private set; }
-
-        public Socket Socket { get; private set; }
-
-        public override string ToString()
+        public bool IsTrue(PowerStatus physicalStatus, Dictionary<string, PowerStatus> sensorStates)
         {
-            return string.Format("Condition [ {0} => {1} ]", Text, ResultingStatus);
+            return _conditionChecker.IsTrue(physicalStatus, sensorStates);
         }
     }
 }

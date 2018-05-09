@@ -6,7 +6,7 @@ namespace AnAusAutomat.Core.Configuration
 {
     public class AppConfig
     {
-        public AppConfig(IEnumerable<SensorSettings> sensors, IEnumerable<Condition> conditions, IEnumerable<string> modes, string defaultMode)
+        public AppConfig(IEnumerable<SensorSettings> sensors, IEnumerable<ConditionSettings> conditions, IEnumerable<string> modes, string defaultMode)
         {
             Sensors = sensors;
             Conditions = conditions;
@@ -16,7 +16,7 @@ namespace AnAusAutomat.Core.Configuration
 
         public IEnumerable<SensorSettings> Sensors { get; private set; }
 
-        public IEnumerable<Condition> Conditions { get; private set; }
+        public IEnumerable<ConditionSettings> Conditions { get; private set; }
 
         public IEnumerable<string> Modes { get; private set; }
 
