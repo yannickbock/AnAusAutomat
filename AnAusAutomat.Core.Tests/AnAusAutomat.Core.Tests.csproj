@@ -73,6 +73,7 @@
     <Compile Include="Configuration\XmlAppConfigReaderTests.cs" />
     <Compile Include="Hubs\ControllerHubTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StateStoreTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

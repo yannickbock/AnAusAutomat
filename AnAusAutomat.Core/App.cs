@@ -19,6 +19,7 @@ namespace AnAusAutomat.Core
         private SensorHub _sensorHub;
         private ControllerHub _controllerHub;
         private ConditionTester _conditionTester;
+        private IStateStore _stateStore;
 
         public App(AppConfig appConfig)
         {
@@ -35,20 +36,20 @@ namespace AnAusAutomat.Core
         private void _sensorHub_StatusChanged(object sender, StatusChangedEventArgs e)
         {
             string triggeredBy = sender.GetType().Name;
-            _conditionTester.UpdateSensorStatus(e.Socket, triggeredBy, e.Status);
+            _stateStore.SetSensorState(e.Socket, triggeredBy, e.Status);
 
-            var condition = _conditionTester.CheckConditions(e.Socket, triggeredBy, _appConfig.DefaultMode);
+            var condition = _conditionTester.CheckConditions(e.Socket, triggeredBy);
             if (condition != null)
             {
                 switch (condition.ResultingStatus)
                 {
                     case PowerStatus.On:
-                        _conditionTester.UpdatePhysicalStatus(e.Socket, PowerStatus.On);
+                        _stateStore.SetPhysicalState(e.Socket, PowerStatus.On);
                         _controllerHub.TurnOn(e.Socket);
                         _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Text, e.Socket, PowerStatus.On));
                         break;
                     case PowerStatus.Off:
-                        _conditionTester.UpdatePhysicalStatus(e.Socket, PowerStatus.Off);
+                        _stateStore.SetPhysicalState(e.Socket, PowerStatus.Off);
                         _controllerHub.TurnOff(e.Socket);
                         _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Text, e.Socket, PowerStatus.Off));
                         break;
@@ -72,7 +73,9 @@ namespace AnAusAutomat.Core
 
             _controllerHub = new ControllerHub(controllers);
 
-            _conditionTester = new ConditionTester(_appConfig.Conditions);
+            _stateStore = new StateStore();
+
+            _conditionTester = new ConditionTester(_stateStore,_appConfig.Conditions);
             _conditionTester.Compile();
 
             _controllerHub.Connect();
@@ -114,17 +117,15 @@ namespace AnAusAutomat.Core
         {
             foreach (var status in startupOrShutdownConditions)
             {
-                _conditionTester.UpdatePhysicalStatus(status.Socket, status.ResultingStatus);
-
                 switch (status.ResultingStatus)
                 {
                     case PowerStatus.On:
-                        _conditionTester.UpdatePhysicalStatus(status.Socket, PowerStatus.On);
+                        _stateStore.SetPhysicalState(status.Socket, PowerStatus.On);
                         _controllerHub.TurnOn(status.Socket);
                         _sensorHub.OnPhysicalStatusHasChanged(this, new StatusChangedEventArgs("", status.Type.ToString(), status.Socket, PowerStatus.On));
                         break;
                     case PowerStatus.Off:
-                        _conditionTester.UpdatePhysicalStatus(status.Socket, PowerStatus.Off);
+                        _stateStore.SetPhysicalState(status.Socket, PowerStatus.Off);
                         _controllerHub.TurnOff(status.Socket);
                         _sensorHub.OnPhysicalStatusHasChanged(this, new StatusChangedEventArgs("", status.Type.ToString(), status.Socket, PowerStatus.Off));
                         break;

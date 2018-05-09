@@ -9,13 +9,15 @@ namespace AnAusAutomat.Core.Conditions
     // TODO: rename. irgendwas mit status & condition service oder store.
     public class ConditionTester
     {
-        private IEnumerable<SocketStates> _states;
+        //private IEnumerable<SocketStates> _states;
+        private IStateStore _stateStore;
         private Dictionary<ConditionSettings, IConditionChecker> _compiledConditions;
 
-        public ConditionTester(IEnumerable<ConditionSettings> conditions)
+        public ConditionTester(IStateStore stateStore, IEnumerable<ConditionSettings> conditions)
         {
+            _stateStore = stateStore;
             _compiledConditions = conditions.Where(x => x.Type == ConditionType.Regular).ToDictionary(x => x, y => null as IConditionChecker); // y => null | y.GetType() = placeholder
-            _states = conditions.Select(x => x.Socket).Distinct().Select(x => new SocketStates(x)).ToList();
+            //_states = conditions.Select(x => x.Socket).Distinct().Select(x => new SocketStates(x)).ToList();
         }
 
         public void Compile()
@@ -31,25 +33,27 @@ namespace AnAusAutomat.Core.Conditions
             }
         }
 
-        public void UpdatePhysicalStatus(Socket socket, PowerStatus status)
-        {
-            var states = _states.First(x => x.Socket.Equals(socket));
-            states.PhysicalStatus = status;
-        }
+        //public void UpdatePhysicalStatus(Socket socket, PowerStatus status)
+        //{
+        //    var states = _states.First(x => x.Socket.Equals(socket));
+        //    states.PhysicalStatus = status;
+        //}
 
-        public void UpdateSensorStatus(Socket socket, string sensorName, PowerStatus status)
-        {
-            var states = _states.First(x => x.Socket.Equals(socket));
-            states.SensorStates[sensorName] = status;
-        }
+        //public void UpdateSensorStatus(Socket socket, string sensorName, PowerStatus status)
+        //{
+        //    var states = _states.First(x => x.Socket.Equals(socket));
+        //    states.SensorStates[sensorName] = status;
+        //}
 
         /// <summary>
         /// Returns the first true condition or null, if no condition is true.
         /// </summary>
         /// <returns></returns>
-        public ConditionSettings CheckConditions(Socket socket, string affectedSensorName, string currentMode)
+        public ConditionSettings CheckConditions(Socket socket, string affectedSensorName)
         {
             ConditionSettings result = null;
+
+            string currentMode = _stateStore.GetCurrentMode();
 
             var possibleTrueConditions = _compiledConditions
                 .Where(x => x.Key.Socket.Equals(socket))
@@ -58,9 +62,11 @@ namespace AnAusAutomat.Core.Conditions
             
             if (possibleTrueConditions.Count() > 0)
             {
-                var states = _states.First(x => x.Socket.Equals(socket));
+                var physicalState = _stateStore.GetPhysicalState(socket);
+                var sensorStates = _stateStore.GetSensorStates(socket);
 
-                var trueConditions = possibleTrueConditions.Where(x => x.Value.IsTrue(states.PhysicalStatus, states.SensorStates)).ToList();
+                var trueConditions = possibleTrueConditions
+                    .Where(x => x.Value.IsTrue(physicalState, sensorStates)).ToList();
 
                 if (trueConditions.Count() > 1)
                 {

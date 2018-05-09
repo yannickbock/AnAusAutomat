@@ -13,8 +13,8 @@ namespace AnAusAutomat.Core.Hubs
     {
         // outsource all the event handling to an eventbroker?
         private IEnumerable<ISensor> _sensors;
-        private IEnumerable<string> _modes;
-        private string _currentMode;
+        private IEnumerable<string> _modes; // <-- TODO: StateStore
+        private string _currentMode; // <-- TODO: StateStore
 
         public SensorHub(IEnumerable<ISensor> sensors, IEnumerable<string> modes, string defaultMode)
         {
