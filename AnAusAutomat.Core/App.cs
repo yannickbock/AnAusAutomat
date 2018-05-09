@@ -74,7 +74,7 @@ namespace AnAusAutomat.Core
             _controllerHub = new ControllerHub(controllers);
 
             _stateStore = new StateStore();
-            var conditions = compile(_appConfig.Conditions);
+            var conditions = compile(_appConfig.Conditions.Where(x => x.Type == ConditionType.Regular));
             _conditionTester = new ConditionTester(_stateStore, conditions);
 
             _controllerHub.Connect();
