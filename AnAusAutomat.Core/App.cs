@@ -74,12 +74,23 @@ namespace AnAusAutomat.Core
             _controllerHub = new ControllerHub(controllers);
 
             _stateStore = new StateStore();
-
-            _conditionTester = new ConditionTester(_stateStore,_appConfig.Conditions);
-            _conditionTester.Compile();
+            var conditions = compile(_appConfig.Conditions);
+            _conditionTester = new ConditionTester(_stateStore, conditions);
 
             _controllerHub.Connect();
             _sensorHub.Initialize(_appConfig.Sensors);
+        }
+
+        private IEnumerable<Condition> compile(IEnumerable<ConditionSettings> conditionSettings)
+        {
+            var compiler = new ConditionCompiler();
+
+            var conditions = conditionSettings
+                .Select(x => compiler.Compile(x))
+                .Where(x => x != null)
+                .ToList();
+
+            return conditions;
         }
 
         private string getRootDirectoryPath()
