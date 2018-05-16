@@ -17,9 +17,9 @@ namespace AnAusAutomat.ConsoleApplication
             setConsoleOptions(commandLineOptions.HideConsoleWindow);
             initializeLogger(commandLineOptions.MinimumLogLevel, commandLineOptions.LogFile);
 
-            var configuration = loadConfigurationAndExitApplicationOnError(commandLineOptions.ConfigurationFile);
+            var appConfig = loadConfigurationOrExitApplicationOnError(commandLineOptions.ConfigurationFile);
 
-            var app = new App(configuration);
+            var app = AppFactory.Create(appConfig);
             app.Initialize();
             app.Start();
 
@@ -53,7 +53,7 @@ namespace AnAusAutomat.ConsoleApplication
             return options;
         }
 
-        private static AppConfig loadConfigurationAndExitApplicationOnError(string configFilePath)
+        private static AppConfig loadConfigurationOrExitApplicationOnError(string configFilePath)
         {
             var configuration = new XmlAppConfigReader(configFilePath);
 

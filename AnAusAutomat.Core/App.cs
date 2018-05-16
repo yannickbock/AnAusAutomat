@@ -6,9 +6,7 @@ using AnAusAutomat.Core.Hubs;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 
 namespace AnAusAutomat.Core
@@ -21,9 +19,15 @@ namespace AnAusAutomat.Core
         private ConditionFilter _conditionFilter;
         private IStateStore _stateStore;
 
-        public App(AppConfig appConfig)
+        public App(IStateStore stateStore, SensorHub sensorHub, ControllerHub controllerHub, AppConfig appConfig)
         {
+            _stateStore = stateStore;
+            _sensorHub = sensorHub;
+            _controllerHub = controllerHub;
             _appConfig = appConfig;
+
+            _sensorHub.StatusChanged += _sensorHub_StatusChanged;
+            _sensorHub.ApplicationExit += _sensorHub_ApplicationExit;
         }
 
         private void _sensorHub_ApplicationExit(object sender, ApplicationExitEventArgs e)
@@ -57,43 +61,16 @@ namespace AnAusAutomat.Core
 
         public void Initialize()
         {
-            string rootDirectoryPath = getRootDirectoryPath();
-            string sensorsDirectoryPath = rootDirectoryPath + "\\Sensors";
-            string controllersDirectoryPath = rootDirectoryPath + "\\Controllers";
-
-            var pluginLoader = new PluginLoader();
-            var sensors = pluginLoader.LoadSensors(sensorsDirectoryPath);
-            var controllers = pluginLoader.LoadControllers(controllersDirectoryPath);
-
-            _stateStore = new StateStore();
-            _stateStore.SetModes(_appConfig.Modes);
-            _stateStore.SetCurrentMode(_appConfig.DefaultMode);
-
-            _sensorHub = new SensorHub(_stateStore, sensors);
-            _sensorHub.StatusChanged += _sensorHub_StatusChanged;
-            _sensorHub.ApplicationExit += _sensorHub_ApplicationExit;
-
-            _controllerHub = new ControllerHub(controllers);
-
             var conditionCompiler = new ConditionCompiler();
             var conditions = conditionCompiler.Compile(_appConfig.Conditions.Where(x => x.Type == ConditionType.Regular));
             _conditionFilter = new ConditionFilter(_stateStore, conditions);
 
-            _controllerHub.Connect();
             _sensorHub.Initialize(_appConfig.Sensors);
-        }
-
-        private string getRootDirectoryPath()
-        {
-            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var uri = new UriBuilder(codeBase);
-            var path = Uri.UnescapeDataString(uri.Path);
-
-            return Path.GetDirectoryName(path);
         }
 
         public void Start()
         {
+            _controllerHub.Connect();
             _sensorHub.Start();
 
             var startupStates = _appConfig.Conditions.Where(x => x.Type == ConditionType.Startup);
