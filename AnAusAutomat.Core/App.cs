@@ -24,8 +24,6 @@ namespace AnAusAutomat.Core
         public App(AppConfig appConfig)
         {
             _appConfig = appConfig;
-
-            // Bootstrapper ?
         }
 
         private void _sensorHub_ApplicationExit(object sender, ApplicationExitEventArgs e)
@@ -77,23 +75,12 @@ namespace AnAusAutomat.Core
 
             _controllerHub = new ControllerHub(controllers);
 
-            var conditions = compile(_appConfig.Conditions.Where(x => x.Type == ConditionType.Regular));
+            var conditionCompiler = new ConditionCompiler();
+            var conditions = conditionCompiler.Compile(_appConfig.Conditions.Where(x => x.Type == ConditionType.Regular));
             _conditionFilter = new ConditionFilter(_stateStore, conditions);
 
             _controllerHub.Connect();
             _sensorHub.Initialize(_appConfig.Sensors);
-        }
-
-        private IEnumerable<Condition> compile(IEnumerable<ConditionSettings> conditionSettings)
-        {
-            var compiler = new ConditionCompiler();
-
-            var conditions = conditionSettings.AsParallel()
-                .Select(x => compiler.Compile(x))
-                .Where(x => x != null)
-                .ToList();
-
-            return conditions;
         }
 
         private string getRootDirectoryPath()

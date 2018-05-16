@@ -9,7 +9,17 @@ namespace AnAusAutomat.Core.Conditions
 {
     public class ConditionCompiler
     {
-        public Condition Compile(ConditionSettings settings)
+        public IEnumerable<Condition> Compile(IEnumerable<ConditionSettings> settings)
+        {
+            var conditions = settings.AsParallel()
+                .Select(x => compile(x))
+                .Where(x => x != null)
+                .ToList();
+
+            return conditions;
+        }
+
+        private Condition compile(ConditionSettings settings)
         {
             string sourceCode = buildSourceCode(settings.Text);
 

@@ -2,6 +2,7 @@
 using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Core.Conditions;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace AnAusAutomat.Core.Tests.Conditions
@@ -51,9 +52,10 @@ namespace AnAusAutomat.Core.Tests.Conditions
 
         private Condition compile(string conditionText)
         {
-            var condition = new ConditionSettings(conditionText, PowerStatus.Undefined, ConditionType.Regular, "", new Socket(0, ""));
+            var settings = new ConditionSettings(conditionText, PowerStatus.Undefined, ConditionType.Regular, "", new Socket(0, ""));
+
             var compiler = new ConditionCompiler();
-            return compiler.Compile(condition);
+            return compiler.Compile(new List<ConditionSettings>() { settings }).FirstOrDefault();
         }
     }
 }
