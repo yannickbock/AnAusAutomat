@@ -67,13 +67,16 @@ namespace AnAusAutomat.Core
             var sensors = pluginLoader.LoadSensors(sensorsDirectoryPath);
             var controllers = pluginLoader.LoadControllers(controllersDirectoryPath);
 
-            _sensorHub = new SensorHub(sensors, _appConfig.Modes, _appConfig.DefaultMode);
+            _stateStore = new StateStore();
+            _stateStore.SetModes(_appConfig.Modes);
+            _stateStore.SetCurrentMode(_appConfig.DefaultMode);
+
+            _sensorHub = new SensorHub(_stateStore, sensors);
             _sensorHub.StatusChanged += _sensorHub_StatusChanged;
             _sensorHub.ApplicationExit += _sensorHub_ApplicationExit;
 
             _controllerHub = new ControllerHub(controllers);
 
-            _stateStore = new StateStore();
             var conditions = compile(_appConfig.Conditions.Where(x => x.Type == ConditionType.Regular));
             _conditionFilter = new ConditionFilter(_stateStore, conditions);
 

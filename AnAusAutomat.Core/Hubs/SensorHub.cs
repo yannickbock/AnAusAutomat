@@ -11,16 +11,13 @@ namespace AnAusAutomat.Core.Hubs
     // chain of responsibility pattern?
     public class SensorHub
     {
-        // outsource all the event handling to an eventbroker?
+        private IStateStore _stateStore;
         private IEnumerable<ISensor> _sensors;
-        private IEnumerable<string> _modes; // <-- TODO: StateStore
-        private string _currentMode; // <-- TODO: StateStore
 
-        public SensorHub(IEnumerable<ISensor> sensors, IEnumerable<string> modes, string defaultMode)
+        public SensorHub(IStateStore stateStore, IEnumerable<ISensor> sensors)
         {
+            _stateStore = stateStore;
             _sensors = sensors;
-            _modes = modes;
-            _currentMode = defaultMode;
         }
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
@@ -51,15 +48,18 @@ namespace AnAusAutomat.Core.Hubs
 
             if (hasSendModeChangedSupport || hasReceiveModeChangedSupport)
             {
+                var modes = _stateStore.GetModes();
+                string currentMode = _stateStore.GetCurrentMode();
+
                 // Call InitializeModes() only once.
                 if (hasSendModeChangedSupport)
                 {
-                    ((ISendModeChanged)sensor).InitializeModes(_modes, _currentMode);
+                    ((ISendModeChanged)sensor).InitializeModes(modes, currentMode);
                     ((ISendModeChanged)sensor).ModeChanged += sensor_ModeChanged;
                 }
                 else if (hasReceiveModeChangedSupport)
                 {
-                    ((IReceiveModeChanged)sensor).InitializeModes(_modes, _currentMode);
+                    ((IReceiveModeChanged)sensor).InitializeModes(modes, currentMode);
                 }
             }
 
@@ -103,7 +103,7 @@ namespace AnAusAutomat.Core.Hubs
 
         private void sensor_ModeChanged(object sender, ModeChangedEventArgs e)
         {
-            _currentMode = e.Mode;
+            _stateStore.SetCurrentMode(e.Mode);
 
             var sensorsWithReceiveModeChangedSupport = _sensors.Where(x => x as IReceiveModeChanged != null).Select(x => (IReceiveModeChanged)x).ToList();
             foreach (var sensor in sensorsWithReceiveModeChangedSupport)
