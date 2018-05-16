@@ -155,7 +155,6 @@ namespace AnAusAutomat.Core.Hubs
             foreach (var sensor in _sensors)
             {
                 string sensorName = sensor.GetType().Name;
-
                 Log.Information(string.Format("Stopping sensor {0} ...", sensorName));
                 sensor.Stop();
             }

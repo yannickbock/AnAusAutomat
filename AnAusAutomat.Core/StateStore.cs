@@ -1,6 +1,7 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Sensor;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AnAusAutomat.Core
 {
@@ -8,12 +9,14 @@ namespace AnAusAutomat.Core
     {
         private Dictionary<Socket, PowerStatus> _physicalStates;
         private Dictionary<Socket, Dictionary<string, PowerStatus>> _sensorStates;
+        private List<string> _modes;
         private string _currentMode;
 
         public StateStore()
         {
             _physicalStates = new Dictionary<Socket, PowerStatus>();
             _sensorStates = new Dictionary<Socket, Dictionary<string, PowerStatus>>();
+            _modes = new List<string>();
             _currentMode = string.Empty;
         }
 
@@ -45,6 +48,16 @@ namespace AnAusAutomat.Core
             }
 
             _sensorStates[socket][sensorName] = status;
+        }
+
+        public IEnumerable<string> GetModes()
+        {
+            return _modes;
+        }
+
+        public void SetModes(IEnumerable<string> modes)
+        {
+            _modes = modes.ToList();
         }
 
         public string GetCurrentMode()

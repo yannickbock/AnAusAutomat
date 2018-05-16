@@ -58,6 +58,37 @@ namespace AnAusAutomat.Core.Tests
         }
 
         [Fact]
+        public void GetModes_DefaultValue()
+        {
+            var store = new StateStore();
+            var result = store.GetModes();
+
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void GetModes_SetAndGet()
+        {
+            var store = new StateStore();
+            store.SetModes(new List<string>()
+            {
+                "Video",
+                "Audio",
+                "Work"
+            });
+            var result = store.GetModes();
+
+            Assert.Equal(3, result.Count());
+            Assert.Contains("Video", result);
+            Assert.Contains("Audio", result);
+            Assert.Contains("Work", result);
+        }
+
+
+
+
+
+        [Fact]
         public void GetCurrentMode_DefaultValue()
         {
             var store = new StateStore();
