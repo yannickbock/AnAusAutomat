@@ -85,7 +85,7 @@ namespace AnAusAutomat.Core
         {
             var compiler = new ConditionCompiler();
 
-            var conditions = conditionSettings
+            var conditions = conditionSettings.AsParallel()
                 .Select(x => compiler.Compile(x))
                 .Where(x => x != null)
                 .ToList();
