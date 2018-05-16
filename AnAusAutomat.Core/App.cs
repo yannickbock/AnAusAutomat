@@ -18,7 +18,7 @@ namespace AnAusAutomat.Core
         private AppConfig _appConfig;
         private SensorHub _sensorHub;
         private ControllerHub _controllerHub;
-        private ConditionTester _conditionTester;
+        private ConditionFilter _conditionFilter;
         private IStateStore _stateStore;
 
         public App(AppConfig appConfig)
@@ -38,7 +38,7 @@ namespace AnAusAutomat.Core
             string triggeredBy = sender.GetType().Name;
             _stateStore.SetSensorState(e.Socket, triggeredBy, e.Status);
 
-            var condition = _conditionTester.CheckConditions(e.Socket, triggeredBy);
+            var condition = _conditionFilter.Filter(e.Socket, triggeredBy).FirstOrDefault();
             if (condition != null)
             {
                 switch (condition.ResultingStatus)
@@ -75,7 +75,7 @@ namespace AnAusAutomat.Core
 
             _stateStore = new StateStore();
             var conditions = compile(_appConfig.Conditions.Where(x => x.Type == ConditionType.Regular));
-            _conditionTester = new ConditionTester(_stateStore, conditions);
+            _conditionFilter = new ConditionFilter(_stateStore, conditions);
 
             _controllerHub.Connect();
             _sensorHub.Initialize(_appConfig.Sensors);

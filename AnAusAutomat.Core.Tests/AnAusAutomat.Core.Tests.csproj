@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConditionFilterTests.cs" />
     <Compile Include="Conditions\ConditionCompilerTests.cs" />
     <Compile Include="Configuration\XmlAppConfigReaderTests.cs" />
     <Compile Include="Hubs\ControllerHubTests.cs" />
