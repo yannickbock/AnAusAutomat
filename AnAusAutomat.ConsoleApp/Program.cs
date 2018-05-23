@@ -1,20 +1,19 @@
-﻿using AnAusAutomat.ConsoleApplication.Adapters;
-using AnAusAutomat.ConsoleApplication.Models;
-using AnAusAutomat.Core;
+﻿using AnAusAutomat.Core;
 using AnAusAutomat.Core.Configuration;
 using Serilog;
 using Serilog.Events;
 using System;
 using System.Windows.Forms;
 
-namespace AnAusAutomat.ConsoleApplication
+namespace AnAusAutomat.ConsoleApp
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            setConsoleOptions();
+
             var commandLineOptions = parseCommandLineOptions(args);
-            setConsoleOptions(commandLineOptions.HideConsoleWindow);
             initializeLogger(commandLineOptions.MinimumLogLevel, commandLineOptions.LogFile);
 
             var appConfig = loadConfigurationOrExitApplicationOnError(commandLineOptions.ConfigurationFile);
@@ -28,19 +27,11 @@ namespace AnAusAutomat.ConsoleApplication
             Application.Run();
         }
 
-        private static void setConsoleOptions(bool hideConsoleWindow)
+        private static void setConsoleOptions()
         {
             Console.Title = "AnAusAutomat";
-
-            if (hideConsoleWindow)
-            {
-                WinAPI.HideConsoleWindow();
-            }
-            else
-            {
-                Console.WindowWidth = (int)(Console.LargestWindowWidth * 0.9);
-                Console.WindowHeight = (int)(Console.LargestWindowHeight * 0.6);
-            }
+            Console.WindowWidth = (int)(Console.LargestWindowWidth * 0.9);
+            Console.WindowHeight = (int)(Console.LargestWindowHeight * 0.6);
         }
 
         private static CommandLineOptions parseCommandLineOptions(string[] args)

@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 
-namespace AnAusAutomat.ConsoleApplication.Models
+namespace AnAusAutomat.ConsoleApp
 {
     public class CommandLineOptions
     {
@@ -13,9 +13,6 @@ namespace AnAusAutomat.ConsoleApplication.Models
 
         [Option('f', "logfile", Required = false, DefaultValue = "log.txt", HelpText = "")]
         public string LogFile { get; set; }
-
-        [Option('h', "hidewindow", Required = false, DefaultValue = false, HelpText = "")]
-        public bool HideConsoleWindow { get; set; }
 
         [ParserState]
         public IParserState LastParserState { get; set; }
