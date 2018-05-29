@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internals\ISoundSettingsProvider.cs" />
+    <Compile Include="Internals\SoundSettingsProvider.cs" />
     <Compile Include="SoundDetector.cs" />
     <Compile Include="Internals\Cache.cs" />
     <Compile Include="Internals\Parameters.cs" />

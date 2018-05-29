@@ -4,7 +4,6 @@ using AnAusAutomat.Contracts.Sensor.Attributes;
 using AnAusAutomat.Contracts.Sensor.Events;
 using AnAusAutomat.Contracts.Sensor.Features;
 using AnAusAutomat.Sensors.SoundDetector.Internals;
-using CSCore.CoreAudioAPI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +18,7 @@ namespace AnAusAutomat.Sensors.SoundDetector
         "Fires turn off event after OffDelaySeconds without music.")]
     public class SoundDetector : ISensor, ISendStatusChangesIn
     {
+        private ISoundSettingsProvider _soundSettings;
         private Timer _timer;
         private IEnumerable<Cache> _cache;
         private Dictionary<Socket, DateTime> _lastStatusChangesInEventsFired;
@@ -28,6 +28,7 @@ namespace AnAusAutomat.Sensors.SoundDetector
 
         public void Initialize(SensorSettings settings)
         {
+            _soundSettings = new SoundSettingsProvider();
             _timer = new Timer(250);
             _timer.Elapsed += _timer_Elapsed;
 
@@ -62,46 +63,7 @@ namespace AnAusAutomat.Sensors.SoundDetector
                 {
                     cache.CurrentSignalSeconds = 0;
                 }
-
-                fireStatusChangesInEvent(cache);
             }
-        }
-
-        private void fireStatusChangesInEvent(Cache cache)
-        {
-            double turnSocketOnCountDownInSeconds = cache.Parameters.MinimumSignalSeconds - cache.CurrentSignalSeconds;
-            double turnSocketOffCountDownInSeconds = cache.Parameters.OffDelaySeconds - (DateTime.Now - cache.LastSignal).TotalSeconds;
-
-            bool isFiveMinuteStepAndMoreAsFiveMinutesRemain = turnSocketOffCountDownInSeconds % 300 == 0 && turnSocketOffCountDownInSeconds >= 300;
-
-            bool fireTurnOffCountDownEvent = turnSocketOffCountDownInSeconds == 240 ||
-                turnSocketOffCountDownInSeconds == 180 ||
-                turnSocketOffCountDownInSeconds == 120 ||
-                turnSocketOffCountDownInSeconds == 60 ||
-                turnSocketOffCountDownInSeconds == 30 ||
-                turnSocketOffCountDownInSeconds == 20 ||
-                turnSocketOffCountDownInSeconds == 10 ||
-                isFiveMinuteStepAndMoreAsFiveMinutesRemain;
-
-            if (fireTurnOffCountDownEvent)
-            {
-                var args = new StatusChangesInEventArgs(
-                    message: "",
-                    countDown: TimeSpan.FromSeconds(turnSocketOffCountDownInSeconds),
-                    socket: cache.Socket,
-                    status: PowerStatus.Off);
-
-                var lastEventFiredAt = _lastStatusChangesInEventsFired.ContainsKey(cache.Socket) ?
-                    _lastStatusChangesInEventsFired[cache.Socket] : DateTime.MinValue;
-                bool currentEventAlreadyFired = (lastEventFiredAt - DateTime.Now) >= TimeSpan.FromSeconds(-1.5);
-                if (!currentEventAlreadyFired)
-                {
-                    //StatusChangesIn?.Invoke(this, args);
-                    _lastStatusChangesInEventsFired[cache.Socket] = DateTime.Now;
-                }
-            }
-
-            // TODO: turnSocketOnCountDownInSeconds ? mostly only a few seconds...
         }
 
         public void Start()
@@ -167,13 +129,9 @@ namespace AnAusAutomat.Sensors.SoundDetector
 
         private bool isAudioPlaying()
         {
-            var device = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Console);
-            var volume = AudioEndpointVolume.FromDevice(device);
-            var meter = AudioMeterInformation.FromDevice(device);
-
-            bool isMuted = volume.GetMute();
-            bool volumeIsZero = volume.GetMasterVolumeLevelScalar() == 0;
-            bool isPlaying = Math.Round(meter.PeakValue, 3) > 0;
+            bool isMuted = _soundSettings.IsMuted;
+            bool volumeIsZero = _soundSettings.SystemVolume == 0;
+            bool isPlaying = _soundSettings.PeakValue > 0;
 
             return !isMuted && !volumeIsZero && isPlaying;
         }
