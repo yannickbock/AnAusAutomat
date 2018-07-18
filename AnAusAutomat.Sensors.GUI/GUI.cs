@@ -41,17 +41,17 @@ namespace AnAusAutomat.Sensors.GUI
 
         private void _trayIcon_ApplicationExit(object sender, ApplicationExitEventArgs e)
         {
-            ApplicationExit?.Invoke(sender, e);
+            ApplicationExit?.Invoke(this, e);
         }
 
         private void _trayIcon_ModeChanged(object sender, ModeChangedEventArgs e)
         {
-            ModeChanged?.Invoke(sender, e);
+            ModeChanged?.Invoke(this, e);
         }
 
         private void _trayIcon_StatusChanged(object sender, StatusChangedEventArgs e)
         {
-            StatusChanged?.Invoke(sender, e);
+            StatusChanged?.Invoke(this, e);
         }
 
         public void OnModeHasChanged(object sender, ModeChangedEventArgs e)
