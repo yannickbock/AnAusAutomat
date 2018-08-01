@@ -56,9 +56,7 @@
     <Compile Include="Internals\Settings.cs" />
     <Compile Include="Internals\Translations.cs" />
     <Compile Include="Internals\TrayIcon.cs" />
-    <Compile Include="Internals\TrayIcon2.cs" />
     <Compile Include="Internals\TrayIconBuilder.cs" />
-    <Compile Include="Internals\TrayIconFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

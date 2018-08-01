@@ -3,6 +3,7 @@ using AnAusAutomat.Contracts.Sensor.Attributes;
 using AnAusAutomat.Contracts.Sensor.Events;
 using AnAusAutomat.Contracts.Sensor.Features;
 using AnAusAutomat.Sensors.GUI.Internals;
+using AnAusAutomat.Sensors.GUI.Internals.Dialogs;
 using AnAusAutomat.Sensors.GUI.Internals.Events;
 using System;
 using System.Collections.Generic;
@@ -58,6 +59,8 @@ namespace AnAusAutomat.Sensors.GUI
 
         private void _trayIcon_MoreOptionsOnClick(object sender, MoreOptionsOnClickEventArgs e)
         {
+            var dialog = new MoreOptionsDialog(_translation);
+            var result = dialog.ShowDialog(e.Socket);
         }
 
         private void _trayIcon_StatusOnClick(object sender, StatusOnClickEventArgs e)
