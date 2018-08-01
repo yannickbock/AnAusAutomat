@@ -1,5 +1,4 @@
 ﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Sensors.GUI.Internals.Scheduling;
 using System;
 using System.Drawing;
 using System.Windows.Forms;

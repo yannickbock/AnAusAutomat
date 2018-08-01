@@ -38,7 +38,9 @@ namespace AnAusAutomat.Sensors.GUI
         public void Initialize(SensorSettings settings)
         {
             _translation = new Translation();
-            _settings = parseSettings(settings.Parameters);
+
+            var parser = new SettingsParser();
+            _settings = parser.Parse(settings.Parameters);
 
             var builder = new TrayIconBuilder(new Translation());
             foreach (var socket in settings.Sockets)
@@ -111,24 +113,6 @@ namespace AnAusAutomat.Sensors.GUI
         public void Stop()
         {
             _trayIcon.Hide();
-        }
-
-        private Settings parseSettings(IEnumerable<SensorParameter> parameters)
-        {
-            bool startMinimized = true;
-
-            if (parameters.Any())
-            {
-                bool startMinimizedDefined = parameters.Any(x => x.Name == "StartMinimized");
-
-                if (startMinimizedDefined)
-                {
-                    string startMinimizedAsString = parameters.FirstOrDefault(x => x.Name == "StartMinimized").Value.ToLower();
-                    startMinimized = new string[] { "true", "yes", "1" }.Contains(startMinimizedAsString);
-                }
-            }
-
-            return new Settings(startMinimized);
         }
     }
 }

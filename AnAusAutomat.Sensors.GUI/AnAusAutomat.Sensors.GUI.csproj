@@ -54,6 +54,7 @@
     <Compile Include="Internals\Scheduling\ScheduledTask.cs" />
     <Compile Include="Internals\Scheduling\Scheduler.cs" />
     <Compile Include="Internals\Settings.cs" />
+    <Compile Include="Internals\SettingsParser.cs" />
     <Compile Include="Internals\Translations.cs" />
     <Compile Include="Internals\TrayIcon.cs" />
     <Compile Include="Internals\TrayIconBuilder.cs" />
