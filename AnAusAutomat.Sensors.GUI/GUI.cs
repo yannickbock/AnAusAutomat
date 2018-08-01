@@ -27,8 +27,6 @@ namespace AnAusAutomat.Sensors.GUI
         private TrayIcon _trayIcon;
         private Translation _translation;
 
-
-
         public void InitializeModes(IEnumerable<string> modes, string currentMode)
         {
             _modes = modes;
@@ -93,6 +91,7 @@ namespace AnAusAutomat.Sensors.GUI
         public void OnPhysicalStatusHasChanged(object sender, StatusChangedEventArgs e)
         {
             _trayIcon.SetPhysicalStatus(e.Socket, e.Status);
+            _trayIcon.ShowPhysicalStatusBalloonTip(e.Socket, e.Status, e.TimeStamp, sender.GetType().Name, e.Condition);
         }
 
         public void OnSensorStatusHasChanged(object sender, StatusChangedEventArgs e)
