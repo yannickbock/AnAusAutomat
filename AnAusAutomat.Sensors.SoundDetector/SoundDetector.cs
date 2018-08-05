@@ -16,15 +16,15 @@ namespace AnAusAutomat.Sensors.SoundDetector
     [Parameter("OffDelaySeconds", typeof(uint), "300")]
     [Description("Fires turn on event after MinimumSignalSeconds of music without a break." +
         "Fires turn off event after OffDelaySeconds without music.")]
-    public class SoundDetector : ISensor, ISendStatusChangesIn
+    public class SoundDetector : ISensor, ISendStatusForecast
     {
         private ISoundSettingsProvider _soundSettings;
         private Timer _timer;
         private IEnumerable<Cache> _cache;
-        private Dictionary<Socket, DateTime> _lastStatusChangesInEventsFired;
+        private Dictionary<Socket, DateTime> _lastStatusForecastEventsFired;
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
-        public event EventHandler<StatusChangesInEventArgs> StatusChangesIn;
+        public event EventHandler<StatusForecastEventArgs> StatusForecast;
 
         public void Initialize(SensorSettings settings)
         {
@@ -33,7 +33,7 @@ namespace AnAusAutomat.Sensors.SoundDetector
             _timer.Elapsed += _timer_Elapsed;
 
             _cache = settings.Sockets.Select(x => new Cache(x, parseParameters(x.Parameters))).ToList();
-            _lastStatusChangesInEventsFired = new Dictionary<Socket, DateTime>();
+            _lastStatusForecastEventsFired = new Dictionary<Socket, DateTime>();
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)

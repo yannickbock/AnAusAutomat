@@ -17,7 +17,7 @@ namespace AnAusAutomat.Sensors.GUI
 {
     [Parameter("StartMinimized", typeof(string), "false")]
     [Description("...")]
-    public class GUI : ISensor, IReceiveStatusChanged, IReceiveStatusChangesIn, IReceiveModeChanged, ISendModeChanged, ISendExit
+    public class GUI : ISensor, IReceiveStatusChanged, IReceiveStatusForecast, IReceiveModeChanged, ISendModeChanged, ISendExit
     {
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
         public event EventHandler<ModeChangedEventArgs> ModeChanged;
@@ -119,9 +119,9 @@ namespace AnAusAutomat.Sensors.GUI
             //_trayIcon.OnSensorStatusHasChanged(sender, e);
         }
 
-        public void OnStatusChangesIn(object sender, StatusChangesInEventArgs e)
+        public void OnStatusForecast(object sender, StatusForecastEventArgs e)
         {
-            //_trayIcon.OnStatusChangesIn(sender, e);
+            //_trayIcon.OnStatusForecast(sender, e);
         }
 
         public void Start()

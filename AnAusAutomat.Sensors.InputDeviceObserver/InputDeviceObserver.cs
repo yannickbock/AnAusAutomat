@@ -15,14 +15,14 @@ namespace AnAusAutomat.Sensors.InputDeviceObserver
     [Parameter("OffDelaySeconds", typeof(uint), "300")]
     [Description("Fires turn on event if mouse or keyboard input action is detected. " +
         "Fires turn off event if time since last input has reached OffDelaySeconds.")]
-    public class InputDeviceObserver : ISensor, ISendStatusChangesIn
+    public class InputDeviceObserver : ISensor, ISendStatusForecast
     {
         private Timer _timer;
         private IEnumerable<Cache> _cache;
-        private Dictionary<Socket, DateTime> _lastStatusChangesInEventsFired;
+        private Dictionary<Socket, DateTime> _lastStatusForecastEventsFired;
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
-        public event EventHandler<StatusChangesInEventArgs> StatusChangesIn;
+        public event EventHandler<StatusForecastEventArgs> StatusForecast;
 
         public void Initialize(SensorSettings settings)
         {
@@ -30,7 +30,7 @@ namespace AnAusAutomat.Sensors.InputDeviceObserver
             _timer.Elapsed += _timer_Elapsed;
 
             _cache = settings.Sockets.Select(x => new Cache(x, parseParameters(x.Parameters))).ToList();
-            _lastStatusChangesInEventsFired = new Dictionary<Socket, DateTime>();
+            _lastStatusForecastEventsFired = new Dictionary<Socket, DateTime>();
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -51,11 +51,11 @@ namespace AnAusAutomat.Sensors.InputDeviceObserver
                     turnSocketOffAndFireStatusChangedEvent(cache);
                 }
 
-                fireStatusChangesInEvent(cache, inputIdleSeconds);
+                fireStatusForecastEvent(cache, inputIdleSeconds);
             }
         }
 
-        private void fireStatusChangesInEvent(Cache cache, uint inputIdleSeconds)
+        private void fireStatusForecastEvent(Cache cache, uint inputIdleSeconds)
         {
             double turnSocketOffCountDownInSeconds = cache.Parameters.OffDelaySeconds - inputIdleSeconds;
 
@@ -72,19 +72,19 @@ namespace AnAusAutomat.Sensors.InputDeviceObserver
 
             if (fireTurnOffCountDownEvent)
             {
-                var args = new StatusChangesInEventArgs(
+                var args = new StatusForecastEventArgs(
                     message: "",
                     countDown: TimeSpan.FromSeconds(turnSocketOffCountDownInSeconds),
                     socket: cache.Socket,
                     status: PowerStatus.Off);
 
-                var lastEventFiredAt = _lastStatusChangesInEventsFired.ContainsKey(cache.Socket) ?
-                    _lastStatusChangesInEventsFired[cache.Socket] : DateTime.MinValue;
+                var lastEventFiredAt = _lastStatusForecastEventsFired.ContainsKey(cache.Socket) ?
+                    _lastStatusForecastEventsFired[cache.Socket] : DateTime.MinValue;
                 bool currentEventAlreadyFired = (lastEventFiredAt - DateTime.Now) >= TimeSpan.FromSeconds(-1.5);
                 if (!currentEventAlreadyFired)
                 {
-                    //StatusChangesIn?.Invoke(this, args);
-                    _lastStatusChangesInEventsFired[cache.Socket] = DateTime.Now;
+                    //StatusForecast?.Invoke(this, args);
+                    _lastStatusForecastEventsFired[cache.Socket] = DateTime.Now;
                 }
             }
         }

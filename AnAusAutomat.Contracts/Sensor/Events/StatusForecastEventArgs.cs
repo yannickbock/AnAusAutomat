@@ -2,9 +2,9 @@
 
 namespace AnAusAutomat.Contracts.Sensor.Events
 {
-    public class StatusChangesInEventArgs : EventArgs
+    public class StatusForecastEventArgs : EventArgs
     {
-        public StatusChangesInEventArgs(string message, TimeSpan countDown, Socket socket, PowerStatus status)
+        public StatusForecastEventArgs(string message, TimeSpan countDown, Socket socket, PowerStatus status)
         {
             Message = message;
             CountDown = countDown;

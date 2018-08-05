@@ -63,9 +63,9 @@ namespace AnAusAutomat.Core.Hubs
                 }
             }
 
-            if (sensor as ISendStatusChangesIn != null)
+            if (sensor as ISendStatusForecast != null)
             {
-                ((ISendStatusChangesIn)sensor).StatusChangesIn += sensor_StatusChangesIn;
+                ((ISendStatusForecast)sensor).StatusForecast += sensor_StatusForecast;
             }
             if (sensor as ISendExit != null)
             {
@@ -88,15 +88,15 @@ namespace AnAusAutomat.Core.Hubs
             }
         }
 
-        private void sensor_StatusChangesIn(object sender, StatusChangesInEventArgs e)
+        private void sensor_StatusForecast(object sender, StatusForecastEventArgs e)
         {
-            var sensorsWithReceiveStatusChangesInSupport = _sensors.Where(x => x as IReceiveStatusChangesIn != null).Select(x => (IReceiveStatusChangesIn)x).ToList();
-            foreach (var sensor in sensorsWithReceiveStatusChangesInSupport)
+            var sensorsWithReceiveStatusForecastSupport = _sensors.Where(x => x as IReceiveStatusForecast != null).Select(x => (IReceiveStatusForecast)x).ToList();
+            foreach (var sensor in sensorsWithReceiveStatusForecastSupport)
             {
                 bool sensorIsSender = sender.GetType().Name == sensor.GetType().Name;
                 if (!sensorIsSender)
                 {
-                    sensor.OnStatusChangesIn(sender, e);
+                    sensor.OnStatusForecast(sender, e);
                 }
             }
         }
