@@ -5,6 +5,8 @@ using AnAusAutomat.Contracts.Sensor.Features;
 using AnAusAutomat.Sensors.GUI.Internals;
 using AnAusAutomat.Sensors.GUI.Internals.Dialogs;
 using AnAusAutomat.Sensors.GUI.Internals.Events;
+using AnAusAutomat.Sensors.GUI.Internals.Scheduling;
+using AnAusAutomat.Sensors.GUI.Internals.Scheduling.Events;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,6 +28,7 @@ namespace AnAusAutomat.Sensors.GUI
         private string _currentMode;
         private TrayIcon _trayIcon;
         private Translation _translation;
+        private Scheduler _scheduler;
 
         public void InitializeModes(IEnumerable<string> modes, string currentMode)
         {
@@ -36,6 +39,7 @@ namespace AnAusAutomat.Sensors.GUI
         public void Initialize(SensorSettings settings)
         {
             _translation = new Translation();
+            _scheduler = new Scheduler();
 
             var parser = new SettingsParser();
             _settings = parser.Parse(settings.Parameters);
@@ -55,12 +59,28 @@ namespace AnAusAutomat.Sensors.GUI
             _trayIcon.ExitOnClick += _trayIcon_ExitOnClick;
             _trayIcon.StatusOnClick += _trayIcon_StatusOnClick;
             _trayIcon.MoreOptionsOnClick += _trayIcon_MoreOptionsOnClick;
+
+            _scheduler.ScheduledTaskReady += _scheduler_ScheduledTaskReady;
+            _scheduler.Start();
+        }
+
+        private void _scheduler_ScheduledTaskReady(object sender, ScheduledTaskReadyEventArgs e)
+        {
+            StatusChanged?.Invoke(this, new StatusChangedEventArgs("Scheduled task.", "", e.Task.Socket, e.Task.Status));
         }
 
         private void _trayIcon_MoreOptionsOnClick(object sender, MoreOptionsOnClickEventArgs e)
         {
             var dialog = new MoreOptionsDialog(_translation);
             var result = dialog.ShowDialog(e.Socket);
+
+            if (!result.Canceled)
+            {
+                _scheduler.Add(new ScheduledTask(
+                    DateTime.Now + result.TimeSpan,
+                    result.Status,
+                    result.Socket));
+            }
         }
 
         private void _trayIcon_StatusOnClick(object sender, StatusOnClickEventArgs e)
