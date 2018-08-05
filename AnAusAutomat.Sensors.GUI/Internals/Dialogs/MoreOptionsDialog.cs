@@ -1,5 +1,4 @@
 ﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Sensors.GUI.Internals.Scheduling;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -9,85 +8,150 @@ namespace AnAusAutomat.Sensors.GUI.Internals.Dialogs
 {
     public class MoreOptionsDialog
     {
-        private Translation _translation;
-
         private readonly Font regularFont = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
         private readonly Font boldFont = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
 
+        private Translation _translation;
         private Form _form;
         private Button _btnOn;
         private Button _btnOff;
         private Button _btnUndefined;
-        private ComboBox _cbTime;
-        private Button _btnExecute;
+        private Button _btnOK;
+        private ComboBox _cbTimeSpan;
 
-        private bool _btnExecutePressed;
+        private bool _canceled;
         private SensorPowerStatus _status;
-        private Socket _socket;
+        private TimeSpan _timeSpan;
 
-        public MoreOptionsDialog(Socket socket)
+        public MoreOptionsDialog(Translation translation)
         {
-            _socket = socket;
-            _translation = new Translation();
+            _translation = translation;
+        }
 
-            _btnExecutePressed = false;
-            _status = SensorPowerStatus.On;
-
+        internal MoreOptionsDialogResult ShowDialog(Socket socket)
+        {
             string title = _translation.GetSocketWithIDAndName(socket);
             _form = createForm(title);
-            _btnOn = createSocketStateButton(_translation.GetOn(), new Point(12, 12), true);
-            _btnOff = createSocketStateButton(_translation.GetOff(), new Point(119, 12), false);
-            _btnUndefined = createSocketStateButton(_translation.GetUndefined(), new Point(226, 12), false);
-            _cbTime = createComboBox();
-            _btnExecute = createExecuteButton();
+
+            _btnOn = createOnButton();
+            _btnOff = createOffButton();
+            _btnUndefined = createUndefinedButton();
+            _cbTimeSpan = createComboBox();
+            _btnOK = createOKButton();
 
             _form.Controls.Add(_btnOn);
             _form.Controls.Add(_btnOff);
             _form.Controls.Add(_btnUndefined);
-            _form.Controls.Add(_cbTime);
-            _form.Controls.Add(_btnExecute);
-        }
+            _form.Controls.Add(_cbTimeSpan);
+            _form.Controls.Add(_btnOK);
 
-        internal MoreOptionsDialogResult ShowDialog()
-        {
+            _btnOn.Click += _btnStatus_Click;
+            _btnOff.Click += _btnStatus_Click;
+            _btnUndefined.Click += _btnStatus_Click;
+            _cbTimeSpan.SelectedValueChanged += _cbTimeSpan_SelectedValueChanged;
+            _btnOK.Click += _btnOK_Click;
+
+            _canceled = true;
+            _status = SensorPowerStatus.On;
+            _timeSpan = new TimeSpan();
+
             _form.ShowDialog();
 
-            bool canceled = _btnExecutePressed ? false : true;
-            var scheduleItem = (ComboBoxScheduleItem)_cbTime.SelectedItem;
+            _btnOn.Click -= _btnStatus_Click;
+            _btnOff.Click -= _btnStatus_Click;
+            _btnUndefined.Click -= _btnStatus_Click;
+            _cbTimeSpan.SelectedValueChanged -= _cbTimeSpan_SelectedValueChanged;
+            _btnOK.Click -= _btnOK_Click;
 
-            var task = new ScheduledTask(
-                executeAt: DateTime.Now + scheduleItem.CountDown,
-                status: _status,
-                socket: _socket);
+            _form = null;
+            _btnOn = null;
+            _btnOff = null;
+            _btnUndefined = null;
+            _cbTimeSpan = null;
+            _btnOK = null;
 
-            return new MoreOptionsDialogResult(canceled, task);
+            return new MoreOptionsDialogResult(socket, _status, _timeSpan, _canceled);
         }
 
-        private Form createForm(string text)
+        private void _cbTimeSpan_SelectedValueChanged(object sender, EventArgs e)
         {
-            var form = new Form();
-            form.Text = text;
-            form.AutoScaleMode = AutoScaleMode.Font;
-            form.ClientSize = new Size(334, 128);
-            form.FormBorderStyle = FormBorderStyle.FixedSingle;
-            form.MaximizeBox = false;
-            form.ShowIcon = false;
-            form.StartPosition = FormStartPosition.CenterScreen;
-            form.Font = regularFont;
-            return form;
+            var item = ((ComboBox)sender).SelectedItem as ComboBoxScheduleItem;
+            _timeSpan = item.CountDown;
         }
 
-        private Button createSocketStateButton(string text, Point location, bool bold)
+        private void _btnStatus_Click(object sender, EventArgs e)
         {
-            var button = new Button();
-            button.FlatStyle = FlatStyle.Popup;
-            button.Size = new Size(95, 23);
-            button.UseVisualStyleBackColor = false;
-            button.Location = location;
-            button.Text = text;
-            button.Click += _btnSocketState_Click;
-            button.Font = bold ? boldFont : regularFont;
-            return button;
+            _btnOn.Font = regularFont;
+            _btnOff.Font = regularFont;
+            _btnUndefined.Font = regularFont;
+
+            var button = (Button)sender;
+            button.Font = boldFont;
+            _status = (SensorPowerStatus)button.Tag;
+        }
+
+        private void _btnOK_Click(object sender, EventArgs e)
+        {
+            _canceled = false;
+
+            _form.Close();
+            _form.Dispose();
+        }
+
+        private Form createForm(string title)
+        {
+            return new Form()
+            {
+                Text = title,
+                AutoScaleMode = AutoScaleMode.Font,
+                ClientSize = new Size(334, 128),
+                FormBorderStyle = FormBorderStyle.FixedSingle,
+                MaximizeBox = false,
+                ShowIcon = false,
+                StartPosition = FormStartPosition.CenterScreen,
+                Font = regularFont
+            };
+        }
+
+        private Button createOnButton()
+        {
+            return createStatusButton(
+                text: _translation.GetOn(),
+                status: SensorPowerStatus.On,
+                location: new Point(12, 12),
+                bold: true);
+        }
+
+        private Button createOffButton()
+        {
+            return createStatusButton(
+                text: _translation.GetOff(),
+                status: SensorPowerStatus.Off,
+                location: new Point(119, 12),
+                bold: false);
+        }
+
+        private Button createUndefinedButton()
+        {
+            return createStatusButton(
+                text: _translation.GetUndefined(),
+                status: SensorPowerStatus.Undefined,
+                location: new Point(226, 12),
+                bold: false);
+        }
+
+        private Button createStatusButton(string text, SensorPowerStatus status, Point location, bool bold)
+        {
+            return new Button()
+            {
+                Text = text,
+                FlatStyle = FlatStyle.Popup,
+                Size = new Size(95, 23),
+                UseVisualStyleBackColor = false,
+                Location = location,
+                Tag = status,
+                Font = bold ? boldFont : regularFont
+            };
         }
 
         private ComboBox createComboBox()
@@ -119,42 +183,17 @@ namespace AnAusAutomat.Sensors.GUI.Internals.Dialogs
             return comboBox;
         }
 
-        private Button createExecuteButton()
+        private Button createOKButton()
         {
-            var button = new Button();
-            button.FlatStyle = FlatStyle.Popup;
-            button.Size = new Size(310, 23);
-            button.UseVisualStyleBackColor = true;
-            button.Location = new Point(12, 93);
-            button.Text = "Execute";
-            button.Font = regularFont;
-            button.Click += _btnExecute_Click;
-            return button;
-        }
-
-        private void _btnSocketState_Click(object sender, EventArgs e)
-        {
-            _btnOn.Font = regularFont;
-            _btnOff.Font = regularFont;
-            _btnUndefined.Font = regularFont;
-
-            var button = ((Button)sender);
-            button.Font = boldFont;
-
-            if (button.Text == _translation.GetOn())
-                _status = SensorPowerStatus.On;
-            else if (button.Text == _translation.GetOff())
-                _status = SensorPowerStatus.Off;
-            else if (button.Text == _translation.GetUndefined())
-                _status = SensorPowerStatus.Undefined;
-        }
-
-        private void _btnExecute_Click(object sender, EventArgs e)
-        {
-            _btnExecutePressed = true;
-
-            _form.Close();
-            _form.Dispose();
+            return new Button()
+            {
+                Text = "OK",
+                FlatStyle = FlatStyle.Popup,
+                Size = new Size(310, 23),
+                UseVisualStyleBackColor = true,
+                Location = new Point(12, 93),
+                Font = regularFont
+            };
         }
     }
 }

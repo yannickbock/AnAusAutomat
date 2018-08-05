@@ -35,7 +35,7 @@ namespace AnAusAutomat.Sensors.GUI.Internals.Scheduling
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            var tasksToExecute = _scheduledTasks.Where(x => x.ExecuteAt > DateTime.Now);
+            var tasksToExecute = _scheduledTasks.Where(x => x.ExecuteAt < DateTime.Now).ToList();
 
             foreach (var task in tasksToExecute)
             {
