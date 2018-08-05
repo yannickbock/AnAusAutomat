@@ -19,20 +19,29 @@ namespace AnAusAutomat.Core
             var files = directories.SelectMany(x => Directory.GetFiles(x, "*.dll", SearchOption.TopDirectoryOnly));
 
             var sensors = new List<ISensor>();
-            var sensorQualifiedName = typeof(ISensor).AssemblyQualifiedName;
             foreach (string file in files)
             {
                 try
                 {
                     var types = Assembly.LoadFrom(file).GetTypes();
-                    var sensorType = types.FirstOrDefault(x => typeof(ISensor).IsAssignableFrom(x));
+                    int count = types.Count(x => typeof(ISensor).IsAssignableFrom(x));
 
-                    var sensor = Activator.CreateInstance(sensorType) as ISensor;
-                    sensors.Add(sensor);
+                    Log.Debug(string.Format("Searching for sensor in {0}", file));
+
+                    if (count == 1)
+                    {
+                        var sensorType = types.FirstOrDefault(x => typeof(ISensor).IsAssignableFrom(x));
+                        var sensor = Activator.CreateInstance(sensorType) as ISensor;
+                        sensors.Add(sensor);
+                    }
+                    else if (count > 1)
+                    {
+                        Log.Warning(string.Format("More then one sensor found in {0}. Just loading the first.", file));
+                    }
                 }
                 catch (Exception e)
                 {
-
+                    Log.Error(e, string.Format("Error while searching for sensor in {0}", file));
                 }
             }
 
@@ -47,20 +56,28 @@ namespace AnAusAutomat.Core
             var files = directories.SelectMany(x => Directory.GetFiles(x, "*.dll", SearchOption.TopDirectoryOnly));
 
             var controllers = new List<IController>();
-            var controllerFactoryQualifiedName = typeof(IControllerFactory).AssemblyQualifiedName;
             foreach (string file in files)
             {
                 try
                 {
                     var types = Assembly.LoadFrom(file).GetTypes();
-                    var controllerFactoryType = types.FirstOrDefault(x => typeof(IControllerFactory).IsAssignableFrom(x));
+                    int count = types.Count(x => typeof(IControllerFactory).IsAssignableFrom(x));
 
-                    var factory = Activator.CreateInstance(controllerFactoryType) as IControllerFactory;
-                    controllers.AddRange(factory.Create());
+                    Log.Debug(string.Format("Searching for controller in {0}", file));
+                    if (count == 1)
+                    {
+                        var controllerFactoryType = types.FirstOrDefault(x => typeof(IControllerFactory).IsAssignableFrom(x));
+                        var factory = Activator.CreateInstance(controllerFactoryType) as IControllerFactory;
+                        controllers.AddRange(factory.Create());
+                    }
+                    else if (count > 1)
+                    {
+                        Log.Warning(string.Format("More then one controller found in {0}. Just loading the first.", file));
+                    }
                 }
                 catch (Exception e)
                 {
-
+                    Log.Error(e, string.Format("Error while searching for controller in {0}", file));
                 }
             }
 
