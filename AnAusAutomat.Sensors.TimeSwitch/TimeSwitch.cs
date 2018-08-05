@@ -1,4 +1,5 @@
-﻿using AnAusAutomat.Contracts.Sensor;
+﻿using AnAusAutomat.Contracts;
+using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Contracts.Sensor.Attributes;
 using AnAusAutomat.Contracts.Sensor.Events;
 using AnAusAutomat.Sensors.TimeSwitch.Internals;

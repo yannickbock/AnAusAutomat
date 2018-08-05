@@ -1,4 +1,4 @@
-﻿using AnAusAutomat.Contracts.Sensor;
+﻿using AnAusAutomat.Contracts;
 using System.Collections.Generic;
 
 namespace AnAusAutomat.Core.Conditions

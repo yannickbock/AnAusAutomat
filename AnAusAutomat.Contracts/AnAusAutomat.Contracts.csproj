@@ -56,7 +56,7 @@
     <Compile Include="Sensor\Features\ISendModeChanged.cs" />
     <Compile Include="Sensor\Features\ISendStatusForecast.cs" />
     <Compile Include="Sensor\ISensor.cs" />
-    <Compile Include="Sensor\PowerStatus.cs" />
+    <Compile Include="PowerStatus.cs" />
     <Compile Include="Sensor\SensorParameter.cs" />
     <Compile Include="Sensor\SensorSettings.cs" />
     <Compile Include="Sensor\SocketWithSensorParameters.cs" />

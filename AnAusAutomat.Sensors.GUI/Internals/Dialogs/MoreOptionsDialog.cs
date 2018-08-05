@@ -2,7 +2,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using SensorPowerStatus = AnAusAutomat.Contracts.Sensor.PowerStatus;
+using SensorPowerStatus = AnAusAutomat.Contracts.PowerStatus;
 
 namespace AnAusAutomat.Sensors.GUI.Internals.Dialogs
 {

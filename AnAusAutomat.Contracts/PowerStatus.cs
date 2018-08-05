@@ -1,4 +1,4 @@
-﻿namespace AnAusAutomat.Contracts.Sensor
+﻿namespace AnAusAutomat.Contracts
 {
     public enum PowerStatus
     {

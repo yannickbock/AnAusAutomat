@@ -1,4 +1,4 @@
-﻿using AnAusAutomat.Contracts.Sensor;
+﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Core.Conditions;
 using AnAusAutomat.Core.Configuration;
 using System.Linq;
