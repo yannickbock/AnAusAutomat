@@ -85,18 +85,21 @@ namespace AnAusAutomat.Sensors.GUI.Internals
 
         public void SetCurrentMode(string mode)
         {
-            var items = getItems();
-            var modeItems = getModeItems();
-            
-            if (modeItems != null)
+            invokeIfRequired(new Action(() =>
             {
-                foreach (var modeItem in modeItems)
+                var items = getItems();
+                var modeItems = getModeItems();
+
+                if (modeItems != null)
                 {
-                    modeItem.Checked = false;
+                    foreach (var modeItem in modeItems)
+                    {
+                        modeItem.Checked = false;
+                    }
+                    var currentModeItem = items.FirstOrDefault(x => x.Text == mode);
+                    currentModeItem.Checked = true;
                 }
-                var currentModeItem = items.FirstOrDefault(x => x.Text == mode);
-                currentModeItem.Checked = true;
-            }
+            }));
         }
 
         public void SetSensorStatus(Socket socket, SensorPowerStatus status)
@@ -106,36 +109,42 @@ namespace AnAusAutomat.Sensors.GUI.Internals
 
         public void SetPhysicalStatus(Socket socket, SensorPowerStatus status)
         {
-            var item = getSocketItem(socket);
-
-            switch (status)
+            invokeIfRequired(new Action(() =>
             {
-                case SensorPowerStatus.On:
-                    item.Image = Resources.On;
-                    item.Text = _translation.GetSocketNameAndStatus(socket, status);
-                    break;
-                case SensorPowerStatus.Off:
-                    item.Image = Resources.Off;
-                    item.Text = _translation.GetSocketNameAndStatus(socket, status);
-                    break;
-            }
+                var item = getSocketItem(socket);
+
+                switch (status)
+                {
+                    case SensorPowerStatus.On:
+                        item.Image = Resources.On;
+                        item.Text = _translation.GetSocketNameAndStatus(socket, status);
+                        break;
+                    case SensorPowerStatus.Off:
+                        item.Image = Resources.Off;
+                        item.Text = _translation.GetSocketNameAndStatus(socket, status);
+                        break;
+                }
+            }));
         }
 
         public void ShowPhysicalStatusBalloonTip(Socket socket, SensorPowerStatus status, DateTime timeStamp, string triggeredBy, string condition)
         {
-            string title = string.Empty;
-            string text = _translation.GetBalloonTipText(timeStamp, triggeredBy, condition);
-
-            if (status == SensorPowerStatus.On)
+            invokeIfRequired(new Action(() =>
             {
-                title = _translation.GetBallonTipTitleOn(socket);
-            }
-            else
-            {
-                title = _translation.GetBallonTipTitleOff(socket);
-            }
+                string title = string.Empty;
+                string text = _translation.GetBalloonTipText(timeStamp, triggeredBy, condition);
 
-            _notifyIcon.ShowBalloonTip(1000, title.PadRight(title.Length + 10), text, ToolTipIcon.Info);
+                if (status == SensorPowerStatus.On)
+                {
+                    title = _translation.GetBallonTipTitleOn(socket);
+                }
+                else
+                {
+                    title = _translation.GetBallonTipTitleOff(socket);
+                }
+
+                _notifyIcon.ShowBalloonTip(1000, title.PadRight(title.Length + 10), text, ToolTipIcon.Info);
+            }));            
         }
 
         public void Show()
@@ -177,6 +186,18 @@ namespace AnAusAutomat.Sensors.GUI.Internals
         private IEnumerable<ToolStripMenuItem> getItems()
         {
             return _notifyIcon.ContextMenuStrip.Items.Cast<ToolStripItem>().Where(x => x as ToolStripMenuItem != null).Cast<ToolStripMenuItem>();
+        }
+
+        private void invokeIfRequired(Action action)
+        {
+            if (_notifyIcon.ContextMenuStrip.InvokeRequired)
+            {
+                _notifyIcon.ContextMenuStrip.Invoke(action);
+            }
+            else
+            {
+                action();
+            }
         }
     }
 }
