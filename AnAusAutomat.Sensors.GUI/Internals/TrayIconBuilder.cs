@@ -128,7 +128,7 @@ namespace AnAusAutomat.Sensors.GUI.Internals
                 };
             }).ToList();
 
-            var modesItem = new ToolStripMenuItem("Mode");
+            var modesItem = new ToolStripMenuItem("Mode", null, null, "mode");
             modesItem.DropDownItems.AddRange(dropDownItems.ToArray());
 
             _notifyIconItems.Add(modesItem);

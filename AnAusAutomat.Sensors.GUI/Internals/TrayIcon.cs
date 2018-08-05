@@ -174,7 +174,7 @@ namespace AnAusAutomat.Sensors.GUI.Internals
         private IEnumerable<ToolStripMenuItem> getModeItems()
         {
             var items = getItems();
-            return items?.FirstOrDefault(x => x.Text == "Mode")?.DropDownItems?.Cast<ToolStripMenuItem>();
+            return items?.FirstOrDefault(x => x.Name == "mode")?.DropDownItems?.Cast<ToolStripMenuItem>();
         }
 
         private ToolStripMenuItem getExitItem()
