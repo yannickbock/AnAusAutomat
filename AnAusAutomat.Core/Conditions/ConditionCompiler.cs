@@ -83,7 +83,7 @@ namespace AnAusAutomat.Core.Conditions
 
             string interfaceName = nameof(IConditionChecker);
             string sourceCode =
-                "using AnAusAutomat.Contracts.Sensor;\n" +
+                "using AnAusAutomat.Contracts;\n" +
                 "using AnAusAutomat.Core.Conditions;\n" +
                 "using AnAusAutomat.Toolbox.Extensions;\n" +
                 "using System.Collections.Generic;\n" +
