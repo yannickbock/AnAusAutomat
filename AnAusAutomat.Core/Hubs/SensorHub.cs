@@ -49,17 +49,16 @@ namespace AnAusAutomat.Core.Hubs
             if (hasSendModeChangedSupport || hasReceiveModeChangedSupport)
             {
                 var modes = _stateStore.GetModes();
-                string currentMode = _stateStore.GetCurrentMode();
 
                 // Call InitializeModes() only once.
                 if (hasSendModeChangedSupport)
                 {
-                    ((ISendModeChanged)sensor).InitializeModes(modes, currentMode);
+                    ((ISendModeChanged)sensor).InitializeModes(modes);
                     ((ISendModeChanged)sensor).ModeChanged += sensor_ModeChanged;
                 }
                 else if (hasReceiveModeChangedSupport)
                 {
-                    ((IReceiveModeChanged)sensor).InitializeModes(modes, currentMode);
+                    ((IReceiveModeChanged)sensor).InitializeModes(modes);
                 }
             }
 
@@ -103,7 +102,7 @@ namespace AnAusAutomat.Core.Hubs
 
         private void sensor_ModeChanged(object sender, ModeChangedEventArgs e)
         {
-            _stateStore.SetCurrentMode(e.Mode);
+            _stateStore.SetModeState(e.Mode);
 
             var sensorsWithReceiveModeChangedSupport = _sensors.Where(x => x as IReceiveModeChanged != null).Select(x => (IReceiveModeChanged)x).ToList();
             foreach (var sensor in sensorsWithReceiveModeChangedSupport)

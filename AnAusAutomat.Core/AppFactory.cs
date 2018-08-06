@@ -20,7 +20,6 @@ namespace AnAusAutomat.Core
 
             var stateStore = new StateStore();
             stateStore.SetModes(appConfig.Modes);
-            stateStore.SetCurrentMode(appConfig.DefaultMode);
 
             var sensorHub = new SensorHub(stateStore, sensors);
             var controllerHub = new ControllerHub(controllers);

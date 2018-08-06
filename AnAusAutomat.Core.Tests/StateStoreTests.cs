@@ -67,41 +67,38 @@ namespace AnAusAutomat.Core.Tests
         public void GetModes_SetAndGet()
         {
             var store = new StateStore();
-            store.SetModes(new List<string>()
+            store.SetModes(new List<ConditionMode>()
             {
-                "Video",
-                "Audio",
-                "Work"
+                new ConditionMode("Video", false),
+                new ConditionMode("Audio", true),
+                new ConditionMode("Work", true)
             });
             var result = store.GetModes();
 
             Assert.Equal(3, result.Count());
-            Assert.Contains("Video", result);
-            Assert.Contains("Audio", result);
-            Assert.Contains("Work", result);
-        }
-
-
-
-
-
-        [Fact]
-        public void GetCurrentMode_DefaultValue()
-        {
-            var store = new StateStore();
-            string result = store.GetCurrentMode();
-
-            Assert.Equal(string.Empty, result);
+            Assert.Contains(new ConditionMode("Video", false), result);
+            Assert.Contains(new ConditionMode("Audio", true), result);
+            Assert.Contains(new ConditionMode("Work", true), result);
         }
 
         [Fact]
-        public void GetCurrentMode_SetAndGet()
+        public void SetModeState()
         {
             var store = new StateStore();
-            store.SetCurrentMode("Dings");
-            string result = store.GetCurrentMode();
+            store.SetModes(new List<ConditionMode>()
+            {
+                new ConditionMode("Video", false),
+                new ConditionMode("Audio", true),
+                new ConditionMode("Work", true)
+            });
 
-            Assert.Equal("Dings", result);
+            store.SetModeState(new ConditionMode("Audio", false));
+
+            var result = store.GetModes();
+            Assert.Equal(3, result.Count());
+            Assert.Contains(new ConditionMode("Video", false), result);
+            Assert.Contains(new ConditionMode("Audio", false), result);
+            Assert.Contains(new ConditionMode("Work", true), result);
         }
     }
 }

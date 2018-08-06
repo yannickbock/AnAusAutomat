@@ -18,7 +18,7 @@ namespace AnAusAutomat.Core.Tests
         {
             var socketOne = new Socket(1, "Bulb");
             var socketTwo = new Socket(2, "External HDD");
-            var stateStore = getStateStore(socketOne, socketTwo, "");
+            var stateStore = getStateStore(socketOne, socketTwo, new List<ConditionMode>());
 
             var filter = new ConditionFilter(stateStore, new List<Condition>());
             var result = filter.Filter(socketOne, "SensorOne");
@@ -30,7 +30,7 @@ namespace AnAusAutomat.Core.Tests
         {
             var socketOne = new Socket(1, "Bulb");
             var socketTwo = new Socket(2, "External HDD");
-            var stateStore = getStateStore(socketOne, socketTwo, "");
+            var stateStore = getStateStore(socketOne, socketTwo, new List<ConditionMode>());
             var conditions = getConditions(socketOne);
 
             var filter = new ConditionFilter(stateStore, conditions);
@@ -39,10 +39,10 @@ namespace AnAusAutomat.Core.Tests
             Assert.Equal(conditions.First(), result.First());
         }
 
-        private IStateStore getStateStore(Socket socketOne, Socket socketTwo, string mode)
+        private IStateStore getStateStore(Socket socketOne, Socket socketTwo, IEnumerable<ConditionMode> modes)
         {
             var stateStore = new Mock<IStateStore>();
-            stateStore.Setup(x => x.GetCurrentMode()).Returns("");
+            stateStore.Setup(x => x.GetModes()).Returns(modes);
             stateStore.Setup(x => x.GetPhysicalState(socketOne)).Returns(PowerStatus.Off);
             stateStore.Setup(x => x.GetPhysicalState(socketTwo)).Returns(PowerStatus.On);
             stateStore.Setup(x => x.GetSensorStates(socketOne)).Returns(

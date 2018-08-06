@@ -64,9 +64,8 @@ namespace AnAusAutomat.Core.Configuration
 
             Log.Information("Loading modes ...");
             var modes = readModes();
-            string defaultMode = readDefaultMode();
 
-            return new AppConfig(sensors, conditions, modes, defaultMode);
+            return new AppConfig(sensors, conditions, modes);
         }
 
         private IEnumerable<SensorSettings> readSensorSettings()
@@ -198,19 +197,17 @@ namespace AnAusAutomat.Core.Configuration
             return value == "powerOn" || value == "on" ? PowerStatus.On : PowerStatus.Off;
         }
 
-        private IEnumerable<string> readModes()
+        private IEnumerable<ConditionMode> readModes()
         {
             Log.Debug("Reading modes ...");
 
-            var conditionElements = _xDocument.Root.Descendants("controlConditions").Elements();
-            var modes = conditionElements.Where(x => x.Attribute("mode") != null).Select(x => x.Attribute("mode").Value).Distinct();
+            var modeNodes = _xDocument.Root.Element("modes").Elements("mode");
+            return modeNodes.Select(x =>
+            {
+                string isActiveValueAsString = x.Attribute("active")?.Value ?? "false";
 
-            return modes.ToList();
-        }
-
-        private string readDefaultMode()
-        {
-            return _xDocument.Root.Element("sockets").Attribute("defaultMode").Value;
+                return new ConditionMode(name: x.Value, isActive: bool.Parse(isActiveValueAsString));
+            }).ToList();
         }
 
         private void readSocketIDsAndNames()

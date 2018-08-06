@@ -18,13 +18,14 @@ namespace AnAusAutomat.Core.Conditions
 
         public IEnumerable<Condition> Filter(Socket socket, string sensorName)
         {
-            string currentMode = _stateStore.GetCurrentMode();
+            var modes = _stateStore.GetModes();
+            var activeModes = modes.Where(x => x.IsActive).Select(x => x.Name);
             var physicalState = _stateStore.GetPhysicalState(socket);
             var sensorStates = _stateStore.GetSensorStates(socket);
 
             var trueConditions = _conditions
                 .Where(x => x.Socket.Equals(socket))
-                .Where(x => x.Mode.Equals(currentMode) || string.IsNullOrEmpty(x.Mode))
+                .Where(x => activeModes.Contains(x.Mode) || string.IsNullOrEmpty(x.Mode))
                 .Where(x => x.Text.Contains(sensorName))
                 .Where(x => x.IsTrue(physicalState, sensorStates))
                 .ToList();
