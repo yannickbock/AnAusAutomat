@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConditionMode.cs" />
     <Compile Include="Controller\IController.cs" />
     <Compile Include="Controller\IControllerFactory.cs" />
     <Compile Include="Sensor\Attributes\ParameterAttribute.cs" />
