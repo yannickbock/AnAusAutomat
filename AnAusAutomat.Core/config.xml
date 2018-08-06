@@ -10,7 +10,7 @@
       <parameter name="StartMinimized">True</parameter>
     </sensor>
   </sensors>
-  <sockets defaultMode="Musik">
+  <sockets>
     <socket id="1" name="Monitor">
       <sensors>
         <sensor name="SoundDetector">

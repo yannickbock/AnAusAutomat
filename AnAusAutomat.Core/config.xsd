@@ -118,7 +118,6 @@
               </xs:element>
             </xs:sequence>
 
-            <xs:attribute name="defaultMode" type="xs:string"/>
           </xs:complexType>
         </xs:element>
         
