@@ -39,7 +39,8 @@ namespace AnAusAutomat.Sensors.GUI.Internals
                     modeItem.Click += (sender, e) =>
                     {
                         var item = sender as ToolStripMenuItem;
-                        ModeOnClick?.Invoke(this, new ModeOnClickEventArgs(item?.Text));
+                        var mode = (ConditionMode)item?.Tag;
+                        ModeOnClick?.Invoke(this, new ModeOnClickEventArgs(mode));
                     };
                 }
             }
@@ -83,7 +84,7 @@ namespace AnAusAutomat.Sensors.GUI.Internals
             }
         }
 
-        public void SetCurrentMode(string mode)
+        public void SetModeState(ConditionMode mode)
         {
             invokeIfRequired(new Action(() =>
             {
@@ -92,12 +93,8 @@ namespace AnAusAutomat.Sensors.GUI.Internals
 
                 if (modeItems != null)
                 {
-                    foreach (var modeItem in modeItems)
-                    {
-                        modeItem.Checked = false;
-                    }
-                    var currentModeItem = items.FirstOrDefault(x => x.Text == mode);
-                    currentModeItem.Checked = true;
+                    var item = items.FirstOrDefault(x => x.Text == mode.Name);
+                    item.Checked = mode.IsActive;
                 }
             }));
         }

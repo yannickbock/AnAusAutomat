@@ -4,7 +4,7 @@ namespace AnAusAutomat.Contracts.Sensor.Events
 {
     public class ModeChangedEventArgs : EventArgs
     {
-        public ModeChangedEventArgs(string message, string mode)
+        public ModeChangedEventArgs(string message, ConditionMode mode)
         {
             Message = message;
             Mode = mode;
@@ -13,7 +13,7 @@ namespace AnAusAutomat.Contracts.Sensor.Events
 
         public string Message { get; private set; }
 
-        public string Mode { get; private set; }
+        public ConditionMode Mode { get; private set; }
 
         public DateTime TimeStamp { get; private set; }
     }

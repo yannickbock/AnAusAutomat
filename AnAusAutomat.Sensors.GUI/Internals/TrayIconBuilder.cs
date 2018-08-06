@@ -105,23 +105,19 @@ namespace AnAusAutomat.Sensors.GUI.Internals
             };
         }
 
-        public void AddModeStrip(IEnumerable<string> modes, string currentMode)
+        public void AddModeStrip(IEnumerable<ConditionMode> modes)
         {
             var dropDownItems = modes.Select(x =>
             {
-                return new ToolStripMenuItem(x, null, onClick: (sender, e) =>
+                return new ToolStripMenuItem(x.Name, null, onClick: (sender, e) =>
                 {
-                    var m = ((ToolStripMenuItem)sender);
-                    var items = m.Owner.Items.Cast<ToolStripMenuItem>().Where(a => a.Checked);
-                    foreach (var item in items)
-                    {
-                        item.Checked = false;
-                    }
-                    m.Checked = true;
+                    var item = ((ToolStripMenuItem)sender);
+                    item.Checked = !item.Checked;
                 })
                 {
                     ImageScaling = ToolStripItemImageScaling.None,
-                    Checked = x == currentMode ? true : false
+                    Checked = x.IsActive,
+                    Tag = x
                 };
             }).ToList();
 

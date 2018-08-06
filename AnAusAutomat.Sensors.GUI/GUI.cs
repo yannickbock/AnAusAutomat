@@ -25,16 +25,14 @@ namespace AnAusAutomat.Sensors.GUI
         public event EventHandler<ApplicationExitEventArgs> ApplicationExit;
 
         private Settings _settings;
-        private IEnumerable<string> _modes;
-        private string _currentMode;
+        private IEnumerable<ConditionMode> _modes;
         private TrayIcon _trayIcon;
         private Translation _translation;
         private Scheduler _scheduler;
 
-        public void InitializeModes(IEnumerable<string> modes, string currentMode)
+        public void InitializeModes(IEnumerable<ConditionMode> modes)
         {
             _modes = modes;
-            _currentMode = currentMode;
         }
 
         public void Initialize(SensorSettings settings)
@@ -51,7 +49,7 @@ namespace AnAusAutomat.Sensors.GUI
                 builder.AddSocketStrip(socket);
             }
             builder.AddSeparatorStrip();
-            builder.AddModeStrip(_modes, _currentMode);
+            builder.AddModeStrip(_modes);
             builder.AddSeparatorStrip();
             builder.AddExitStrip();
 
@@ -106,7 +104,7 @@ namespace AnAusAutomat.Sensors.GUI
 
         public void OnModeHasChanged(object sender, ModeChangedEventArgs e)
         {
-            _trayIcon.SetCurrentMode(e.Mode);
+            _trayIcon.SetModeState(e.Mode);
         }
 
         public void OnPhysicalStatusHasChanged(object sender, StatusChangedEventArgs e)

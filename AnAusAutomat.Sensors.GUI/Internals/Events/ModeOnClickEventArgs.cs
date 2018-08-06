@@ -1,14 +1,15 @@
-﻿using System;
+﻿using AnAusAutomat.Contracts;
+using System;
 
 namespace AnAusAutomat.Sensors.GUI.Internals.Events
 {
     public class ModeOnClickEventArgs : EventArgs
     {
-        public ModeOnClickEventArgs(string mode)
+        public ModeOnClickEventArgs(ConditionMode mode)
         {
             Mode = mode;
         }
 
-        public string Mode { get; private set; }
+        public ConditionMode Mode { get; private set; }
     }
 }

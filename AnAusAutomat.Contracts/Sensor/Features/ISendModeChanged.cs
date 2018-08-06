@@ -10,8 +10,7 @@ namespace AnAusAutomat.Contracts.Sensor.Features
         /// Called before Sensor.Initialize()
         /// </summary>
         /// <param name="modes"></param>
-        /// <param name="currentMode"></param>
-        void InitializeModes(IEnumerable<string> modes, string currentMode);
+        void InitializeModes(IEnumerable<ConditionMode> modes);
 
         /// <summary>
         /// Need to be call if the sensor changed the mode.

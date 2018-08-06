@@ -128,6 +128,17 @@ namespace AnAusAutomat.Core.Tests.Configuration
             // TODO
         }
 
+        [Fact]
+        public void Load_Modes()
+        {
+            var config = getConfig();
+
+            Assert.Equal(3, config.Modes.Count());
+            Assert.Contains(new ConditionMode("Arbeit", true), config.Modes);
+            Assert.Contains(new ConditionMode("Musik", true), config.Modes);
+            Assert.Contains(new ConditionMode("Video", false), config.Modes);
+        }
+
         private AppConfig getConfig()
         {
             var reader = new XmlAppConfigReader("_TestData\\config_valid.xml");
