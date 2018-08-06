@@ -4,6 +4,22 @@
     <xs:complexType>
       <xs:all>
 
+        <xs:element name="modes">
+          <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="mode">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="active" type="xs:boolean" use="optional" default="false"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
         <xs:element name="sensors">
           <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
