@@ -5,6 +5,6 @@ namespace AnAusAutomat.Core.Conditions
 {
     public interface IConditionChecker
     {
-        bool IsTrue(PowerStatus physicalStatus, Dictionary<string, PowerStatus> sensorStates);
+        bool IsTrue(Dictionary<Socket, PowerStatus> physicalStates, Dictionary<string, PowerStatus> sensorStates);
     }
 }

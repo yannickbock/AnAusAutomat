@@ -6,7 +6,7 @@ namespace AnAusAutomat.Core
     public interface IStateStore
     {
         IEnumerable<ConditionMode> GetModes();
-        PowerStatus GetPhysicalState(Socket socket);
+        Dictionary<Socket, PowerStatus> GetPhysicalStates();
         Dictionary<string, PowerStatus> GetSensorStates(Socket socket);
         void SetModeState(ConditionMode mode);
         void SetModes(IEnumerable<ConditionMode> modes);

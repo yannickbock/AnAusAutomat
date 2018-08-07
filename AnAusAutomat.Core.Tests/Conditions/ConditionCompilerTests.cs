@@ -1,5 +1,4 @@
 ﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Core.Conditions;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,19 +13,19 @@ namespace AnAusAutomat.Core.Tests.Conditions
         {
             var condition = compile("Socket.IsOn AND InputDeviceObserver.PowerOff");
             Assert.True(condition.IsTrue(
-                physicalStatus: PowerStatus.On,
+                physicalStates: new Dictionary<Socket, PowerStatus>() { { new Socket(1, ""), PowerStatus.On } },
                 sensorStates: new Dictionary<string, PowerStatus>()
                 {
                     { "InputDeviceObserver", PowerStatus.Off }
                 }));
             Assert.False(condition.IsTrue(
-                physicalStatus: PowerStatus.Off,
+                physicalStates: new Dictionary<Socket, PowerStatus>() { { new Socket(1, ""), PowerStatus.Off } },
                 sensorStates: new Dictionary<string, PowerStatus>()
                 {
                     { "InputDeviceObserver", PowerStatus.Off }
                 }));
             Assert.False(condition.IsTrue(
-                physicalStatus: PowerStatus.On,
+                physicalStates: new Dictionary<Socket, PowerStatus>() { { new Socket(1, ""), PowerStatus.On } },
                 sensorStates: new Dictionary<string, PowerStatus>()
                 {
                     { "InputDeviceObserver", PowerStatus.On }
@@ -35,7 +34,7 @@ namespace AnAusAutomat.Core.Tests.Conditions
             // ---
             condition = compile("!Socket.IsOn AND SoundDetector.PowerOff AND GUI.Undefined");
             Assert.True(condition.IsTrue(
-                physicalStatus: PowerStatus.Off,
+                physicalStates: new Dictionary<Socket, PowerStatus>() { { new Socket(1, ""), PowerStatus.Off } },
                 sensorStates: new Dictionary<string, PowerStatus>()
                 {
                     { "SoundDetector", PowerStatus.Off },
@@ -52,7 +51,7 @@ namespace AnAusAutomat.Core.Tests.Conditions
 
         private Condition compile(string conditionText)
         {
-            var settings = new ConditionSettings(conditionText, PowerStatus.Undefined, ConditionType.Regular, "", new Socket(0, ""));
+            var settings = new ConditionSettings(conditionText, PowerStatus.Undefined, ConditionType.Regular, "", new Socket(1, ""));
 
             var compiler = new ConditionCompiler();
             return compiler.Compile(new List<ConditionSettings>() { settings }).FirstOrDefault();
