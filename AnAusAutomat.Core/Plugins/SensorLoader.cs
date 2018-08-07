@@ -17,7 +17,7 @@ namespace AnAusAutomat.Core.Plugins
             _directoryPath = directoryPath;
         }
 
-        public IEnumerable<ISensor> Load()
+        public IEnumerable<ISensor> Load(IEnumerable<string> sensorNames)
         {
             Log.Information(string.Format("Searching sensors in directory {0} ...", _directoryPath));
 
@@ -28,9 +28,16 @@ namespace AnAusAutomat.Core.Plugins
                 try
                 {
                     var types = Assembly.LoadFrom(file).GetTypes();
-                    int count = types.Count(x => typeof(ISensor).IsAssignableFrom(x));
+                    var filterResult = types.Where(x => typeof(ISensor).IsAssignableFrom(x));
+                    bool sensorFoundButNotConfigured = filterResult.Any(x => !sensorNames.Contains(x.Name));
+                    int count = filterResult.Count(x => sensorNames.Contains(x.Name));
 
                     Log.Debug(string.Format("Searching for sensor in {0}", file));
+
+                    if (sensorFoundButNotConfigured)
+                    {
+                        Log.Warning("Sensor found but not configured. Skipping.");
+                    }
 
                     if (count > 1)
                     {
@@ -60,6 +67,20 @@ namespace AnAusAutomat.Core.Plugins
         {
             var directories = Directory.GetDirectories(_directoryPath, "*", SearchOption.TopDirectoryOnly);
             return directories.SelectMany(x => Directory.GetFiles(x, "*.dll", SearchOption.TopDirectoryOnly));
+        }
+
+        private void logUnconfiguredSensors(IEnumerable<Type> sensors, IEnumerable<string> sensorNames)
+        {
+            var s = sensors.Where(x => !sensorNames.Contains(x.Name));
+            if (s.Any())
+            {
+                var result = s.Select(x => x.Name);
+
+                if (result.Count() == 1)
+                {
+                    Log.Warning(string.Format("Found unconfigured sensor: {0}", result.FirstOrDefault()));
+                }
+            }
         }
     }
 }

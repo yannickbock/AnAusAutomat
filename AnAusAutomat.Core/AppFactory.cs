@@ -3,6 +3,7 @@ using AnAusAutomat.Core.Hubs;
 using AnAusAutomat.Core.Plugins;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace AnAusAutomat.Core
@@ -15,9 +16,11 @@ namespace AnAusAutomat.Core
             string sensorsDirectoryPath = rootDirectoryPath + "\\Sensors";
             string controllersDirectoryPath = rootDirectoryPath + "\\Controllers";
 
+            var sensorNames = appConfig.Sensors.Select(x => x.SensorName);
+
             var sensorLoader = new SensorLoader(sensorsDirectoryPath);
             var controllerLoader = new ControllerLoader(controllersDirectoryPath);
-            var sensors = sensorLoader.Load();
+            var sensors = sensorLoader.Load(sensorNames);
             var controllers = controllerLoader.Load();
 
             var stateStore = new StateStore();
