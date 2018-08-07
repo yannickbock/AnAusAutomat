@@ -22,13 +22,13 @@
         </sensor>
         <sensor name="GUI" />
       </sensors>
-      <controlConditions startupState="On" shutdownState="On">
+      <conditions startupState="On" shutdownState="On">
         <powerOn>!Socket.IsOn AND (InputDeviceObserver.PowerOn OR GUI.PowerOn)</powerOn>
         <powerOff mode="Arbeit">Socket.IsOn AND InputDeviceObserver.PowerOff</powerOff>
         <powerOff mode="Musik">Socket.IsOn AND InputDeviceObserver.PowerOff AND (SoundDetector.PowerOff OR SoundDetector.Undefined)</powerOff>
         <powerOff mode="Video">Socket.IsOn AND InputDeviceObserver.PowerOff AND (SoundDetector.PowerOff OR SoundDetector.Undefined)</powerOff>
         <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
-      </controlConditions>
+      </conditions>
     </socket>
     <socket id="2" name="Verstärker">
       <sensors>
@@ -38,12 +38,12 @@
         </sensor>
         <sensor name="GUI" />
       </sensors>
-      <controlConditions startupState="Off" shutdownState="Off">
+      <conditions startupState="Off" shutdownState="Off">
         <powerOn>!Socket.IsOn AND SoundDetector.PowerOn AND GUI.Undefined</powerOn>
         <powerOff>Socket.IsOn AND SoundDetector.PowerOff AND GUI.Undefined</powerOff>
         <powerOn>!Socket.IsOn AND GUI.PowerOn</powerOn>
         <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
-      </controlConditions>
+      </conditions>
     </socket>
     <socket id="3" name="Lampe">
       <sensors>
@@ -52,11 +52,11 @@
         </sensor>
         <sensor name="GUI" />
       </sensors>
-      <controlConditions startupState="On" shutdownState="Off">
+      <conditions startupState="On" shutdownState="Off">
         <powerOn>!Socket.IsOn AND InputDeviceObserver.PowerOn AND GUI.Undefined</powerOn>
         <powerOff>Socket.IsOn AND InputDeviceObserver.PowerOff AND GUI.Undefined</powerOff>
         <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
-      </controlConditions>
+      </conditions>
     </socket>
     <socket id="4" name="Externe HDDs">
       <sensors>
@@ -72,13 +72,13 @@
           <parameter name="Off">18:30:00</parameter>
         </sensor>
       </sensors>
-      <controlConditions startupState="Off" shutdownState="Off">
+      <conditions startupState="Off" shutdownState="Off">
         <powerOn>!Socket.IsOn AND GUI.PowerOn</powerOn>
         <powerOn>!Socket.IsOn AND TimeSwitch.PowerOn</powerOn>
         <powerOff mode="Arbeit">Socket.IsOn AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
         <powerOff mode="Musik">Socket.IsOn AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
         <powerOff mode="Video">Socket.IsOn AND SoundDetector.PowerOff AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
-      </controlConditions>
+      </conditions>
     </socket>
   </sockets>
 </configuration>

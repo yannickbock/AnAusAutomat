@@ -57,7 +57,7 @@
                       </xs:complexType>
                     </xs:element>
 
-                    <xs:element name="controlConditions">
+                    <xs:element name="conditions">
                       <xs:complexType>
                         <xs:sequence minOccurs="0" maxOccurs="unbounded">
                           
