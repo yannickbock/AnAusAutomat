@@ -60,11 +60,12 @@
     <Compile Include="Configuration\AppConfig.cs" />
     <Compile Include="Configuration\XmlAppConfigReader.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="Plugins\ControllerLoader.cs" />
     <Compile Include="Hubs\ControllerHub.cs" />
     <Compile Include="IStateStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Hubs\SensorHub.cs" />
-    <Compile Include="PluginLoader.cs" />
+    <Compile Include="Plugins\SensorLoader.cs" />
     <Compile Include="StateStore.cs" />
   </ItemGroup>
   <ItemGroup>
