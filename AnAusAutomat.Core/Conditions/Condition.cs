@@ -12,9 +12,9 @@ namespace AnAusAutomat.Core.Conditions
             _conditionChecker = conditionChecker;
         }
 
-        public bool IsTrue(PowerStatus physicalStatus, Dictionary<string, PowerStatus> sensorStates)
+        public bool IsTrue(Dictionary<Socket, PowerStatus> physicalStates, Dictionary<string, PowerStatus> sensorStates)
         {
-            return _conditionChecker.IsTrue(physicalStatus, sensorStates);
+            return _conditionChecker.IsTrue(physicalStates, sensorStates);
         }
     }
 }

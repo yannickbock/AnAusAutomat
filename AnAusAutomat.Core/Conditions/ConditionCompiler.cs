@@ -1,9 +1,11 @@
-﻿using Microsoft.CSharp;
+﻿using AnAusAutomat.Contracts;
+using Microsoft.CSharp;
 using Serilog;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AnAusAutomat.Core.Conditions
 {
@@ -21,7 +23,7 @@ namespace AnAusAutomat.Core.Conditions
 
         private Condition compile(ConditionSettings settings)
         {
-            string sourceCode = buildSourceCode(settings.Text);
+            string sourceCode = buildSourceCode(settings.Text, settings.Socket);
 
             Log.Debug(string.Format("Compile SourceCode for {0}", settings.Text));
             CSharpCodeProvider provider = new CSharpCodeProvider();
@@ -60,16 +62,32 @@ namespace AnAusAutomat.Core.Conditions
             return null;
         }
 
-        private string buildSourceCode(string commandText)
+        private string buildSourceCode(string commandText, Socket defaultSocket)
         {
             Log.Debug(string.Format("Generate SourceCode for {0}", commandText));
 
             //Example: Socket.IsOn AND UserInputDetector.PowerOff AND SoundDetector.PowerOff AND TrayIcon.Undefined
-            string condition = commandText.Trim().Replace("AND", "&&").Replace("OR", "||")
-                .Replace("!Socket.IsOn", "physicalStatus == PowerStatus.Off")
-                .Replace("!Socket.IsOff", "physicalStatus == PowerStatus.On")
-                .Replace("Socket.IsOff", "physicalStatus == PowerStatus.Off")
-                .Replace("Socket.IsOn", "physicalStatus == PowerStatus.On")
+            string condition = commandText.Trim().Replace("Socket.", string.Format("Socket({0}).", defaultSocket.ID));
+
+            foreach (var x in Regex.Matches(condition, @"!Socket\(\d+\).IsOff").Cast<Match>())
+            {
+                condition = condition.Replace(x.Value, x.Value.Replace("!", "").Replace("IsOff", "IsOn"));
+            }
+
+            foreach (var x in Regex.Matches(condition, @"!Socket\(\d+\).IsOn").Cast<Match>())
+            {
+                condition = condition.Replace(x.Value, x.Value.Replace("!", "").Replace("IsOn", "IsOff"));
+            }
+
+            foreach (var x in Regex.Matches(condition, @"Socket\(\d+\)").Cast<Match>())
+            {
+                condition = condition.Replace(x.Value, x.Value.Replace("Socket(", "getPhysicalStateByID(physicalStates, "));
+            }
+
+            condition = condition
+                .Replace("AND", "&&").Replace("OR", "||")
+                .Replace(".IsOff", " == PowerStatus.Off")
+                .Replace(".IsOn", " == PowerStatus.On")
                 .Replace(".PowerOn", " == PowerStatus.On")
                 .Replace(".PowerOff", " == PowerStatus.Off")
                 .Replace(".Undefined", " == PowerStatus.Undefined");
@@ -87,14 +105,20 @@ namespace AnAusAutomat.Core.Conditions
                 "using AnAusAutomat.Core.Conditions;\n" +
                 "using AnAusAutomat.Toolbox.Extensions;\n" +
                 "using System.Collections.Generic;\n" +
+                "using System.Linq;\n" +
                 "\n" +
                 "public class Magic : " + interfaceName + "\n" +
                 "{\n" +
-                "  public bool IsTrue(PowerStatus physicalStatus, Dictionary<string, PowerStatus> sensorStates)\n" +
+                "  public bool IsTrue(Dictionary<Socket, PowerStatus> physicalStates, Dictionary<string, PowerStatus> sensorStates)\n" +
                 "  {\n" +
                 "    return " + condition.Replace("&&", "\n      &&") + ";\n" +
                 "  }\n" +
-                "}";
+                "\n" +
+                "  private PowerStatus getPhysicalStateByID(Dictionary <Socket, PowerStatus> physicalStates, int id)\n" +
+                "  {\n" +
+                "    return physicalStates.Any(x => x.Key.ID == id) ? physicalStates.FirstOrDefault(x => x.Key.ID == id).Value : PowerStatus.Undefined;\n" +
+                "  }\n" +
+                "}\n";
 
             return sourceCode;
         }
@@ -103,6 +127,11 @@ namespace AnAusAutomat.Core.Conditions
         {
             string temp = commandText
                 .Replace("Socket.IsOn", "").Replace("Socket.IsOff", "")
+                .Replace("0", "").Replace("1", "")
+                .Replace("2", "").Replace("3", "")
+                .Replace("4", "").Replace("5", "")
+                .Replace("6", "").Replace("7", "")
+                .Replace("8", "").Replace("9", "")
                 .Replace("AND", "").Replace("OR", "")
                 .Replace("(", "").Replace(")", "")
                 .Replace("&", "").Replace("|", "")
