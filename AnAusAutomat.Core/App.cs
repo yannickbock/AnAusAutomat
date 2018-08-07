@@ -43,19 +43,12 @@ namespace AnAusAutomat.Core
             var condition = _conditionFilter.Filter(e.Socket, triggeredBy).FirstOrDefault();
             if (condition != null)
             {
-                switch (condition.ResultingStatus)
-                {
-                    case PowerStatus.On:
-                        _stateStore.SetPhysicalState(e.Socket, PowerStatus.On);
-                        _controllerHub.TurnOn(e.Socket);
-                        _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Text, e.Socket, PowerStatus.On));
-                        break;
-                    case PowerStatus.Off:
-                        _stateStore.SetPhysicalState(e.Socket, PowerStatus.Off);
-                        _controllerHub.TurnOff(e.Socket);
-                        _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(e.Message, condition.Text, e.Socket, PowerStatus.Off));
-                        break;
-                }
+                turnOnOrOff(
+                    socket: e.Socket,
+                    status: condition.ResultingStatus,
+                    condition: condition.Text,
+                    message: e.Message,
+                    sender: sender);
             }
         }
 
@@ -95,17 +88,29 @@ namespace AnAusAutomat.Core
         {
             foreach (var status in startupOrShutdownConditions)
             {
-                switch (status.ResultingStatus)
+                turnOnOrOff(
+                    socket: status.Socket,
+                    status: status.ResultingStatus,
+                    condition: status.Type.ToString(),
+                    message: "",
+                    sender: this);
+            }
+        }
+
+        private void turnOnOrOff(Socket socket, PowerStatus status, string condition, string message, object sender)
+        {
+            if (status != PowerStatus.Undefined)
+            {
+                _stateStore.SetPhysicalState(socket, status);
+                _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(message, condition, socket, status));
+
+                switch (status)
                 {
                     case PowerStatus.On:
-                        _stateStore.SetPhysicalState(status.Socket, PowerStatus.On);
-                        _controllerHub.TurnOn(status.Socket);
-                        _sensorHub.OnPhysicalStatusHasChanged(this, new StatusChangedEventArgs("", status.Type.ToString(), status.Socket, PowerStatus.On));
+                        _controllerHub.TurnOn(socket);
                         break;
                     case PowerStatus.Off:
-                        _stateStore.SetPhysicalState(status.Socket, PowerStatus.Off);
-                        _controllerHub.TurnOff(status.Socket);
-                        _sensorHub.OnPhysicalStatusHasChanged(this, new StatusChangedEventArgs("", status.Type.ToString(), status.Socket, PowerStatus.Off));
+                        _controllerHub.TurnOff(socket);
                         break;
                 }
             }

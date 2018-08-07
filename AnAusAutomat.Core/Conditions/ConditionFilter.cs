@@ -20,18 +20,14 @@ namespace AnAusAutomat.Core.Conditions
         {
             var modes = _stateStore.GetModes();
             var activeModes = modes.Where(x => x.IsActive).Select(x => x.Name);
-            var physicalState = _stateStore.GetPhysicalState(socket);
+            var physicalStates = _stateStore.GetPhysicalStates();
             var sensorStates = _stateStore.GetSensorStates(socket);
 
-            
-
-            var temp = new Dictionary<Socket, PowerStatus>() { { socket, physicalState } };
-
             var trueConditions = _conditions
-                //.Where(x => x.Socket.Equals(socket))
+                .Where(x => x.Socket.Equals(socket))
                 .Where(x => activeModes.Contains(x.Mode) || string.IsNullOrEmpty(x.Mode))
-                .Where(x => x.Text.Contains(sensorName))
-                .Where(x => x.IsTrue(temp, sensorStates))
+                //.Where(x => x.Text.Contains(sensorName))
+                .Where(x => x.IsTrue(physicalStates, sensorStates))
                 .ToList();
 
             return trueConditions;

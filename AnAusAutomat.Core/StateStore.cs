@@ -17,9 +17,9 @@ namespace AnAusAutomat.Core
             _modes = new List<ConditionMode>();
         }
 
-        public PowerStatus GetPhysicalState(Socket socket)
+        public Dictionary<Socket, PowerStatus> GetPhysicalStates()
         {
-            return _physicalStates.ContainsKey(socket) ? _physicalStates[socket] : PowerStatus.Undefined;
+            return _physicalStates.ToDictionary(x => x.Key, y => y.Value);
         }
 
         public void SetPhysicalState(Socket socket, PowerStatus status)
