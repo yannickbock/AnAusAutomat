@@ -12,9 +12,9 @@ namespace AnAusAutomat.Core.Tests
         public void GetPhysicalState_DefaultValue()
         {
             var store = new StateStore();
-            var result = store.GetPhysicalState(new Socket(1, "Klaus-Dieter"));
+            var result = store.GetPhysicalStates();
 
-            Assert.Equal(PowerStatus.Undefined, result);
+            Assert.Empty(result);
         }
 
         [Fact]
@@ -24,9 +24,11 @@ namespace AnAusAutomat.Core.Tests
 
             var store = new StateStore();
             store.SetPhysicalState(socket, PowerStatus.On);
-            var result = store.GetPhysicalState(socket);
+            var result = store.GetPhysicalStates();
 
-            Assert.Equal(PowerStatus.On, result);
+            Assert.Single(result);
+            Assert.True(result.ContainsKey(socket));
+            Assert.Equal(PowerStatus.On, result[socket]);
         }
 
         [Fact]

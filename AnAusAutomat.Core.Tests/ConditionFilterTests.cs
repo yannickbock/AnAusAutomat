@@ -13,38 +13,67 @@ namespace AnAusAutomat.Core.Tests
 {
     public class ConditionFilterTests
     {
-        [Fact]
-        public void Filter_NoConditions()
+        private Dictionary<Socket, PowerStatus> _physicalStates = new Dictionary<Socket, PowerStatus>()
         {
-            var socketOne = new Socket(1, "Bulb");
-            var socketTwo = new Socket(2, "External HDD");
-            var stateStore = getStateStore(socketOne, socketTwo, new List<ConditionMode>());
+            { new Socket(1, "Bulb"), PowerStatus.Off },
+            { new Socket(2, "External HDD"), PowerStatus.On }
+        };
+
+        private Socket _socketOne = new Socket(1, "Bulb");
+        private Socket _socketTwo = new Socket(2, "External HDD");
+
+        [Fact]
+        public void FilterBySensor_NoConditions()
+        {
+            var stateStore = getStateStore(_socketOne, _socketTwo, new List<ConditionMode>());
 
             var filter = new ConditionFilter(stateStore, new List<Condition>());
-            var result = filter.Filter(socketOne, "SensorOne");
+            var result = filter.FilterBySensor(_socketOne, "SensorOne");
             Assert.Empty(result);
         }
 
         [Fact]
-        public void Filter()
+        public void FilterBySensor()
         {
-            var socketOne = new Socket(1, "Bulb");
-            var socketTwo = new Socket(2, "External HDD");
-            var stateStore = getStateStore(socketOne, socketTwo, new List<ConditionMode>());
-            var conditions = getConditions(socketOne);
+            var stateStore = getStateStore(_socketOne, _socketTwo, new List<ConditionMode>());
+            var conditions = getConditions(_socketOne, "SensorOne.PowerOn");
 
             var filter = new ConditionFilter(stateStore, conditions);
-            var result = filter.Filter(socketOne, "SensorOne");
+            var result = filter.FilterBySensor(_socketOne, "SensorOne");
             Assert.Single(result);
             Assert.Equal(conditions.First(), result.First());
+        }
+
+        [Fact]
+        public void FilterByRelatedSocket_NoConditions()
+        {
+            var stateStore = getStateStore(_socketOne, _socketTwo, new List<ConditionMode>());
+            var conditions = getConditions(_socketOne, "Socket(2).IsOff AND SensorOne.PowerOn");
+
+            var filter = new ConditionFilter(stateStore, conditions);
+            var result = filter.FilterByRelatedSocket(_socketOne);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void FilterByRelatedSocket()
+        {
+            var stateStore = getStateStore(_socketOne, _socketTwo, new List<ConditionMode>());
+            var conditions = getConditions(_socketOne, "Socket(2).IsOn AND SensorFour.PowerOn");
+
+            var filter = new ConditionFilter(stateStore, conditions);
+            var result = filter.FilterByRelatedSocket(_socketTwo);
+            //Assert.Single(result);
+            //Assert.Contains(conditions.First(), result);
+
+            // TODO: gars­tiges Mocking Zeug...
         }
 
         private IStateStore getStateStore(Socket socketOne, Socket socketTwo, IEnumerable<ConditionMode> modes)
         {
             var stateStore = new Mock<IStateStore>();
             stateStore.Setup(x => x.GetModes()).Returns(modes);
-            stateStore.Setup(x => x.GetPhysicalState(socketOne)).Returns(PowerStatus.Off);
-            stateStore.Setup(x => x.GetPhysicalState(socketTwo)).Returns(PowerStatus.On);
+            stateStore.Setup(x => x.GetPhysicalStates()).Returns(_physicalStates);
             stateStore.Setup(x => x.GetSensorStates(socketOne)).Returns(
                 new Dictionary<string, PowerStatus>()
                 {
@@ -65,10 +94,11 @@ namespace AnAusAutomat.Core.Tests
             return stateStore.Object;
         }
 
-        private IEnumerable<Condition> getConditions(Socket socket)
+        private IEnumerable<Condition> getConditions(Socket socket, string conditionText)
         {
             var a = new Mock<IConditionChecker>();
-            a.Setup(x => x.IsTrue(new Dictionary<Socket, PowerStatus>() { { new Socket(1, ""), PowerStatus.Off } }, new Dictionary<string, PowerStatus>()
+            a.Setup(x => x.IsTrue(_physicalStates,
+                new Dictionary<string, PowerStatus>()
                 {
                     { "SensorOne", PowerStatus.Off },
                     { "SensorTwo", PowerStatus.On },
@@ -79,7 +109,7 @@ namespace AnAusAutomat.Core.Tests
             return new List<Condition>()
             {
                 new Condition(
-                    new ConditionSettings("SensorOne.PowerOn", PowerStatus.On, ConditionType.Regular, "", socket),
+                    new ConditionSettings(conditionText, PowerStatus.On, ConditionType.Regular, "", socket),
                     a.Object)
             };
         }

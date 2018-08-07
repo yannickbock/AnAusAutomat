@@ -40,7 +40,7 @@ namespace AnAusAutomat.Core
             string triggeredBy = sender.GetType().Name;
             _stateStore.SetSensorState(e.Socket, triggeredBy, e.Status);
 
-            var condition = _conditionFilter.Filter(e.Socket, triggeredBy).FirstOrDefault();
+            var condition = _conditionFilter.FilterBySensor(e.Socket, triggeredBy).FirstOrDefault();
             if (condition != null)
             {
                 turnOnOrOff(
@@ -49,6 +49,20 @@ namespace AnAusAutomat.Core
                     condition: condition.Text,
                     message: e.Message,
                     sender: sender);
+
+                var relatedConditions = _conditionFilter.FilterByRelatedSocket(e.Socket);
+                if (relatedConditions.Any())
+                {
+                    foreach (var x in relatedConditions)
+                    {
+                        turnOnOrOff(
+                            x.Socket,
+                            x.ResultingStatus,
+                            x.Text,
+                            e.Message,
+                            sender);
+                    }
+                }
             }
         }
 
@@ -103,7 +117,6 @@ namespace AnAusAutomat.Core
             {
                 _stateStore.SetPhysicalState(socket, status);
                 _sensorHub.OnPhysicalStatusHasChanged(sender, new StatusChangedEventArgs(message, condition, socket, status));
-
                 switch (status)
                 {
                     case PowerStatus.On:
