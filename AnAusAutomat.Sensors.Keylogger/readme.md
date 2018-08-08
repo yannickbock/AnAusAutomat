@@ -12,14 +12,14 @@ Not supported.
 ## Parameters
 
 ### Global
-| Name | Type | Default Value | Description |
+| Name | Valid values | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | | | | |
 
 ### Socket
-| Name | Type | Default Value | Description |
+| Name | Valid values | Default value | Description |
 | ------ | ------ | ------ | ------ |
-| OffDelaySeconds | uint ( x > 0 ) | 300 | Time between last interaction and PowerOff. |
+| OffDelaySeconds | 0 to 4294967295 | 300 | Period between last interaction and PowerOff. |
 
 ## Features
 - SendStatusForecast
