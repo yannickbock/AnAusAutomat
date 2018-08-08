@@ -29,7 +29,7 @@ namespace AnAusAutomat.ConsoleApp
 
         private static void setConsoleOptions()
         {
-            Console.Title = "AnAusAutomat";
+            Console.Title = "AnAusAutomat.Console";
             Console.WindowWidth = (int)(Console.LargestWindowWidth * 0.9);
             Console.WindowHeight = (int)(Console.LargestWindowHeight * 0.6);
         }
