@@ -46,7 +46,11 @@
     <Compile Include="Internals\User32Adapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="readme.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AnAusAutomat.Contracts\AnAusAutomat.Contracts.csproj">
       <Project>{7AFB88F5-83CC-4B32-87D6-2B45F26570BD}</Project>
