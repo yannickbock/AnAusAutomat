@@ -15,12 +15,12 @@ Not supported.
 ## Parameters
 
 ### Global
-| Name | Valid values | Default value | Multiple allowed | Sample | Description |
+| Name | Values | Default | Multiple | Sample | Description |
 | ------ | ------ | ------ | ------ | ------ | ------ |
 | | | | |
 
 ### Socket
-| Name | Valid values | Default value | Multiple allowed | Sample | Description |
+| Name | Values | Default | Multiple | Sample | Description |
 | ------ | ------ | ------ | ------ | ------ | ------ |
 | OffDelaySeconds | 0 to 4294967295 | 300 | no | | Period between last interaction and PowerOff. |
 
