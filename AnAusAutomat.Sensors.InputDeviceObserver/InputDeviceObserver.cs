@@ -57,34 +57,25 @@ namespace AnAusAutomat.Sensors.InputDeviceObserver
 
         private void fireStatusForecastEvent(Cache cache, uint inputIdleSeconds)
         {
-            double turnSocketOffCountDownInSeconds = cache.Parameters.OffDelaySeconds - inputIdleSeconds;
+            var fireAt = new int[] { 240, 180, 120, 60, 30, 15 };
+            int countdown = (int)Math.Ceiling((double)(cache.Parameters.OffDelaySeconds - inputIdleSeconds));
 
-            bool isFiveMinuteStepAndMoreAsFiveMinutesRemain = turnSocketOffCountDownInSeconds % 300 == 0 && turnSocketOffCountDownInSeconds >= 300;
-
-            bool fireTurnOffCountDownEvent = turnSocketOffCountDownInSeconds == 240 ||
-                turnSocketOffCountDownInSeconds == 180 ||
-                turnSocketOffCountDownInSeconds == 120 ||
-                turnSocketOffCountDownInSeconds == 60 ||
-                turnSocketOffCountDownInSeconds == 30 ||
-                turnSocketOffCountDownInSeconds == 20 ||
-                turnSocketOffCountDownInSeconds == 10 ||
-                isFiveMinuteStepAndMoreAsFiveMinutesRemain;
-
-            if (fireTurnOffCountDownEvent)
+            if (inputIdleSeconds > cache.Parameters.OffDelaySeconds / 2)
             {
-                var args = new StatusForecastEventArgs(
-                    message: "",
-                    countDown: TimeSpan.FromSeconds(turnSocketOffCountDownInSeconds),
-                    socket: cache.Socket,
-                    status: PowerStatus.Off);
-
                 var lastEventFiredAt = _lastStatusForecastEventsFired.ContainsKey(cache.Socket) ?
                     _lastStatusForecastEventsFired[cache.Socket] : DateTime.MinValue;
-                bool currentEventAlreadyFired = (lastEventFiredAt - DateTime.Now) >= TimeSpan.FromSeconds(-1.5);
-                if (!currentEventAlreadyFired)
+
+                bool fireEvent = fireAt.Contains(countdown);
+                bool eventAlreadyFired = (lastEventFiredAt - DateTime.Now) >= TimeSpan.FromSeconds(-1.5);
+                if (fireEvent && !eventAlreadyFired)
                 {
-                    //StatusForecast?.Invoke(this, args);
                     _lastStatusForecastEventsFired[cache.Socket] = DateTime.Now;
+
+                    StatusForecast?.Invoke(this,
+                            new StatusForecastEventArgs(message: "",
+                            countDown: TimeSpan.FromSeconds(countdown),
+                            socket: cache.Socket,
+                            status: PowerStatus.Off));
                 }
             }
         }
