@@ -42,8 +42,10 @@ namespace AnAusAutomat.Sensors.SoundDetector
 
             foreach (var cache in _cache)
             {
+                double lastSignalSeconds = (DateTime.Now - cache.LastSignal).TotalSeconds;
+
                 bool turnSocketOn = cache.CurrentSignalSeconds > cache.Parameters.MinimumSignalSeconds;
-                bool turnSocketOff = (DateTime.Now - cache.LastSignal).TotalSeconds >= cache.Parameters.OffDelaySeconds;
+                bool turnSocketOff = lastSignalSeconds >= cache.Parameters.OffDelaySeconds;
 
                 if (turnSocketOff && cache.Status != PowerStatus.Off)
                 {
@@ -62,6 +64,33 @@ namespace AnAusAutomat.Sensors.SoundDetector
                 else
                 {
                     cache.CurrentSignalSeconds = 0;
+
+                    fireStatusForecastEvent(cache.Socket, (int)lastSignalSeconds, (int)cache.Parameters.OffDelaySeconds);
+                }
+            }
+        }
+
+        private void fireStatusForecastEvent(Socket socket, int lastSignalSeconds, int offDelaySeconds)
+        {
+            var fireAt = new int[] { 240, 180, 120, 60, 30, 15 };
+            int countdown = offDelaySeconds - lastSignalSeconds;
+
+            if (lastSignalSeconds > offDelaySeconds / 2)
+            {
+                var lastEventFiredAt = _lastStatusForecastEventsFired.ContainsKey(socket) ?
+                    _lastStatusForecastEventsFired[socket] : DateTime.MinValue;
+
+                bool fireEvent = fireAt.Contains(countdown);
+                bool eventAlreadyFired = (lastEventFiredAt - DateTime.Now) >= TimeSpan.FromSeconds(-1.5);
+                if (fireEvent && !eventAlreadyFired)
+                {
+                    _lastStatusForecastEventsFired[socket] = DateTime.Now;
+
+                    StatusForecast?.Invoke(this,
+                            new StatusForecastEventArgs(message: "",
+                            countDown: TimeSpan.FromSeconds((int)Math.Ceiling((decimal)(offDelaySeconds - lastSignalSeconds))),
+                            socket: socket,
+                            status: PowerStatus.Off));
                 }
             }
         }
