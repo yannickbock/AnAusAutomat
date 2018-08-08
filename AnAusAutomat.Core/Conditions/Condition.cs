@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace AnAusAutomat.Core.Conditions
 {
-    public class Condition : ConditionSettings, IConditionChecker
+    public class Condition : ConditionSettings, IConditionExecutor
     {
-        private IConditionChecker _conditionChecker;
+        private IConditionExecutor _conditionChecker;
 
-        public Condition(ConditionSettings settings, IConditionChecker conditionChecker) : base(settings.Text, settings.ResultingStatus, settings.Type, settings.Mode, settings.Socket)
+        public Condition(ConditionSettings settings, IConditionExecutor conditionChecker) : base(settings.Text, settings.ResultingStatus, settings.Type, settings.Mode, settings.Socket)
         {
             _conditionChecker = conditionChecker;
         }

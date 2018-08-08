@@ -96,7 +96,7 @@ namespace AnAusAutomat.Core.Tests
 
         private IEnumerable<Condition> getConditions(Socket socket, string conditionText)
         {
-            var a = new Mock<IConditionChecker>();
+            var a = new Mock<IConditionExecutor>();
             a.Setup(x => x.IsTrue(_physicalStates,
                 new Dictionary<string, PowerStatus>()
                 {

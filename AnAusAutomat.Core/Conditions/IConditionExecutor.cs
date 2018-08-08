@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AnAusAutomat.Core.Conditions
 {
-    public interface IConditionChecker
+    public interface IConditionExecutor
     {
         bool IsTrue(Dictionary<Socket, PowerStatus> physicalStates, Dictionary<string, PowerStatus> sensorStates);
     }

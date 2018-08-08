@@ -56,7 +56,7 @@
     <Compile Include="Conditions\ConditionSettings.cs" />
     <Compile Include="Conditions\ConditionFilter.cs" />
     <Compile Include="Conditions\ConditionType.cs" />
-    <Compile Include="Conditions\IConditionChecker.cs" />
+    <Compile Include="Conditions\IConditionExecutor.cs" />
     <Compile Include="Configuration\AppConfig.cs" />
     <Compile Include="Configuration\XmlAppConfigReader.cs" />
     <Compile Include="App.cs" />

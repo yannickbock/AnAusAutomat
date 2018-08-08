@@ -41,7 +41,7 @@ namespace AnAusAutomat.Core.Conditions
 
                 if (results.Errors.Count == 0)
                 {
-                    var checker = Activator.CreateInstance(results.CompiledAssembly.DefinedTypes.FirstOrDefault()) as IConditionChecker;
+                    var checker = Activator.CreateInstance(results.CompiledAssembly.DefinedTypes.FirstOrDefault()) as IConditionExecutor;
 
                     return new Condition(settings, checker);
                 }
@@ -99,7 +99,7 @@ namespace AnAusAutomat.Core.Conditions
                     string.Format("sensorStates.GetValueOrDefault(\"{0}\", PowerStatus.Undefined)", sensorName));
             }
 
-            string interfaceName = nameof(IConditionChecker);
+            string interfaceName = nameof(IConditionExecutor);
             string sourceCode =
                 "using AnAusAutomat.Contracts;\n" +
                 "using AnAusAutomat.Core.Conditions;\n" +
