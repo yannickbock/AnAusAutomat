@@ -2,9 +2,12 @@
 Listens to mouse move and key pressed event.
 
 ## Status
-**PowerOn:** Immediately after a key is pressed or the mouse cursor was moved.
-**PowerOff:** After x seconds without any interaction.
-**Undefined:** n/a
+##### PowerOn
+Immediately after a key is pressed or the mouse cursor was moved.
+##### PowerOff
+After x seconds without any interaction.
+##### Undefined
+Not supported.
 
 ## Parameters
 
