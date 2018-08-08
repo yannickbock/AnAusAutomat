@@ -2,7 +2,7 @@
 using AnAusAutomat.Contracts.Sensor;
 using System;
 
-namespace AnAusAutomat.Sensors.InputDeviceObserver.Internals
+namespace AnAusAutomat.Sensors.Keylogger.Internals
 {
     public class Cache
     {

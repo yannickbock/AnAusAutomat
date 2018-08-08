@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace AnAusAutomat.Sensors.InputDeviceObserver.Internals
+namespace AnAusAutomat.Sensors.Keylogger.Internals
 {
     public static class User32Adapter
     {

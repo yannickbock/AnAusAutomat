@@ -1,4 +1,4 @@
-﻿namespace AnAusAutomat.Sensors.InputDeviceObserver.Internals
+﻿namespace AnAusAutomat.Sensors.Keylogger.Internals
 {
     public class Parameters
     {

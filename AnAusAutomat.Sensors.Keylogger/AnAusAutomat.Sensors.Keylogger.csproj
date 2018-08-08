@@ -7,8 +7,8 @@
     <ProjectGuid>{DC9BF9B1-DE1F-4580-A526-46CFF1279338}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AnAusAutomat.Sensors.InputDeviceObserver</RootNamespace>
-    <AssemblyName>InputDeviceObserver</AssemblyName>
+    <RootNamespace>AnAusAutomat.Sensors.Keylogger</RootNamespace>
+    <AssemblyName>Keylogger</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\_bin\Sensors\InputDeviceObserver\</OutputPath>
+    <OutputPath>..\_bin\Sensors\Keylogger\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InputDeviceObserver.cs" />
+    <Compile Include="Keylogger.cs" />
     <Compile Include="Internals\Cache.cs" />
     <Compile Include="Internals\Parameters.cs" />
     <Compile Include="Internals\User32Adapter.cs" />
