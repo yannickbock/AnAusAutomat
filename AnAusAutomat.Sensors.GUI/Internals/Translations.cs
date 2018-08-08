@@ -87,12 +87,12 @@ namespace AnAusAutomat.Sensors.GUI.Internals
             return _culture.Name == "de-DE" ? "Weitere Optionen ..." : "More options ...";
         }
 
-        public string GetBallonTipTitleForecast(Socket socket)
+        public string GetBallonTipTitleForecast(Socket socket, string triggeredBy)
         {
             return string.Format(_culture.Name == "de-DE" ?
-                "Steckdose {0}: {1}" :
-                "Socket {0}: {1}",
-                socket.ID, socket.Name);
+                "Steckdose {0}: {1} / {2}" :
+                "Socket {0}: {1} / {2}",
+                socket.ID, socket.Name, triggeredBy);
         }
 
         public string GetBallonTipTitleOn(Socket socket)
