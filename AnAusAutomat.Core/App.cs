@@ -43,6 +43,8 @@ namespace AnAusAutomat.Core
             var condition = _conditionFilter.FilterBySensor(e.Socket, triggeredBy).FirstOrDefault();
             if (condition != null)
             {
+                Log.Information(string.Format("{0} = True", condition));
+
                 turnOnOrOff(
                     socket: e.Socket,
                     status: condition.ResultingStatus,
@@ -55,6 +57,8 @@ namespace AnAusAutomat.Core
                 {
                     foreach (var x in relatedConditions)
                     {
+                        Log.Information(string.Format("{0} = True", x));
+
                         turnOnOrOff(
                             x.Socket,
                             x.ResultingStatus,
