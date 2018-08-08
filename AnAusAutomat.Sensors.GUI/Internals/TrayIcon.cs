@@ -144,6 +144,17 @@ namespace AnAusAutomat.Sensors.GUI.Internals
             }));            
         }
 
+        public void ShowStatusForecastBalloonTip(Socket socket, SensorPowerStatus status, TimeSpan countdown, string triggeredBy)
+        {
+            invokeIfRequired(new Action(() =>
+            {
+                string title = _translation.GetBallonTipTitleForecast(socket, triggeredBy);
+                string text = _translation.GetBalloonTipTextForecast(triggeredBy, countdown, status);
+
+                _notifyIcon.ShowBalloonTip(1000, title.PadRight(title.Length + 10), text, ToolTipIcon.Info);
+            }));
+        }
+
         public void Show()
         {
             _notifyIcon.Visible = true;

@@ -1,5 +1,4 @@
 ﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Contracts.Sensor;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -37,7 +36,7 @@ namespace AnAusAutomat.Sensors.GUI.Internals
             return _culture.Name == "de-DE" ? "Undefiniert" : "Undefined";
         }
 
-        public string GetCountDown(TimeSpan timeSpan)
+        public string GetCountdown(TimeSpan timeSpan)
         {
             var temp = new[]
             {
@@ -88,20 +87,12 @@ namespace AnAusAutomat.Sensors.GUI.Internals
             return _culture.Name == "de-DE" ? "Weitere Optionen ..." : "More options ...";
         }
 
-        public string GetBallonTipTitleOnInCountDown(Socket socket, TimeSpan countDown)
+        public string GetBallonTipTitleForecast(Socket socket, string triggeredBy)
         {
             return string.Format(_culture.Name == "de-DE" ?
-                "Steckdose {0}: {1} wird in {2} eingeschaltet." :
-                "Socket {0}: {1} will turned on in {2}.",
-                socket.ID, socket.Name, GetCountDown(countDown));
-        }
-
-        public string GetBallonTipTitleOffInCountDown(Socket socket, TimeSpan countDown)
-        {
-            return string.Format(_culture.Name == "de-DE" ?
-                "Steckdose {0}: {1} wird in {2} ausgeschaltet." :
-                "Socket {0}: {1} will turned off in {2}.",
-                socket.ID, socket.Name, GetCountDown(countDown));
+                "Steckdose {0}: {1} / {2}" :
+                "Socket {0}: {1} / {2}",
+                socket.ID, socket.Name, triggeredBy);
         }
 
         public string GetBallonTipTitleOn(Socket socket)
@@ -126,6 +117,14 @@ namespace AnAusAutomat.Sensors.GUI.Internals
                 "Uhrzeit: {0}\nTrigger: {1}\nBedingung: {2}" :
                 "TimeStamp: {0}\nTriggeredBy: {1}\nCondition: {2}",
                 timeStamp, triggeredBy, condition);
+        }
+
+        public string GetBalloonTipTextForecast(string sensorName, TimeSpan countdown, PowerStatus status)
+        {
+            return string.Format(_culture.Name == "de-DE" ?
+                "Der Sensor {0} ändert möglicherweise seinen Zustand zu {1} in {2}." :
+                "The sensor {0} may change state to {1} in {2}.",
+                sensorName, status, GetCountdown(countdown));
         }
 
         public string GetExit()

@@ -120,7 +120,7 @@ namespace AnAusAutomat.Sensors.GUI
 
         public void OnStatusForecast(object sender, StatusForecastEventArgs e)
         {
-            //_trayIcon.OnStatusForecast(sender, e);
+            _trayIcon.ShowStatusForecastBalloonTip(e.Socket, e.Status, e.CountDown, sender.GetType().Name);
         }
 
         public void Start()
