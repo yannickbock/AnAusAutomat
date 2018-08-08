@@ -23,18 +23,12 @@ namespace AnAusAutomat.Controllers.Proprietary.Internals
             _schemaFilePath = currentAssemblyDirectoryPath + "\\config.xsd";
             _configFilePath = currentAssemblyDirectoryPath + "\\config.xml";
 
-            _xmlSchemaValidator = new XmlSchemaValidator(_schemaFilePath, _configFilePath)
-            {
-                SchemaNotValidLogMessage = string.Format("Proprietary controller schema file {0} is corrupted.", _schemaFilePath),
-                ConfigNotValidLogMessage = string.Format("Proprietary controller config file {0} is not valid.", _configFilePath),
-                SchemaFileNotFoundLogMessage = string.Format("Proprietary controller schema file {0} does not exist.", _schemaFilePath),
-                ConfigFileNotFoundLogMessage = string.Format("Proprietary controller config file {0} does not exist.", _configFilePath)
-            };
+            _xmlSchemaValidator = new XmlSchemaValidator(_schemaFilePath, _configFilePath);
         }
 
         public bool Validate()
         {
-            return _xmlSchemaValidator.Validate();
+            return _xmlSchemaValidator.Validate(out string message);
         }
 
         public IEnumerable<DeviceSettings> Read()

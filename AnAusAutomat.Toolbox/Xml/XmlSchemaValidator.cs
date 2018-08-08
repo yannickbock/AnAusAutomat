@@ -11,28 +11,32 @@ namespace AnAusAutomat.Toolbox.Xml
     {
         private string _schemaFilePath;
         private string _configFilePath;
-
-        public string SchemaNotValidLogMessage { get; set; }
-
-        public string ConfigNotValidLogMessage { get; set; }
-
-        public string SchemaFileNotFoundLogMessage { get; set; }
-
-        public string ConfigFileNotFoundLogMessage { get; set; }
+        private string _schemaNotValidMessage;
+        private string _configNotValidMessage;
+        private string _schemaFileNotFoundMessage;
+        private string _configFileNotFoundMessage;
+        private string _message;
 
         public XmlSchemaValidator(string schemaFilePath, string configFilePath)
         {
             _schemaFilePath = schemaFilePath;
             _configFilePath = configFilePath;
 
-            SchemaNotValidLogMessage = string.Format("Schema file {0} is corrupted.", _schemaFilePath);
-            ConfigNotValidLogMessage = string.Format("Config file {0} is not valid.", _configFilePath);
-            SchemaFileNotFoundLogMessage = string.Format("Schema file {0} does not exist.", _schemaFilePath);
-            ConfigFileNotFoundLogMessage = string.Format("Config file {0} does not exist.", _configFilePath);
+            _schemaNotValidMessage = string.Format("Schema file {0} is corrupted.", _schemaFilePath);
+            _configNotValidMessage = string.Format("Config file {0} is not valid.", _configFilePath);
+            _schemaFileNotFoundMessage = string.Format("Schema file {0} does not exist.", _schemaFilePath);
+            _configFileNotFoundMessage = string.Format("Config file {0} does not exist.", _configFilePath);
         }
 
         public bool Validate()
         {
+            return Validate(out string message);
+        }
+
+        public bool Validate(out string message)
+        {
+            _message = string.Empty;
+
             bool schemaFileExists = checkIfSchemaFileExists();
             bool configFileExists = checkIfConfigFileExists();
 
@@ -45,10 +49,12 @@ namespace AnAusAutomat.Toolbox.Xml
                 {
                     bool isValid = validate(xmlSchemaSet, xDocument);
 
+                    message = _message.Trim();
                     return isValid;
                 }
             }
 
+            message = _message.Trim();
             return false;
         }
 
@@ -60,9 +66,10 @@ namespace AnAusAutomat.Toolbox.Xml
             {
                 xDocument.Validate(xmlSchemaSet, (sender, e) =>
                 {
-                    var exception = new ConfigurationErrorsException(ConfigNotValidLogMessage, e.Exception, _configFilePath, 0);
+                    var exception = new ConfigurationErrorsException(_configNotValidMessage, e.Exception, _configFilePath, 0);
 
-                    Log.Error(ConfigNotValidLogMessage, exception);
+                    _message += _configNotValidMessage + "\n";
+                    Log.Error(_configNotValidMessage, exception);
 
                     isValid = false;
                 });
@@ -82,7 +89,8 @@ namespace AnAusAutomat.Toolbox.Xml
 
             if (!fileExists)
             {
-                Log.Error(SchemaFileNotFoundLogMessage);
+                _message += _schemaFileNotFoundMessage + "\n";
+                Log.Error(_schemaFileNotFoundMessage);
             }
 
             return fileExists;
@@ -94,7 +102,8 @@ namespace AnAusAutomat.Toolbox.Xml
 
             if (!fileExists)
             {
-                Log.Error(ConfigFileNotFoundLogMessage);
+                _message += _configFileNotFoundMessage + "\n";
+                Log.Error(_configFileNotFoundMessage);
             }
 
             return fileExists;
@@ -110,9 +119,10 @@ namespace AnAusAutomat.Toolbox.Xml
             }
             catch (XmlSchemaException e)
             {
-                var exception = new ConfigurationErrorsException(SchemaNotValidLogMessage, e, _schemaFilePath, e.LineNumber);
+                var exception = new ConfigurationErrorsException(_schemaNotValidMessage, e, _schemaFilePath, e.LineNumber);
 
-                Log.Error(SchemaNotValidLogMessage, exception);
+                _message += _schemaNotValidMessage + "\n";
+                Log.Error(_schemaNotValidMessage, exception);
             }
             catch (ArgumentNullException)
             {

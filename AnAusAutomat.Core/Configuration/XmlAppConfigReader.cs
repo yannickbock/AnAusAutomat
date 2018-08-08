@@ -45,7 +45,7 @@ namespace AnAusAutomat.Core.Configuration
 
         public bool Validate()
         {
-            return _xmlSchemaValidator.Validate();
+            return _xmlSchemaValidator.Validate(out string message);
         }
 
         public AppConfig Load()

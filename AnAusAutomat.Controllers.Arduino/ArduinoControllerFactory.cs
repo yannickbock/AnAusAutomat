@@ -19,15 +19,9 @@ namespace AnAusAutomat.Controllers.Arduino
             string schemaFilePath = directoryPath + "\\config.xsd";
             string configFilePath = directoryPath + "\\config.xml";
 
-            var xmlSchemaValidator = new XmlSchemaValidator(schemaFilePath, configFilePath)
-            {
-                SchemaNotValidLogMessage = string.Format("Arduino controller schema file {0} is corrupted.", schemaFilePath),
-                ConfigNotValidLogMessage = string.Format("Arduino controller config file {0} is not valid.", configFilePath),
-                SchemaFileNotFoundLogMessage = string.Format("Arduino controller schema file {0} does not exist.", schemaFilePath),
-                ConfigFileNotFoundLogMessage = string.Format("Arduino controller config file {0} does not exist.", configFilePath)
-            };
+            var xmlSchemaValidator = new XmlSchemaValidator(schemaFilePath, configFilePath);
 
-            bool isValid = xmlSchemaValidator.Validate();
+            bool isValid = xmlSchemaValidator.Validate(out string message);
             if (!isValid)
             {
                 throw new ConfigurationErrorsException("Arduino controller configuration is not valid.");
