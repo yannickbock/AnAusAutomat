@@ -19,7 +19,7 @@ namespace AnAusAutomat.Core.Plugins
 
         public IEnumerable<IController> Load()
         {
-            Log.Debug(string.Format("Searching controllers in directory {0} ...", _directoryPath));
+            Log.Information(string.Format("Searching controllers in directory {0} ...", _directoryPath));
 
             var files = getFiles();
             var controllers = new List<IController>();
