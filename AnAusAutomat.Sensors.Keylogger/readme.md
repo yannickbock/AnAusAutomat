@@ -15,14 +15,14 @@ Not supported.
 ## Parameters
 
 ### Global
-| Name | Valid values | Default value | Description |
-| ------ | ------ | ------ | ------ |
+| Name | Valid values | Default value | Multiple allowed | Sample | Description |
+| ------ | ------ | ------ | ------ | ------ | ------ |
 | | | | |
 
 ### Socket
-| Name | Valid values | Default value | Description |
-| ------ | ------ | ------ | ------ |
-| OffDelaySeconds | 0 to 4294967295 | 300 | Period between last interaction and PowerOff. |
+| Name | Valid values | Default value | Multiple allowed | Sample | Description |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| OffDelaySeconds | 0 to 4294967295 | 300 | no | | Period between last interaction and PowerOff. |
 
 ## Features
 - SendStatusForecast
