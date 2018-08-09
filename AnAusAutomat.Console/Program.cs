@@ -1,5 +1,6 @@
 ﻿using AnAusAutomat.Core;
 using AnAusAutomat.Core.Configuration;
+using AnAusAutomat.Toolbox.Logging;
 using Serilog;
 using Serilog.Events;
 using System;

@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using AnAusAutomat.Toolbox.Logging;
+using CommandLine;
 using CommandLine.Text;
 
 namespace AnAusAutomat.ConsoleApp
