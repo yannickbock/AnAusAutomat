@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace AnAusAutomat.Sensors.Keylogger.Internals
 {
-    public static class User32Adapter
+    public class User32
     {
         [DllImport("User32.dll")]
         private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
@@ -19,20 +19,14 @@ namespace AnAusAutomat.Sensors.Keylogger.Internals
             public UInt32 dwTime;
         }
 
-        public static DateTime LastInput
+        public DateTime GetLastInput()
         {
-            get
-            {
-                return DateTime.Now - TimeSpan.FromSeconds(getLastGlobalInputTime());
-            }
+            return DateTime.Now - TimeSpan.FromSeconds(getLastGlobalInputTime());
         }
 
-        public static uint InputIdleSeconds
+        public TimeSpan GetInputIdle()
         {
-            get
-            {
-                return getLastGlobalInputTime();
-            }
+            return TimeSpan.FromSeconds(getLastGlobalInputTime());
         }
 
         private static uint getLastGlobalInputTime()

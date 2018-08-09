@@ -41,6 +41,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Console", "AnA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Sensors.Keylogger", "AnAusAutomat.Sensors.Keylogger\AnAusAutomat.Sensors.Keylogger.csproj", "{DC9BF9B1-DE1F-4580-A526-46CFF1279338}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AnAusAutomat.Sensors.Tests", "AnAusAutomat.Sensors.Tests", "{DBC795B0-74D6-4C95-9274-4E692D7CF776}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Sensors.Keylogger.Tests", "AnAusAutomat.Sensors.Keylogger.Tests\AnAusAutomat.Sensors.Keylogger.Tests.csproj", "{C6CA9A1E-1B60-4344-B90E-2896B38DCA9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +111,10 @@ Global
 		{DC9BF9B1-DE1F-4580-A526-46CFF1279338}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC9BF9B1-DE1F-4580-A526-46CFF1279338}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC9BF9B1-DE1F-4580-A526-46CFF1279338}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6CA9A1E-1B60-4344-B90E-2896B38DCA9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6CA9A1E-1B60-4344-B90E-2896B38DCA9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6CA9A1E-1B60-4344-B90E-2896B38DCA9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6CA9A1E-1B60-4344-B90E-2896B38DCA9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,6 +131,7 @@ Global
 		{E08E2967-7130-4E49-B514-59B0BCA41FD6} = {62E7B8B6-C7B2-414D-93CB-6A606A5B245A}
 		{B5B12B16-20AD-47CC-958B-23A97083FF5F} = {62E7B8B6-C7B2-414D-93CB-6A606A5B245A}
 		{DC9BF9B1-DE1F-4580-A526-46CFF1279338} = {7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}
+		{C6CA9A1E-1B60-4344-B90E-2896B38DCA9A} = {DBC795B0-74D6-4C95-9274-4E692D7CF776}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98FB91DA-8377-4531-B65D-986E71B016AA}
