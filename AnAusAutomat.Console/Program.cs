@@ -51,7 +51,7 @@ namespace AnAusAutomat.ConsoleApp
 
             if (!configuration.Validate())
             {
-                Log.Fatal("Invalid configuration. Exit application.");
+                Logger.Fatal("Invalid configuration. Exit application.");
                 Application.Exit();
 
                 return null;
