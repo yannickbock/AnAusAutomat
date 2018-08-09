@@ -1,14 +1,13 @@
 ﻿using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Contracts.Sensor.Events;
 using AnAusAutomat.Contracts.Sensor.Features;
-using Serilog;
+using AnAusAutomat.Toolbox.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace AnAusAutomat.Core.Hubs
 {
-    // chain of responsibility pattern?
     public class SensorHub
     {
         private IStateStore _stateStore;
@@ -144,7 +143,7 @@ namespace AnAusAutomat.Core.Hubs
             foreach (var sensor in _sensors)
             {
                 string sensorName = sensor.GetType().Name;
-                Log.Information(string.Format("Starting sensor {0} ...", sensorName));
+                Logger.Information(string.Format("Starting sensor {0} ...", sensorName));
                 sensor.Start();
             }
         }
@@ -154,7 +153,7 @@ namespace AnAusAutomat.Core.Hubs
             foreach (var sensor in _sensors)
             {
                 string sensorName = sensor.GetType().Name;
-                Log.Information(string.Format("Stopping sensor {0} ...", sensorName));
+                Logger.Information(string.Format("Stopping sensor {0} ...", sensorName));
                 sensor.Stop();
             }
         }

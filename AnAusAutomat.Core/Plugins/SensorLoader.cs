@@ -1,5 +1,5 @@
 ﻿using AnAusAutomat.Contracts.Sensor;
-using Serilog;
+using AnAusAutomat.Toolbox.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +19,7 @@ namespace AnAusAutomat.Core.Plugins
 
         public IEnumerable<ISensor> Load(IEnumerable<string> sensorNames)
         {
-            Log.Information(string.Format("Searching sensors in directory {0} ...", _directoryPath));
+            Logger.Information(string.Format("Searching sensors in directory {0} ...", _directoryPath));
 
             var files = getFiles();
             var sensors = new List<ISensor>();
@@ -32,16 +32,16 @@ namespace AnAusAutomat.Core.Plugins
                     bool sensorFoundButNotConfigured = filterResult.Any(x => !sensorNames.Contains(x.Name));
                     int count = filterResult.Count(x => sensorNames.Contains(x.Name));
 
-                    Log.Debug(string.Format("Searching for sensor in {0}", file));
+                    Logger.Debug(string.Format("Searching for sensor in {0}", file));
 
                     if (sensorFoundButNotConfigured)
                     {
-                        Log.Warning("Sensor found but not configured. Skipping.");
+                        Logger.Warning("Sensor found but not configured. Skipping.");
                     }
 
                     if (count > 1)
                     {
-                        Log.Warning(string.Format("More then one sensor found. Just loading the first."));
+                        Logger.Warning(string.Format("More then one sensor found. Just loading the first."));
                     }
 
                     if (count >= 1)
@@ -49,14 +49,13 @@ namespace AnAusAutomat.Core.Plugins
                         var sensorType = types.FirstOrDefault(x => typeof(ISensor).IsAssignableFrom(x));
                         var sensor = Activator.CreateInstance(sensorType) as ISensor;
 
-                        Log.Information(string.Format("Found {0} sensor.", sensorType.Name.Replace("Sensor", "")));
+                        Logger.Information(string.Format("Found {0} sensor.", sensorType.Name.Replace("Sensor", "")));
                         sensors.Add(sensor);
                     }
-                    
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e, string.Format("Error while searching for sensor in {0}", file));
+                    Logger.Error(e, string.Format("Error while searching for sensor in {0}", file));
                 }
             }
 
@@ -78,7 +77,7 @@ namespace AnAusAutomat.Core.Plugins
 
                 if (result.Count() == 1)
                 {
-                    Log.Warning(string.Format("Found unconfigured sensor: {0}", result.FirstOrDefault()));
+                    Logger.Warning(string.Format("Found unconfigured sensor: {0}", result.FirstOrDefault()));
                 }
             }
         }

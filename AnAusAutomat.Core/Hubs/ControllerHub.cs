@@ -1,11 +1,10 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Controller;
-using Serilog;
+using AnAusAutomat.Toolbox.Logging;
 using System.Collections.Generic;
 
 namespace AnAusAutomat.Core.Hubs
 {
-    // chain of responsibility pattern?
     public class ControllerHub
     {
         private IEnumerable<IController> _controllers;
@@ -33,7 +32,7 @@ namespace AnAusAutomat.Core.Hubs
 
         public void TurnOn(Socket socket)
         {
-            Log.Information(string.Format("Turn on {0}", socket));
+            Logger.Information(string.Format("Turn on {0}", socket));
 
             foreach (var controller in _controllers)
             {
@@ -43,7 +42,7 @@ namespace AnAusAutomat.Core.Hubs
 
         public void TurnOff(Socket socket)
         {
-            Log.Information(string.Format("Turn off {0}", socket));
+            Logger.Information(string.Format("Turn off {0}", socket));
 
             foreach (var controller in _controllers)
             {

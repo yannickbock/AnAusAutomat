@@ -1,6 +1,6 @@
 ﻿using AnAusAutomat.Contracts;
+using AnAusAutomat.Toolbox.Logging;
 using Microsoft.CSharp;
-using Serilog;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -25,7 +25,7 @@ namespace AnAusAutomat.Core.Conditions
         {
             string sourceCode = buildSourceCode(settings.Text, settings.Socket);
 
-            Log.Debug(string.Format("Compile SourceCode for {0}", settings.Text));
+            Logger.Debug(string.Format("Compile SourceCode for {0}", settings.Text));
             CSharpCodeProvider provider = new CSharpCodeProvider();
             CompilerParameters options = new CompilerParameters();
             options.GenerateExecutable = false;
@@ -47,16 +47,16 @@ namespace AnAusAutomat.Core.Conditions
                 }
                 else
                 {
-                    Log.Error(string.Format("Can not compile condition: {0} ...", settings.Text));
+                    Logger.Error(string.Format("Can not compile condition: {0} ...", settings.Text));
                     foreach (CompilerError error in results.Errors)
                     {
-                        Log.Error(error.ErrorText);
+                        Logger.Error(error.ErrorText);
                     }
                 }
             }
             catch (Exception e)
             {
-                Log.Error(e, string.Format("Can not parse condition: {0}", settings.Text));
+                Logger.Error(e, string.Format("Can not parse condition: {0}", settings.Text));
             }
 
             return null;
@@ -64,7 +64,7 @@ namespace AnAusAutomat.Core.Conditions
 
         private string buildSourceCode(string commandText, Socket defaultSocket)
         {
-            Log.Debug(string.Format("Generate SourceCode for {0}", commandText));
+            Logger.Debug(string.Format("Generate SourceCode for {0}", commandText));
 
             //Example: Socket.IsOn AND UserInputDetector.PowerOff AND SoundDetector.PowerOff AND TrayIcon.Undefined
             string condition = commandText.Trim().Replace("Socket.", string.Format("Socket({0}).", defaultSocket.ID));
