@@ -1,7 +1,7 @@
 ﻿using CSCore.CoreAudioAPI;
 using System;
 
-namespace AnAusAutomat.Sensors.SoundDetector.Internals
+namespace AnAusAutomat.Sensors.SoundSniffer.Internals
 {
     public class SoundSettingsProvider : ISoundSettingsProvider
     {

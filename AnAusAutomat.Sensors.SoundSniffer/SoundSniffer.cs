@@ -3,20 +3,20 @@ using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Contracts.Sensor.Attributes;
 using AnAusAutomat.Contracts.Sensor.Events;
 using AnAusAutomat.Contracts.Sensor.Features;
-using AnAusAutomat.Sensors.SoundDetector.Internals;
+using AnAusAutomat.Sensors.SoundSniffer.Internals;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Timers;
 
-namespace AnAusAutomat.Sensors.SoundDetector
+namespace AnAusAutomat.Sensors.SoundSniffer
 {
     [Parameter("MinimumSignalSeconds", typeof(uint), "3")]
     [Parameter("OffDelaySeconds", typeof(uint), "300")]
     [Description("Fires turn on event after MinimumSignalSeconds of music without a break." +
         "Fires turn off event after OffDelaySeconds without music.")]
-    public class SoundDetector : ISensor, ISendStatusForecast
+    public class SoundSniffer : ISensor, ISendStatusForecast
     {
         private ISoundSettingsProvider _soundSettings;
         private Timer _timer;

@@ -1,4 +1,4 @@
-﻿namespace AnAusAutomat.Sensors.SoundDetector.Internals
+﻿namespace AnAusAutomat.Sensors.SoundSniffer.Internals
 {
     public class Parameters
     {

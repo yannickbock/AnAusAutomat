@@ -1,8 +1,7 @@
 ﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Contracts.Sensor;
 using System;
 
-namespace AnAusAutomat.Sensors.SoundDetector.Internals
+namespace AnAusAutomat.Sensors.SoundSniffer.Internals
 {
     public class Cache
     {

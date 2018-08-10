@@ -7,8 +7,8 @@
     <ProjectGuid>{53DD49C7-DE34-4289-A8D3-5533C2369723}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AnAusAutomat.Sensors.SoundDetector</RootNamespace>
-    <AssemblyName>SoundDetector</AssemblyName>
+    <RootNamespace>AnAusAutomat.Sensors.SoundSniffer</RootNamespace>
+    <AssemblyName>SoundSniffer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\_bin\Sensors\SoundDetector\</OutputPath>
+    <OutputPath>..\_bin\Sensors\SoundSniffer\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Internals\ISoundSettingsProvider.cs" />
     <Compile Include="Internals\SoundSettingsProvider.cs" />
-    <Compile Include="SoundDetector.cs" />
+    <Compile Include="SoundSniffer.cs" />
     <Compile Include="Internals\Cache.cs" />
     <Compile Include="Internals\Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
