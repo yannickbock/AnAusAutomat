@@ -27,6 +27,7 @@ namespace AnAusAutomat.Core.Hubs
             foreach (var sensor in _sensors)
             {
                 string sensorName = sensor.GetType().Name;
+                Logger.Information(string.Format("Initializing sensor {0} ...", sensorName));
 
                 var s = settings.FirstOrDefault(x => x.SensorName == sensorName);
 
