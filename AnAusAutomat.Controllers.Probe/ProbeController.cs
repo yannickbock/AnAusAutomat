@@ -1,6 +1,6 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Controller;
-using Serilog;
+using AnAusAutomat.Toolbox.Logging;
 
 namespace AnAusAutomat.Controllers.Probe
 {
@@ -15,24 +15,24 @@ namespace AnAusAutomat.Controllers.Probe
 
         public void Connect()
         {
-            Log.Debug("ProbeController: Connect()");
+            Logger.Debug("ProbeController: Connect()");
         }
 
         public void Disconnect()
         {
-            Log.Debug("ProbeController: Disconnect()");
+            Logger.Debug("ProbeController: Disconnect()");
         }
 
         public bool TurnOff(Socket socket)
         {
-            Log.Debug(string.Format("ProbeController: TurnOff({0})", socket));
+            Logger.Debug(string.Format("ProbeController: TurnOff({0})", socket));
 
             return true;
         }
 
         public bool TurnOn(Socket socket)
         {
-            Log.Debug(string.Format("ProbeController: TurnOn({0})", socket));
+            Logger.Debug(string.Format("ProbeController: TurnOn({0})", socket));
 
             return true;
         }
