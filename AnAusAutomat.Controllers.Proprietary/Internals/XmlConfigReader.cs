@@ -1,5 +1,5 @@
-﻿using AnAusAutomat.Toolbox.Xml;
-using Serilog;
+﻿using AnAusAutomat.Toolbox.Logging;
+using AnAusAutomat.Toolbox.Xml;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,7 +33,7 @@ namespace AnAusAutomat.Controllers.Proprietary.Internals
 
         public IEnumerable<DeviceSettings> Read()
         {
-            Log.Information("Loading proprietary controller settings ...");
+            Logger.Information("Loading proprietary controller settings ...");
             _xDocument = XDocument.Load(_configFilePath);
 
             return readDeviceSettings();

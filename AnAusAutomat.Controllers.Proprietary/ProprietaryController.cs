@@ -1,7 +1,7 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Controller;
 using AnAusAutomat.Controllers.Proprietary.Internals;
-using Serilog;
+using AnAusAutomat.Toolbox.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -168,7 +168,7 @@ namespace AnAusAutomat.Controllers.Proprietary
             }
             catch (Exception ex)
             {
-                Log.Error(ex,
+                Logger.Error(ex,
                     string.Format("{0} An error occurred while turning {1} socket with id {1}",
                         _logMessagePrefix,
                         powerOn ? "on" : "off",

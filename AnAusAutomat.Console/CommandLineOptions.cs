@@ -23,7 +23,7 @@ namespace AnAusAutomat.ConsoleApp
         {
             var help = new HelpText
             {
-                Heading = new HeadingInfo("AnAusAutomat"),
+                Heading = new HeadingInfo("AnAusAutomat.Console"),
                 AdditionalNewLineAfterOption = true,
                 AddDashesToOption = true
             };
