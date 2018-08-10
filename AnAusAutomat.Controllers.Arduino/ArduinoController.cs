@@ -1,8 +1,8 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Controller;
 using AnAusAutomat.Controllers.Arduino.Internals;
+using AnAusAutomat.Toolbox.Logging;
 using ArduinoMajoro;
-using Serilog;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -94,7 +94,7 @@ namespace AnAusAutomat.Controllers.Arduino
 
         private void logSwitchPin(Pin pin, bool writeHigh)
         {
-            Log.Debug(string.Format("{0} @ Arduino [ {1} ] => {2}", pin, DeviceIdentifier, writeHigh ? "High" : "Low"));
+            Logger.Debug(string.Format("{0} @ Arduino [ {1} ] => {2}", pin, DeviceIdentifier, writeHigh ? "High" : "Low"));
         }
     }
 }

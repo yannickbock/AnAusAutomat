@@ -1,8 +1,8 @@
 ﻿using AnAusAutomat.Contracts.Controller;
 using AnAusAutomat.Controllers.Arduino.Internals;
+using AnAusAutomat.Toolbox.Logging;
 using AnAusAutomat.Toolbox.Xml;
 using ArduinoMajoro;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -48,10 +48,10 @@ namespace AnAusAutomat.Controllers.Arduino
             int numberOfRetries = 10;
             string serialPort = null;
 
-            Log.Information(string.Format("Searching for {0}", name));
+            Logger.Information(string.Format("Searching for {0}", name));
             for (int i = 0; i < numberOfRetries && serialPort == null; i++)
             {
-                Log.Debug(string.Format("Try {0} / {1}", i + 1, numberOfRetries));
+                Logger.Debug(string.Format("Try {0} / {1}", i + 1, numberOfRetries));
                 serialPort = Majoro.Hello(name)?.SerialPort;
             }
 
@@ -68,7 +68,7 @@ namespace AnAusAutomat.Controllers.Arduino
             string message = "Cannot establish connection to controller. Maybe the device is not properly connected, the wire is to long or the wrong sketch is uploaded.";
             var exception = new DeviceNotFoundException(name, message);
 
-            Log.Error(exception, message);
+            Logger.Error(exception, message);
             throw exception;
         }
     }
