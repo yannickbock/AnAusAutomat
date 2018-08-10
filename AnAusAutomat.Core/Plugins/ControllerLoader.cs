@@ -1,5 +1,5 @@
 ﻿using AnAusAutomat.Contracts.Controller;
-using Serilog;
+using AnAusAutomat.Toolbox.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +19,7 @@ namespace AnAusAutomat.Core.Plugins
 
         public IEnumerable<IController> Load()
         {
-            Log.Information(string.Format("Searching controllers in directory {0} ...", _directoryPath));
+            Logger.Information(string.Format("Searching controllers in directory {0} ...", _directoryPath));
 
             var files = getFiles();
             var controllers = new List<IController>();
@@ -30,11 +30,11 @@ namespace AnAusAutomat.Core.Plugins
                     var types = Assembly.LoadFrom(file).GetTypes();
                     int count = types.Count(x => typeof(IControllerFactory).IsAssignableFrom(x));
 
-                    Log.Debug(string.Format("Searching for controller in {0}", file));
+                    Logger.Debug(string.Format("Searching for controller in {0}", file));
 
                     if (count > 1)
                     {
-                        Log.Warning(string.Format("More then one controller found. Just loading the first.", file));
+                        Logger.Warning(string.Format("More then one controller found. Just loading the first.", file));
                     }
 
                     if (count >= 1)
@@ -42,13 +42,13 @@ namespace AnAusAutomat.Core.Plugins
                         var controllerFactoryType = types.FirstOrDefault(x => typeof(IControllerFactory).IsAssignableFrom(x));
                         var factory = Activator.CreateInstance(controllerFactoryType) as IControllerFactory;
 
-                        Log.Information(string.Format("Found {0} controller", controllerFactoryType.Name.Replace("Controller", "").Replace("Factory", ""), file));
+                        Logger.Information(string.Format("Found {0} controller", controllerFactoryType.Name.Replace("Controller", "").Replace("Factory", ""), file));
                         controllers.AddRange(factory.Create());
                     }
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e, string.Format("Error while searching for controller in {0}", file));
+                    Logger.Error(e, string.Format("Error while searching for controller in {0}", file));
                 }
             }
 

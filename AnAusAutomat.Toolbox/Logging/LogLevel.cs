@@ -1,4 +1,4 @@
-﻿namespace AnAusAutomat.ConsoleApp
+﻿namespace AnAusAutomat.Toolbox.Logging
 {
     public enum LogLevel
     {

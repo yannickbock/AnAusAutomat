@@ -1,5 +1,5 @@
 ﻿using AnAusAutomat.Contracts.Sensor;
-using Serilog;
+using AnAusAutomat.Toolbox.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +12,6 @@ namespace AnAusAutomat.Sensors.Keylogger.Internals
 
         public KeyloggerSettingsParser()
         {
-            Log.Logger = new LoggerConfiguration()
-                .CreateLogger();
-
             _defaultSettings = KeyloggerSettings.GetDefault();
         }
 
@@ -30,11 +27,11 @@ namespace AnAusAutomat.Sensors.Keylogger.Internals
 
             if (count == 0)
             {
-                Log.Warning("OffDelaySeconds is not defined. Using default value.");
+                Logger.Warning("OffDelaySeconds is not defined. Using default value.");
             }
             else if (count > 1)
             {
-                Log.Warning("OffDelaySeconds is more than once defined. Using default value.");
+                Logger.Warning("OffDelaySeconds is more than once defined. Using default value.");
             }
             else
             {
@@ -47,7 +44,7 @@ namespace AnAusAutomat.Sensors.Keylogger.Internals
                 }
                 else
                 {
-                    Log.Warning("OffDelaySeconds is defined, but the value is not valid. Using default value.");
+                    Logger.Warning("OffDelaySeconds is defined, but the value is not valid. Using default value.");
                 }
             }
 

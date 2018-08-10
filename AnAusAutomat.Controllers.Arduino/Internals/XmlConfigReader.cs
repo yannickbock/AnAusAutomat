@@ -1,4 +1,4 @@
-﻿using Serilog;
+﻿using AnAusAutomat.Toolbox.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -16,7 +16,7 @@ namespace AnAusAutomat.Controllers.Arduino.Internals
 
         public IEnumerable<ControllerSettings> Read()
         {
-            Log.Information("Loading arduino controller settings ...");
+            Logger.Information("Loading arduino controller settings ...");
 
             return readDevices();
         }

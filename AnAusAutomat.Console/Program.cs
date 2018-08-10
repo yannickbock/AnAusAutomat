@@ -1,5 +1,6 @@
 ﻿using AnAusAutomat.Core;
 using AnAusAutomat.Core.Configuration;
+using AnAusAutomat.Toolbox.Logging;
 using Serilog;
 using Serilog.Events;
 using System;
@@ -50,7 +51,7 @@ namespace AnAusAutomat.ConsoleApp
 
             if (!configuration.Validate())
             {
-                Log.Fatal("Invalid configuration. Exit application.");
+                Logger.Fatal("Invalid configuration. Exit application.");
                 Application.Exit();
 
                 return null;

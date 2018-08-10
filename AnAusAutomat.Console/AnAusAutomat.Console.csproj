@@ -71,7 +71,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LogLevel.cs" />
     <Compile Include="CommandLineOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +83,10 @@
     <ProjectReference Include="..\AnAusAutomat.Core\AnAusAutomat.Core.csproj">
       <Project>{635BEE61-2E2B-4362-B80E-6F96F3635FCE}</Project>
       <Name>AnAusAutomat.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnAusAutomat.Toolbox\AnAusAutomat.Toolbox.csproj">
+      <Project>{6ACA9411-7251-48D4-B764-87FB96D0EF15}</Project>
+      <Name>AnAusAutomat.Toolbox</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,8 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Core.Conditions;
+using AnAusAutomat.Toolbox.Logging;
 using AnAusAutomat.Toolbox.Xml;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,19 +50,19 @@ namespace AnAusAutomat.Core.Configuration
 
         public AppConfig Load()
         {
-            Log.Information(string.Format("Loading settings from {0} ...", _configFilePath));
+            Logger.Information(string.Format("Loading settings from {0} ...", _configFilePath));
             _xDocument = XDocument.Load(_configFilePath);
 
             readNodes();
             readSocketIDsAndNames();
 
-            Log.Information("Loading sensor settings ...");
+            Logger.Information("Loading sensor settings ...");
             var sensors = readSensorSettings();
 
-            Log.Information("Loading conditions ...");
+            Logger.Information("Loading conditions ...");
             var conditions = _socketNodes.Select(x => readConditions(x)).SelectMany(x => x);
 
-            Log.Information("Loading modes ...");
+            Logger.Information("Loading modes ...");
             var modes = readModes();
 
             return new AppConfig(sensors, conditions, modes);
@@ -199,7 +199,7 @@ namespace AnAusAutomat.Core.Configuration
 
         private IEnumerable<ConditionMode> readModes()
         {
-            Log.Debug("Reading modes ...");
+            Logger.Debug("Reading modes ...");
 
             var modeNodes = _xDocument.Root.Element("modes").Elements("mode");
             return modeNodes.Select(x =>

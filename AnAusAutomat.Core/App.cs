@@ -3,7 +3,7 @@ using AnAusAutomat.Contracts.Sensor.Events;
 using AnAusAutomat.Core.Conditions;
 using AnAusAutomat.Core.Configuration;
 using AnAusAutomat.Core.Hubs;
-using Serilog;
+using AnAusAutomat.Toolbox.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +43,7 @@ namespace AnAusAutomat.Core
             var condition = _conditionFilter.FilterBySensor(e.Socket, triggeredBy).FirstOrDefault();
             if (condition != null)
             {
-                Log.Information(string.Format("{0} = True", condition));
+                Logger.Information(string.Format("{0} = True", condition));
 
                 turnOnOrOff(
                     socket: e.Socket,
@@ -57,7 +57,7 @@ namespace AnAusAutomat.Core
                 {
                     foreach (var x in relatedConditions)
                     {
-                        Log.Information(string.Format("{0} = True", x));
+                        Logger.Information(string.Format("{0} = True", x));
 
                         turnOnOrOff(
                             x.Socket,
@@ -97,7 +97,7 @@ namespace AnAusAutomat.Core
             Thread.Sleep(500);
             _controllerHub.Disconnect();
 
-            Log.Information("Good bye! ;)");
+            Logger.Information("Good bye! ;)");
             Thread.Sleep(1000);
             Environment.Exit(0);
         }
