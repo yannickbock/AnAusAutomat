@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Internals\ISoundSettingsProvider.cs" />
     <Compile Include="Internals\SoundSettingsProvider.cs" />
+    <Compile Include="Internals\SoundSnifferSettings.cs" />
+    <Compile Include="Internals\SoundSnifferSettingsParser.cs" />
     <Compile Include="SoundSniffer.cs" />
     <Compile Include="Internals\Cache.cs" />
     <Compile Include="Internals\Parameters.cs" />
@@ -54,6 +56,10 @@
     <ProjectReference Include="..\AnAusAutomat.Contracts\AnAusAutomat.Contracts.csproj">
       <Project>{7AFB88F5-83CC-4B32-87D6-2B45F26570BD}</Project>
       <Name>AnAusAutomat.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnAusAutomat.Toolbox\AnAusAutomat.Toolbox.csproj">
+      <Project>{6ACA9411-7251-48D4-B764-87FB96D0EF15}</Project>
+      <Name>AnAusAutomat.Toolbox</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
