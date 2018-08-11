@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Internals\ISoundSettingsProvider.cs" />
+    <Compile Include="Internals\ISystemAudio.cs" />
+    <Compile Include="Internals\SoundSnifferStateStore.cs" />
     <Compile Include="Internals\WindowsAudio.cs" />
     <Compile Include="Internals\SoundSnifferSettings.cs" />
     <Compile Include="Internals\SoundSnifferSettingsParser.cs" />

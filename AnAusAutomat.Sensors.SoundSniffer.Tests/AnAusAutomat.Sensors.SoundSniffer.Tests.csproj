@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Internals\SoundSnifferSettingsParserTests.cs" />
+    <Compile Include="Internals\SoundSnifferStateStoreTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
