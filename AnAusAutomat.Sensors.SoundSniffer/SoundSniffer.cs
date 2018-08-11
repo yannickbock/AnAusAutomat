@@ -22,8 +22,6 @@ namespace AnAusAutomat.Sensors.SoundSniffer
         private Timer _timer;
         private IEnumerable<Socket> _sockets;
         private SoundSnifferStateStore _stateStore;
-        private DateTime _lastSignalAt;
-        private TimeSpan _signalDuration;
         private Dictionary<Socket, DateTime> _lastStatusForecastEventsFired;
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
@@ -31,8 +29,6 @@ namespace AnAusAutomat.Sensors.SoundSniffer
 
         public SoundSniffer()
         {
-            _lastSignalAt = DateTime.MinValue;
-            _signalDuration = TimeSpan.FromSeconds(0);
             _systemAudio = new WindowsAudio();
             _stateStore = new SoundSnifferStateStore();
             _timer = new Timer(250);
@@ -55,14 +51,16 @@ namespace AnAusAutomat.Sensors.SoundSniffer
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             bool isPlaying = isAudioPlaying();
+            var lastSignal = _stateStore.GetLastSignal();
+            var signalDuration = _stateStore.GetSignalDuration();
 
             foreach (var socket in _sockets)
             {
                 var settings = _stateStore.GetSettings(socket);
                 var status = _stateStore.GetStatus(socket);
 
-                var signalIdle = DateTime.Now - _lastSignalAt;
-                bool turnSocketOn = _signalDuration > settings.MinimumSignalDuration && status != PowerStatus.On;
+                var signalIdle = DateTime.Now - lastSignal;
+                bool turnSocketOn = signalDuration > settings.MinimumSignalDuration && status != PowerStatus.On;
                 bool turnSocketOff = signalIdle >= settings.OffDelay && status != PowerStatus.Off;
 
                 if (turnSocketOn)
@@ -76,17 +74,17 @@ namespace AnAusAutomat.Sensors.SoundSniffer
                     StatusChanged?.Invoke(this, new StatusChangedEventArgs("", "", socket, PowerStatus.Off));
                 }
 
-                if (isPlaying)
-                {
-                    _signalDuration += TimeSpan.FromSeconds(((Timer)sender).Interval / 1000);
-                    _lastSignalAt = DateTime.Now;
-                }
-                else
-                {
-                    _signalDuration = TimeSpan.FromSeconds(0);
+                fireStatusForecastEvent(socket, signalIdle, settings.OffDelay);
+            }
 
-                    fireStatusForecastEvent(socket, signalIdle, settings.OffDelay);
-                }
+            if (isPlaying)
+            {
+                _stateStore.SetSignalDuration(signalDuration + TimeSpan.FromSeconds(((Timer)sender).Interval / 1000));
+                _stateStore.SetLastSignal(DateTime.Now);
+            }
+            else
+            {
+                _stateStore.SetSignalDuration(TimeSpan.FromSeconds(0));
             }
         }
 

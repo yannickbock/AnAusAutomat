@@ -46,5 +46,41 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Tests.Internals
 
             Assert.Equal(PowerStatus.On, stateStore.GetStatus(socket));
         }
+
+        [Fact]
+        public void GetLastSignal_DefaultValue()
+        {
+            var stateStore = new SoundSnifferStateStore();
+
+            Assert.Equal(DateTime.MinValue, stateStore.GetLastSignal());
+        }
+
+        [Fact]
+        public void GetLastSignal_SetAndGet()
+        {
+            var lastSignal = new DateTime(2018, 1, 1, 15, 15, 30);
+            var stateStore = new SoundSnifferStateStore();
+            stateStore.SetLastSignal(lastSignal);
+
+            Assert.Equal(lastSignal, stateStore.GetLastSignal());
+        }
+
+        [Fact]
+        public void GetSignalDuration_DefaultValue()
+        {
+            var stateStore = new SoundSnifferStateStore();
+
+            Assert.Equal(TimeSpan.FromSeconds(0), stateStore.GetSignalDuration());
+        }
+
+        [Fact]
+        public void GetSignalDuration_SetAndGet()
+        {
+            var signalDuration = TimeSpan.FromMilliseconds(3500);
+            var stateStore = new SoundSnifferStateStore();
+            stateStore.SetSignalDuration(signalDuration);
+
+            Assert.Equal(signalDuration, stateStore.GetSignalDuration());
+        }
     }
 }
