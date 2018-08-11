@@ -1,4 +1,5 @@
 ﻿using AnAusAutomat.Contracts;
+using System;
 using System.Collections.Generic;
 
 namespace AnAusAutomat.Sensors.SoundSniffer.Internals

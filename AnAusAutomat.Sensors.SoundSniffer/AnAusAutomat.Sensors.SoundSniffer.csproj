@@ -49,8 +49,6 @@
     <Compile Include="Internals\SoundSnifferSettings.cs" />
     <Compile Include="Internals\SoundSnifferSettingsParser.cs" />
     <Compile Include="SoundSniffer.cs" />
-    <Compile Include="Internals\Cache.cs" />
-    <Compile Include="Internals\Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

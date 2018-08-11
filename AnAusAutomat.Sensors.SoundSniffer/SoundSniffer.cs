@@ -18,79 +18,95 @@ namespace AnAusAutomat.Sensors.SoundSniffer
         "Fires turn off event after OffDelaySeconds without music.")]
     public class SoundSniffer : ISensor, ISendStatusForecast
     {
-        private ISystemAudio systemAudio;
+        private ISystemAudio _systemAudio;
         private Timer _timer;
-        private IEnumerable<Cache> _cache;
+        private IEnumerable<Socket> _sockets;
+        private SoundSnifferStateStore _stateStore;
+        private DateTime _lastSignalAt;
+        private TimeSpan _signalDuration;
         private Dictionary<Socket, DateTime> _lastStatusForecastEventsFired;
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
         public event EventHandler<StatusForecastEventArgs> StatusForecast;
 
-        public void Initialize(SensorSettings settings)
+        public SoundSniffer()
         {
-            systemAudio = new WindowsAudio();
+            _lastSignalAt = DateTime.MinValue;
+            _signalDuration = TimeSpan.FromSeconds(0);
+            _systemAudio = new WindowsAudio();
+            _stateStore = new SoundSnifferStateStore();
             _timer = new Timer(250);
             _timer.Elapsed += _timer_Elapsed;
-
-            _cache = settings.Sockets.Select(x => new Cache(x, parseParameters(x.Parameters))).ToList();
             _lastStatusForecastEventsFired = new Dictionary<Socket, DateTime>();
+        }
+
+        public void Initialize(SensorSettings settings)
+        {
+            var parser = new SoundSnifferSettingsParser();
+            _sockets = settings.Sockets;
+
+            foreach (var socket in settings.Sockets)
+            {
+                var s = parser.Parse(socket.Parameters);
+                _stateStore.SetSettings(socket, s);
+            }
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             bool isPlaying = isAudioPlaying();
 
-            foreach (var cache in _cache)
+            foreach (var socket in _sockets)
             {
-                double lastSignalSeconds = (DateTime.Now - cache.LastSignal).TotalSeconds;
+                var settings = _stateStore.GetSettings(socket);
+                var status = _stateStore.GetStatus(socket);
 
-                bool turnSocketOn = cache.CurrentSignalSeconds > cache.Parameters.MinimumSignalSeconds;
-                bool turnSocketOff = lastSignalSeconds >= cache.Parameters.OffDelaySeconds;
+                var signalIdle = DateTime.Now - _lastSignalAt;
+                bool turnSocketOn = _signalDuration > settings.MinimumSignalDuration && status != PowerStatus.On;
+                bool turnSocketOff = signalIdle >= settings.OffDelay && status != PowerStatus.Off;
 
-                if (turnSocketOff && cache.Status != PowerStatus.Off)
+                if (turnSocketOn)
                 {
-                    turnSocketOffAndFireStatusChangedEvent(cache);
+                    _stateStore.SetStatus(socket, PowerStatus.On);
+                    StatusChanged?.Invoke(this, new StatusChangedEventArgs("", "", socket, PowerStatus.On));
                 }
-                else if (turnSocketOn && cache.Status != PowerStatus.On)
+                else if (turnSocketOff)
                 {
-                    turnSocketOnAndFireStatusChangedEvent(cache);
+                    _stateStore.SetStatus(socket, PowerStatus.Off);
+                    StatusChanged?.Invoke(this, new StatusChangedEventArgs("", "", socket, PowerStatus.Off));
                 }
 
                 if (isPlaying)
                 {
-                    cache.CurrentSignalSeconds += ((Timer)sender).Interval / 1000;
-                    cache.LastSignal = DateTime.Now;
+                    _signalDuration += TimeSpan.FromSeconds(((Timer)sender).Interval / 1000);
+                    _lastSignalAt = DateTime.Now;
                 }
                 else
                 {
-                    cache.CurrentSignalSeconds = 0;
+                    _signalDuration = TimeSpan.FromSeconds(0);
 
-                    fireStatusForecastEvent(cache.Socket, (int)lastSignalSeconds, (int)cache.Parameters.OffDelaySeconds);
+                    fireStatusForecastEvent(socket, signalIdle, settings.OffDelay);
                 }
             }
         }
 
-        private void fireStatusForecastEvent(Socket socket, int lastSignalSeconds, int offDelaySeconds)
+        private void fireStatusForecastEvent(Socket socket, TimeSpan signalIdle, TimeSpan offDelay)
         {
             var fireAt = new int[] { 240, 180, 120, 60, 30, 15 };
-            int countdown = offDelaySeconds - lastSignalSeconds;
 
-            if (lastSignalSeconds > offDelaySeconds / 2)
+            if (signalIdle.TotalSeconds > offDelay.TotalSeconds / 2)
             {
-                var lastEventFiredAt = _lastStatusForecastEventsFired.ContainsKey(socket) ?
-                    _lastStatusForecastEventsFired[socket] : DateTime.MinValue;
+                var countdown = offDelay - signalIdle;
+                int countdownInSeconds = (int)Math.Ceiling(countdown.TotalSeconds);
+                bool fireEvent = fireAt.Contains(countdownInSeconds);
+                var lastEventFiredAt = _lastStatusForecastEventsFired.ContainsKey(socket) ? _lastStatusForecastEventsFired[socket] : DateTime.MinValue;
+                bool eventAlreadyFired = (DateTime.Now - lastEventFiredAt) <= TimeSpan.FromSeconds(1.5);
 
-                bool fireEvent = fireAt.Contains(countdown);
-                bool eventAlreadyFired = (lastEventFiredAt - DateTime.Now) >= TimeSpan.FromSeconds(-1.5);
                 if (fireEvent && !eventAlreadyFired)
                 {
                     _lastStatusForecastEventsFired[socket] = DateTime.Now;
 
-                    StatusForecast?.Invoke(this,
-                            new StatusForecastEventArgs(message: "",
-                            countDown: TimeSpan.FromSeconds((int)Math.Ceiling((decimal)(offDelaySeconds - lastSignalSeconds))),
-                            socket: socket,
-                            status: PowerStatus.Off));
+                    StatusForecast?.Invoke(this, new StatusForecastEventArgs("", countdown, socket, PowerStatus.Off));
                 }
             }
         }
@@ -105,62 +121,11 @@ namespace AnAusAutomat.Sensors.SoundSniffer
             _timer.Stop();
         }
 
-        private void turnSocketOnAndFireStatusChangedEvent(Cache cache)
-        {
-            cache.Status = PowerStatus.On;
-            var args = convertToStatusChangedEventArgs(cache);
-            StatusChanged?.Invoke(this, args);
-        }
-
-        private void turnSocketOffAndFireStatusChangedEvent(Cache cache)
-        {
-            cache.Status = PowerStatus.Off;
-            var args = convertToStatusChangedEventArgs(cache);
-            StatusChanged?.Invoke(this, args);
-        }
-
-        private StatusChangedEventArgs convertToStatusChangedEventArgs(Cache cache)
-        {
-            var args = new StatusChangedEventArgs(
-                message: "",
-                condition: "",
-                socket: cache.Socket,
-                status: cache.Status);
-
-            return args;
-        }
-
-        private Parameters parseParameters(IEnumerable<SensorParameter> parameters)
-        {
-            uint offDelaySeconds = 300;
-            uint minimumSignalSeconds = 3;
-
-            if (parameters.Count() > 0)
-            {
-                bool offDelaySecondsDefined = parameters.Count(x => x.Name == "OffDelaySeconds") == 1;
-                bool minimumSignalSecondsDefined = parameters.Count(x => x.Name == "MinimumSignalSeconds") == 1;
-
-                if (offDelaySecondsDefined)
-                {
-                    string offDelaySecondsAsString = parameters.FirstOrDefault(x => x.Name == "OffDelaySeconds").Value;
-                    offDelaySeconds = uint.Parse(offDelaySecondsAsString);
-                }
-
-                if (minimumSignalSecondsDefined)
-                {
-                    string minimumSignalSecondsAsString = parameters.FirstOrDefault(x => x.Name == "MinimumSignalSeconds").Value;
-                    minimumSignalSeconds = uint.Parse(minimumSignalSecondsAsString);
-                }
-            }
-
-            return new Parameters(offDelaySeconds, minimumSignalSeconds);
-        }
-
         private bool isAudioPlaying()
         {
-            bool isMuted = systemAudio.IsMuted;
-            bool volumeIsZero = systemAudio.SystemVolume == 0;
-            bool isPlaying = systemAudio.PeakValue > 0;
+            bool isMuted = _systemAudio.IsMuted;
+            bool volumeIsZero = _systemAudio.SystemVolume == 0;
+            bool isPlaying = _systemAudio.PeakValue > 0;
 
             return !isMuted && !volumeIsZero && isPlaying;
         }
