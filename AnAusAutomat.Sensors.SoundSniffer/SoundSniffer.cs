@@ -18,7 +18,7 @@ namespace AnAusAutomat.Sensors.SoundSniffer
         "Fires turn off event after OffDelaySeconds without music.")]
     public class SoundSniffer : ISensor, ISendStatusForecast
     {
-        private ISoundSettingsProvider _soundSettings;
+        private ISystemAudio systemAudio;
         private Timer _timer;
         private IEnumerable<Cache> _cache;
         private Dictionary<Socket, DateTime> _lastStatusForecastEventsFired;
@@ -28,7 +28,7 @@ namespace AnAusAutomat.Sensors.SoundSniffer
 
         public void Initialize(SensorSettings settings)
         {
-            _soundSettings = new SoundSettingsProvider();
+            systemAudio = new WindowsAudio();
             _timer = new Timer(250);
             _timer.Elapsed += _timer_Elapsed;
 
@@ -158,9 +158,9 @@ namespace AnAusAutomat.Sensors.SoundSniffer
 
         private bool isAudioPlaying()
         {
-            bool isMuted = _soundSettings.IsMuted;
-            bool volumeIsZero = _soundSettings.SystemVolume == 0;
-            bool isPlaying = _soundSettings.PeakValue > 0;
+            bool isMuted = systemAudio.IsMuted;
+            bool volumeIsZero = systemAudio.SystemVolume == 0;
+            bool isPlaying = systemAudio.PeakValue > 0;
 
             return !isMuted && !volumeIsZero && isPlaying;
         }

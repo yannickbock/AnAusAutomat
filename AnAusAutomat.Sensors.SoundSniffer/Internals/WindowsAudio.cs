@@ -3,12 +3,12 @@ using System;
 
 namespace AnAusAutomat.Sensors.SoundSniffer.Internals
 {
-    public class SoundSettingsProvider : ISoundSettingsProvider
+    public class WindowsAudio : ISystemAudio
     {
         private AudioEndpointVolume _volume;
         private AudioMeterInformation _meter;
 
-        public SoundSettingsProvider()
+        public WindowsAudio()
         {
             var device = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Console);
             _volume = AudioEndpointVolume.FromDevice(device);

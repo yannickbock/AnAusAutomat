@@ -1,6 +1,6 @@
 ﻿namespace AnAusAutomat.Sensors.SoundSniffer.Internals
 {
-    public interface ISoundSettingsProvider
+    public interface ISystemAudio
     {
         bool IsMuted { get; }
         double PeakValue { get; }

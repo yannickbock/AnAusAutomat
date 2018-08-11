@@ -24,49 +24,29 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Internals
 
         private TimeSpan parseOffDelay(IEnumerable<SensorParameter> parameters)
         {
-            int count = parameters.Count(x => x.Name == "OffDelaySeconds");
-
-            if (count == 0)
-            {
-                Logger.Warning("OffDelaySeconds is not defined. Using default value.");
-            }
-            else if (count > 1)
-            {
-                Logger.Warning("OffDelaySeconds is more than once defined. Using default value.");
-            }
-            else
-            {
-                string valueAsString = parameters.FirstOrDefault(x => x.Name == "OffDelaySeconds").Value;
-                bool successful = uint.TryParse(valueAsString, out uint result);
-
-                if (successful)
-                {
-                    return TimeSpan.FromSeconds(result);
-                }
-                else
-                {
-                    Logger.Warning("OffDelaySeconds is defined, but the value is not valid. Using default value.");
-                }
-            }
-
-            return _defaultSettings.OffDelay;
+            return parseTimeSpanValue(parameters, "OffDelaySeconds", _defaultSettings.OffDelay);
         }
 
         private TimeSpan parseMinimumSignalDuration(IEnumerable<SensorParameter> parameters)
         {
-            int count = parameters.Count(x => x.Name == "MinimumSignalSeconds");
+            return parseTimeSpanValue(parameters, "MinimumSignalSeconds", _defaultSettings.MinimumSignalDuration);
+        }
+
+        private TimeSpan parseTimeSpanValue(IEnumerable<SensorParameter> parameters, string name, TimeSpan defaultValue)
+        {
+            int count = parameters.Count(x => x.Name == name);
 
             if (count == 0)
             {
-                Logger.Warning("MinimumSignalSeconds is not defined. Using default value.");
+                Logger.Warning(string.Format("{0} is not defined. Using default value.", name));
             }
             else if (count > 1)
             {
-                Logger.Warning("MinimumSignalSeconds is more than once defined. Using default value.");
+                Logger.Warning(string.Format("{0} is more than once defined. Using default value.", name));
             }
             else
             {
-                string valueAsString = parameters.FirstOrDefault(x => x.Name == "MinimumSignalSeconds").Value;
+                string valueAsString = parameters.FirstOrDefault(x => x.Name == name).Value;
                 bool successful = uint.TryParse(valueAsString, out uint result);
 
                 if (successful)
@@ -75,11 +55,11 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Internals
                 }
                 else
                 {
-                    Logger.Warning("MinimumSignalSeconds is defined, but the value is not valid. Using default value.");
+                    Logger.Warning(string.Format("{0} is defined, but {1} is not a valid value. Using default value.", name, valueAsString));
                 }
             }
 
-            return _defaultSettings.MinimumSignalDuration;
+            return defaultValue;
         }
     }
 }

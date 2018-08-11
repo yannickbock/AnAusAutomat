@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Internals\ISoundSettingsProvider.cs" />
-    <Compile Include="Internals\SoundSettingsProvider.cs" />
+    <Compile Include="Internals\WindowsAudio.cs" />
     <Compile Include="Internals\SoundSnifferSettings.cs" />
     <Compile Include="Internals\SoundSnifferSettingsParser.cs" />
     <Compile Include="SoundSniffer.cs" />
