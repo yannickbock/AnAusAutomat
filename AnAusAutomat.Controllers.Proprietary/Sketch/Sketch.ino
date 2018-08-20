@@ -1,4 +1,4 @@
-﻿enum Method
+enum Method
 {
   Hello = 0,
   Ping = 1,
