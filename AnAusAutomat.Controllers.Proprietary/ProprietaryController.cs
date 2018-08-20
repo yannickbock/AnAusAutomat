@@ -1,12 +1,9 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Controller;
 using AnAusAutomat.Controllers.Proprietary.Internals;
-using AnAusAutomat.Toolbox.Logging;
 using System;
 using System.Collections.Generic;
-using System.IO.Ports;
 using System.Linq;
-using System.Threading;
 using TimersTimer = System.Timers.Timer;
 
 namespace AnAusAutomat.Controllers.Proprietary
@@ -16,20 +13,19 @@ namespace AnAusAutomat.Controllers.Proprietary
         private DeviceSettings _settings;
         private ProprietaryDevice _device;
         private TimersTimer _timer;
-        private SerialPort _serialPort;
+
+        private Communicator _communicator;
 
         private bool _activeFlag = false;
         private int _sessionId;
         private Dictionary<int, bool> _socketStates;
 
-        private string _logMessagePrefix;
-
         public string DeviceIdentifier { get { return _device.Name; } }
 
         public ProprietaryController(DeviceSettings settings)
         {
-            _logMessagePrefix = string.Format("ProprietaryController: [ {0} ] ", settings.Name);
             _settings = settings;
+            _communicator = new Communicator();
 
             _timer = new TimersTimer(200);
             _timer.Elapsed += _timer_Elapsed;
@@ -40,18 +36,17 @@ namespace AnAusAutomat.Controllers.Proprietary
 
         public void Connect()
         {
-            _device = hello(_settings.Name);
+            _device = _communicator.Search(_settings.Name);
+            _communicator.Connect(_device.SerialPort);
 
-            _serialPort = buildConnection(_device.SerialPort);
-            _serialPort.Open();
-            Thread.Sleep(15);
             _timer.Start();
         }
 
         public void Disconnect()
         {
             _timer.Stop();
-            _serialPort.Close();
+
+            _communicator.Disconnect();
         }
 
         public bool TurnOff(Socket socket)
@@ -59,7 +54,7 @@ namespace AnAusAutomat.Controllers.Proprietary
             int internalID = convertSocketIDToInternalID(socket.ID);
             _socketStates[internalID] = false;
 
-            return turnOnOrOff(internalID, false);
+            return _communicator.TurnOff(internalID);
         }
 
         public bool TurnOn(Socket socket)
@@ -67,20 +62,22 @@ namespace AnAusAutomat.Controllers.Proprietary
             int internalID = convertSocketIDToInternalID(socket.ID);
             _socketStates[internalID] = true;
 
-            return turnOnOrOff(internalID, true);
+            return _communicator.TurnOn(internalID);
         }
 
         private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
+            _activeFlag = false;
+
             if (!_activeFlag)
             {
-                int currentSessionId = ping();
+                int currentSessionId = _communicator.Ping();
                 bool connectionLost = currentSessionId == -1;
                 bool connectionRestored = currentSessionId != _sessionId;
 
                 if (connectionLost)
                 {
-                    var device = hello(_device.Name);
+                    var device = _communicator.Search(_device.Name);
 
                     if (device != null)
                     {
@@ -94,7 +91,16 @@ namespace AnAusAutomat.Controllers.Proprietary
                     {
                         foreach (var socketState in _socketStates)
                         {
-                            turnOnOrOff(socketId: socketState.Key, powerOn: socketState.Value);
+                            bool powerOn = socketState.Value;
+                            int internalID = socketState.Key;
+                            if (powerOn)
+                            {
+                                _communicator.TurnOn(internalID);
+                            }
+                            else
+                            {
+                                _communicator.TurnOff(internalID);
+                            }
                         }
                         _sessionId = currentSessionId;
                     }
@@ -106,108 +112,6 @@ namespace AnAusAutomat.Controllers.Proprietary
                     }
                 }
             }
-        }
-
-        private ProprietaryDevice hello(string name)
-        {
-            return hello(3).FirstOrDefault(x => x.Name == name); ;
-        }
-
-        private IEnumerable<ProprietaryDevice> hello(int retries)
-        {
-            return Enumerable.Range(0, retries).SelectMany(x => hello()).Distinct().ToList();
-        }
-
-        private IEnumerable<ProprietaryDevice> hello()
-        {
-            var bytes = ByteBuilder.Hello();
-
-            var list = new List<ProprietaryDevice>();
-            foreach (var serialPort in SerialPort.GetPortNames())
-            {
-                var connection = buildConnection(serialPort);
-                string result = "";
-                try
-                {
-                    connection.Open();
-                    Thread.Sleep(15);
-                    connection.Write(bytes, 0, bytes.Length);
-                    Thread.Sleep(15);
-                    result = connection.ReadExisting();
-                    connection.Close();
-
-                    if (result.Contains("AnAusAutomat"))
-                    {
-                        var split = result.Split('|');
-                        list.Add(new ProprietaryDevice(
-                            name: split.ElementAt(1),
-                            socketIDs: split.ElementAt(2).Replace("{", "").Replace("}", "").Split(';').Select(x => int.Parse(x)).ToList(),
-                            serialPort: serialPort));
-                    }
-                }
-                catch (Exception)
-                {
-                    // No AnAusAutomat. Wrong Sketch. Connection Problems...
-                }
-            }
-
-            return list;
-        }
-
-        private bool turnOnOrOff(int socketId, bool powerOn)
-        {
-            var command = powerOn ? ByteBuilder.TurnOn(socketId) : ByteBuilder.TurnOff(socketId);
-            bool successful = false;
-
-            _activeFlag = true;
-            try
-            {
-                _serialPort.Write(command, 0, command.Length);
-                Thread.Sleep(15);
-                successful = (_serialPort.ReadChar() - 48) == 1;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex,
-                    string.Format("{0} An error occurred while turning {1} socket with id {1}",
-                        _logMessagePrefix,
-                        powerOn ? "on" : "off",
-                        convertInternalIDToSocketID(socketId)
-                ));
-            }
-            _activeFlag = false;
-
-            return successful;
-        }
-
-        private int ping()
-        {
-            var bytes = ByteBuilder.Ping();
-            int sessionId = -1;
-
-            try
-            {
-                _serialPort.Write(bytes, 0, bytes.Length);
-                Thread.Sleep(15);
-                string result = _serialPort.ReadExisting();
-
-                sessionId = int.Parse(result);
-            }
-            catch (Exception)
-            {
-            }
-
-            return sessionId;
-        }
-
-        private SerialPort buildConnection(string port)
-        {
-            return new SerialPort(port, 38400)
-            {
-                Parity = Parity.None,
-                DataBits = 8,
-                StopBits = StopBits.One
-            };
         }
 
         private int convertInternalIDToSocketID(int internalID)

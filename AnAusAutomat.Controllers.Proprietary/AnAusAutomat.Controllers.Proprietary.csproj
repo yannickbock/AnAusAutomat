@@ -42,9 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Internals\ByteBuilder.cs" />
+    <Compile Include="Internals\Communicator.cs" />
+    <Compile Include="Internals\Device.cs" />
     <Compile Include="Internals\DeviceSettings.cs" />
     <Compile Include="Internals\Method.cs" />
     <Compile Include="Internals\ProprietaryDevice.cs" />
+    <Compile Include="Internals\ResponseParser.cs" />
     <Compile Include="Internals\XmlConfigReader.cs" />
     <Compile Include="ProprietaryController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
