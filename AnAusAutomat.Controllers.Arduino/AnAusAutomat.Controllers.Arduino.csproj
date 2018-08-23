@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="ArduinoController.cs" />
     <Compile Include="ArduinoControllerFactory.cs" />
-    <Compile Include="Internals\ControllerSettings.cs" />
+    <Compile Include="Internals\DeviceSettings.cs" />
     <Compile Include="Internals\Pin.cs" />
     <Compile Include="Internals\PinLogic.cs" />
     <Compile Include="Internals\XmlConfigReader.cs" />

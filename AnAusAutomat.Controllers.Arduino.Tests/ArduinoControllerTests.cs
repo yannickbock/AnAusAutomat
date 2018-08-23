@@ -128,17 +128,17 @@ namespace AnAusAutomat.Controllers.Arduino.Tests
             Assert.True(successful);
         }
 
-        private ControllerSettings getSettingsWithoutPins()
+        private DeviceSettings getSettingsWithoutPins()
         {
-            return new ControllerSettings(
-                deviceName: "Sam",
+            return new DeviceSettings(
+                name: "Sam",
                 pins: new List<Pin>());
         }
 
-        private ControllerSettings getSettingsWithPins()
+        private DeviceSettings getSettingsWithPins()
         {
-            return new ControllerSettings(
-                deviceName: "Sam",
+            return new DeviceSettings(
+                name: "Sam",
                 pins: new List<Pin>()
                 {
                     new Pin(1, 8, "Relay", PinLogic.Negative),

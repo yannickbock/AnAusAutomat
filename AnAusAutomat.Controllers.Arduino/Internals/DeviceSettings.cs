@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace AnAusAutomat.Controllers.Arduino.Internals
 {
-    public class ControllerSettings : IDevice
+    public class DeviceSettings : IDevice
     {
-        public ControllerSettings(string deviceName, IEnumerable<Pin> pins)
+        public DeviceSettings(string name, IEnumerable<Pin> pins)
         {
-            Name = deviceName;
+            Name = name;
             Pins = pins;
         }
 

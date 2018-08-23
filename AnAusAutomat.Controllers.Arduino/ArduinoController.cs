@@ -16,7 +16,7 @@ namespace AnAusAutomat.Controllers.Arduino
 
         public IDevice Device { get; private set; }
 
-        public ArduinoController(IMajoro majoro, ControllerSettings settings)
+        public ArduinoController(IMajoro majoro, DeviceSettings settings)
         {
             _majoro = majoro;
             Device = settings;

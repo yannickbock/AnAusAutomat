@@ -14,19 +14,19 @@ namespace AnAusAutomat.Controllers.Arduino.Internals
             _xDocument = XDocument.Load(configFilePath);
         }
 
-        public IEnumerable<ControllerSettings> Read()
+        public IEnumerable<DeviceSettings> Read()
         {
             Logger.Information("Loading arduino controller settings ...");
 
             return readDevices();
         }
 
-        private IEnumerable<ControllerSettings> readDevices()
+        private IEnumerable<DeviceSettings> readDevices()
         {
             return _xDocument.Root.Element("devices").Elements("device").Select(deviceNode =>
             {
-                return new ControllerSettings(
-                    deviceName: deviceNode.Attribute("name").Value,
+                return new DeviceSettings(
+                    name: deviceNode.Attribute("name").Value,
                     pins: readPins(deviceNode));
             }).ToList();
         }
