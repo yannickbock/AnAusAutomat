@@ -23,7 +23,7 @@
         <sensor name="GUI" />
       </sensors>
       <conditions startupState="On" shutdownState="On">
-        <powerOn>!Socket.IsOn AND (Keylogger.PowerOn OR GUI.PowerOn)</powerOn>
+        <powerOn>Socket.IsOff AND (Keylogger.PowerOn OR GUI.PowerOn)</powerOn>
         <powerOff mode="Arbeit">Socket.IsOn AND Keylogger.PowerOff</powerOff>
         <powerOff mode="Musik">Socket.IsOn AND Keylogger.PowerOff AND (SoundSniffer.PowerOff OR SoundSniffer.Undefined)</powerOff>
         <powerOff mode="Video">Socket.IsOn AND Keylogger.PowerOff AND (SoundSniffer.PowerOff OR SoundSniffer.Undefined)</powerOff>
@@ -39,9 +39,9 @@
         <sensor name="GUI" />
       </sensors>
       <conditions startupState="Off" shutdownState="Off">
-        <powerOn>!Socket.IsOn AND SoundSniffer.PowerOn AND GUI.Undefined</powerOn>
+        <powerOn>Socket.IsOff AND SoundSniffer.PowerOn AND GUI.Undefined</powerOn>
         <powerOff>Socket.IsOn AND SoundSniffer.PowerOff AND GUI.Undefined</powerOff>
-        <powerOn>!Socket.IsOn AND GUI.PowerOn</powerOn>
+        <powerOn>Socket.IsOff AND GUI.PowerOn</powerOn>
         <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
       </conditions>
     </socket>
@@ -53,7 +53,7 @@
         <sensor name="GUI" />
       </sensors>
       <conditions startupState="On" shutdownState="Off">
-        <powerOn>!Socket.IsOn AND Keylogger.PowerOn AND GUI.Undefined</powerOn>
+        <powerOn>Socket.IsOff AND Keylogger.PowerOn AND GUI.Undefined</powerOn>
         <powerOff>Socket.IsOn AND Keylogger.PowerOff AND GUI.Undefined</powerOff>
         <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
       </conditions>
@@ -73,8 +73,8 @@
         </sensor>
       </sensors>
       <conditions startupState="Off" shutdownState="Off">
-        <powerOn>!Socket.IsOn AND GUI.PowerOn</powerOn>
-        <powerOn>!Socket.IsOn AND TimeSwitch.PowerOn</powerOn>
+        <powerOn>Socket.IsOff AND GUI.PowerOn</powerOn>
+        <powerOn>Socket.IsOff AND TimeSwitch.PowerOn</powerOn>
         <powerOff mode="Arbeit">Socket.IsOn AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
         <powerOff mode="Musik">Socket.IsOn AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
         <powerOff mode="Video">Socket.IsOn AND SoundSniffer.PowerOff AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
