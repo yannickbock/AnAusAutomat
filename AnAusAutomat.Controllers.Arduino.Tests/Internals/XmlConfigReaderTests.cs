@@ -24,7 +24,7 @@ namespace AnAusAutomat.Controllers.Arduino.Tests.Internals
             var device = settings.FirstOrDefault();
 
             Assert.Single(settings);
-            Assert.Equal("Sam", device.DeviceName);
+            Assert.Equal("Sam", device.Name);
 
             Assert.Equal(4, device.Pins.Count());
             Assert.Contains(new Pin(1, 6, "Relay + LED", PinLogic.Negative), device.Pins);

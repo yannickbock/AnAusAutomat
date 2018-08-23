@@ -1,16 +1,17 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Controller;
+using AnAusAutomat.Controllers.Probe.Internals;
 using AnAusAutomat.Toolbox.Logging;
 
 namespace AnAusAutomat.Controllers.Probe
 {
     public class ProbeController : IController
     {
-        public string DeviceIdentifier { get; private set; }
+        public IDevice Device { get; private set; }
 
         public ProbeController()
         {
-            DeviceIdentifier = "n/a";
+            Device = new ProbeDevice("n/a");
         }
 
         public void Connect()

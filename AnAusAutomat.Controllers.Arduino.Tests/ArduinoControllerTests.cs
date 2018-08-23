@@ -41,7 +41,7 @@ namespace AnAusAutomat.Controllers.Arduino.Tests
 
             var controller = new ArduinoController(majoro.Object, settings);
 
-            Assert.Equal(settings.DeviceName, controller.DeviceIdentifier);
+            Assert.Equal(settings.Name, controller.Device.Name);
         }
 
         [Fact]

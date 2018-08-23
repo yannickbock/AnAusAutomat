@@ -20,7 +20,7 @@ namespace AnAusAutomat.Controllers.Proprietary
         private int _sessionId;
         private Dictionary<int, bool> _socketStates;
 
-        public string DeviceIdentifier { get { return _device.Name; } }
+        public IDevice Device { get; private set; }
 
         public ProprietaryController(DeviceSettings settings)
         {

@@ -14,12 +14,12 @@ namespace AnAusAutomat.Controllers.Arduino
         private IMajoro _majoro;
         private IEnumerable<Pin> _pins;
 
-        public string DeviceIdentifier { get; private set; }
+        public IDevice Device { get; private set; }
 
         public ArduinoController(IMajoro majoro, ControllerSettings settings)
         {
             _majoro = majoro;
-            DeviceIdentifier = settings.DeviceName;
+            Device = settings;
             _pins = settings.Pins;
         }
 
@@ -94,7 +94,7 @@ namespace AnAusAutomat.Controllers.Arduino
 
         private void logSwitchPin(Pin pin, bool writeHigh)
         {
-            Logger.Debug(string.Format("{0} @ Arduino [ {1} ] => {2}", pin, DeviceIdentifier, writeHigh ? "High" : "Low"));
+            Logger.Debug(string.Format("{0} @ Arduino [ {1} ] => {2}", pin, Device, writeHigh ? "High" : "Low"));
         }
     }
 }

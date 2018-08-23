@@ -44,6 +44,7 @@
     <Compile Include="ConditionMode.cs" />
     <Compile Include="Controller\IController.cs" />
     <Compile Include="Controller\IControllerFactory.cs" />
+    <Compile Include="Controller\IDevice.cs" />
     <Compile Include="Sensor\Attributes\ParameterAttribute.cs" />
     <Compile Include="Sensor\Events\ApplicationExitEventArgs.cs" />
     <Compile Include="Sensor\Events\ModeChangedEventArgs.cs" />

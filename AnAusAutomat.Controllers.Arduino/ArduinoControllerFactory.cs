@@ -32,7 +32,7 @@ namespace AnAusAutomat.Controllers.Arduino
 
             return config.Select(x =>
             {
-                var majoro = findConnection(x.DeviceName);
+                var majoro = findConnection(x.Name);
                 return new ArduinoController(majoro, x);
             });
         }

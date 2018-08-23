@@ -42,7 +42,7 @@ namespace AnAusAutomat.Core.Plugins
                         var controllerFactoryType = types.FirstOrDefault(x => typeof(IControllerFactory).IsAssignableFrom(x));
                         var factory = Activator.CreateInstance(controllerFactoryType) as IControllerFactory;
 
-                        Logger.Information(string.Format("Found {0} controller", controllerFactoryType.Name.Replace("Controller", "").Replace("Factory", ""), file));
+                        Logger.Information(string.Format("Found {0} controller.", controllerFactoryType.Name.Replace("Controller", "").Replace("Factory", ""), file));
                         controllers.AddRange(factory.Create());
                     }
                 }
