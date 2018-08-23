@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace AnAusAutomat.Controllers.Arduino.Internals
+namespace AnAusAutomat.Toolbox.Exceptions
 {
     public class DeviceNotFoundException : IOException
     {

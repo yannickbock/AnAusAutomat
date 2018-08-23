@@ -1,5 +1,6 @@
 ﻿using AnAusAutomat.Contracts.Controller;
 using AnAusAutomat.Controllers.Arduino.Internals;
+using AnAusAutomat.Toolbox.Exceptions;
 using AnAusAutomat.Toolbox.Logging;
 using AnAusAutomat.Toolbox.Xml;
 using ArduinoMajoro;
