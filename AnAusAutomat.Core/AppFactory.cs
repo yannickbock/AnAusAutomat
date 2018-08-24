@@ -32,7 +32,9 @@ namespace AnAusAutomat.Core
             var sensorHub = new SensorHub(sensors);
             var controllerHub = new ControllerHub(controllers);
 
-            return new App(stateStore, sensorHub, controllerHub, appConfig);
+            var app = new App(stateStore, sensorHub, controllerHub);
+            app.Initialize(appConfig);
+            return app;
         }
 
         private static IEnumerable<ISensor> buildSensors(IEnumerable<ISensorBuilder> builders, AppConfig appConfig)
