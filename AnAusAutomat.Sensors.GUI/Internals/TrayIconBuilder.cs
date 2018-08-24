@@ -107,24 +107,27 @@ namespace AnAusAutomat.Sensors.GUI.Internals
 
         public void AddModeStrip(IEnumerable<ConditionMode> modes)
         {
-            var dropDownItems = modes.Select(x =>
+            if (modes.Any())
             {
-                return new ToolStripMenuItem(x.Name, null, onClick: (sender, e) =>
+                var dropDownItems = modes.Select(x =>
                 {
-                    var item = ((ToolStripMenuItem)sender);
-                    item.Checked = !item.Checked;
-                })
-                {
-                    ImageScaling = ToolStripItemImageScaling.None,
-                    Checked = x.IsActive,
-                    Tag = x
-                };
-            }).ToList();
+                    return new ToolStripMenuItem(x.Name, null, onClick: (sender, e) =>
+                    {
+                        var item = ((ToolStripMenuItem)sender);
+                        item.Checked = !item.Checked;
+                    })
+                    {
+                        ImageScaling = ToolStripItemImageScaling.None,
+                        Checked = x.IsActive,
+                        Tag = x
+                    };
+                }).ToList();
 
-            var modesItem = new ToolStripMenuItem("Mode", null, null, "mode");
-            modesItem.DropDownItems.AddRange(dropDownItems.ToArray());
+                var modesItem = new ToolStripMenuItem("Mode", null, null, "mode");
+                modesItem.DropDownItems.AddRange(dropDownItems.ToArray());
 
-            _notifyIconItems.Add(modesItem);
+                _notifyIconItems.Add(modesItem);
+            }
         }
 
         public void AddSeparatorStrip()
