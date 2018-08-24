@@ -2,6 +2,7 @@
 
 namespace AnAusAutomat.Contracts.Sensor.Attributes
 {
+    [Obsolete("readme.md is the future.")]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class ParameterAttribute : Attribute
     {
