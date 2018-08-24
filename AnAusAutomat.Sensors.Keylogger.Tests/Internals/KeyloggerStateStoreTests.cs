@@ -15,7 +15,7 @@ namespace AnAusAutomat.Sensors.Keylogger.Tests.Internals
         public void GetSettings_DefaultValue()
         {
             var socket = new Socket(1, "Test");
-            var defaultSettings = KeyloggerSettings.GetDefault();
+            var defaultSettings = KeyloggerSocketSettings.GetDefault();
             var stateStore = new KeyloggerStateStore();
 
             Assert.Equal(defaultSettings, stateStore.GetSettings(socket));
@@ -25,7 +25,7 @@ namespace AnAusAutomat.Sensors.Keylogger.Tests.Internals
         public void GetSettings_SetAndGet()
         {
             var socket = new Socket(1, "Test");
-            var settings = new KeyloggerSettings(TimeSpan.FromSeconds(50));
+            var settings = new KeyloggerSocketSettings(TimeSpan.FromSeconds(50));
             var stateStore = new KeyloggerStateStore();
             stateStore.SetSettings(socket, settings);
 
@@ -49,6 +49,19 @@ namespace AnAusAutomat.Sensors.Keylogger.Tests.Internals
             stateStore.SetStatus(socket, PowerStatus.On);
 
             Assert.Equal(PowerStatus.On, stateStore.GetStatus(socket));
+        }
+
+        [Fact]
+        public void GetSockets()
+        {
+            var socket = new Socket(1, "Test");
+            var settings = new KeyloggerSocketSettings(TimeSpan.FromSeconds(50));
+            var stateStore = new KeyloggerStateStore();
+            stateStore.SetSettings(socket, settings);
+
+            var sockets = stateStore.GetSockets();
+            Assert.Single(sockets);
+            Assert.Equal(socket, sockets.First());
         }
     }
 }

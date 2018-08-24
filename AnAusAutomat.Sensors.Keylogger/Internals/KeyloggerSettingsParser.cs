@@ -8,16 +8,16 @@ namespace AnAusAutomat.Sensors.Keylogger.Internals
 {
     public class KeyloggerSettingsParser
     {
-        private KeyloggerSettings _defaultSettings;
+        private KeyloggerSocketSettings _defaultSettings;
 
         public KeyloggerSettingsParser()
         {
-            _defaultSettings = KeyloggerSettings.GetDefault();
+            _defaultSettings = KeyloggerSocketSettings.GetDefault();
         }
 
-        public KeyloggerSettings Parse(IEnumerable<SensorParameter> parameters)
+        public KeyloggerSocketSettings ParseSocketSettings(IEnumerable<SensorParameter> parameters)
         {
-            return new KeyloggerSettings(
+            return new KeyloggerSocketSettings(
                 offDelay: parseOffDelay(parameters));
         }
 

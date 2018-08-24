@@ -59,12 +59,7 @@ namespace AnAusAutomat.Core
                     {
                         Logger.Information(string.Format("{0} = True", x));
 
-                        turnOnOrOff(
-                            x.Socket,
-                            x.ResultingStatus,
-                            x.Text,
-                            e.Message,
-                            sender);
+                        turnOnOrOff(x.Socket, x.ResultingStatus, x.Text, e.Message, sender);
                     }
                 }
             }
@@ -75,8 +70,6 @@ namespace AnAusAutomat.Core
             var conditionCompiler = new ConditionCompiler();
             var conditions = conditionCompiler.Compile(_appConfig.Conditions.Where(x => x.Type == ConditionType.Regular));
             _conditionFilter = new ConditionFilter(_stateStore, conditions);
-
-            _sensorHub.Initialize(_appConfig.Sensors);
         }
 
         public void Start()

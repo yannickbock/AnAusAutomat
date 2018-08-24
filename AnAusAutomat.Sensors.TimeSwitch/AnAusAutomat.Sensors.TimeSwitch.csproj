@@ -44,6 +44,7 @@
     <Compile Include="Internals\Cache.cs" />
     <Compile Include="Internals\Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimeSwitchBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AnAusAutomat.Contracts\AnAusAutomat.Contracts.csproj">

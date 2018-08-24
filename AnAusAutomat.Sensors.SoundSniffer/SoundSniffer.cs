@@ -19,42 +19,31 @@ namespace AnAusAutomat.Sensors.SoundSniffer
     public class SoundSniffer : ISensor, ISendStatusForecast
     {
         private ISystemAudio _systemAudio;
-        private Timer _timer;
-        private IEnumerable<Socket> _sockets;
         private SoundSnifferStateStore _stateStore;
+
+        private Timer _timer;
         private Dictionary<Socket, DateTime> _lastStatusForecastEventsFired;
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
         public event EventHandler<StatusForecastEventArgs> StatusForecast;
 
-        public SoundSniffer()
+        public SoundSniffer(ISystemAudio systemAudio, SoundSnifferStateStore stateStore)
         {
-            _systemAudio = new WindowsAudio();
-            _stateStore = new SoundSnifferStateStore();
+            _systemAudio = systemAudio;
+            _stateStore = stateStore;
             _timer = new Timer(250);
             _timer.Elapsed += _timer_Elapsed;
             _lastStatusForecastEventsFired = new Dictionary<Socket, DateTime>();
         }
 
-        public void Initialize(SensorSettings settings)
-        {
-            var parser = new SoundSnifferSettingsParser();
-            _sockets = settings.Sockets;
-
-            foreach (var socket in settings.Sockets)
-            {
-                var s = parser.Parse(socket.Parameters);
-                _stateStore.SetSettings(socket, s);
-            }
-        }
-
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            var sockets = _stateStore.GetSockets();
             bool isPlaying = isAudioPlaying();
             var lastSignal = _stateStore.GetLastSignal();
             var signalDuration = _stateStore.GetSignalDuration();
 
-            foreach (var socket in _sockets)
+            foreach (var socket in sockets)
             {
                 var settings = _stateStore.GetSettings(socket);
                 var status = _stateStore.GetStatus(socket);

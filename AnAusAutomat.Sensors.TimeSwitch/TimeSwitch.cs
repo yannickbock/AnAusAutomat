@@ -22,7 +22,7 @@ namespace AnAusAutomat.Sensors.TimeSwitch
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
 
-        public void Initialize(SensorSettings settings)
+        internal void Initialize(SensorSettings settings)
         {
             _timer = new Timer(1000);
             _timer.Elapsed += _timer_Elapsed;

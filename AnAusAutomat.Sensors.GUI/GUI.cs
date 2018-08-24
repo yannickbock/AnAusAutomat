@@ -30,12 +30,14 @@ namespace AnAusAutomat.Sensors.GUI
         private Translation _translation;
         private Scheduler _scheduler;
 
-        public void InitializeModes(IEnumerable<ConditionMode> modes)
+        [Obsolete("Use Builder instead.")]
+        internal void InitializeModes(IEnumerable<ConditionMode> modes)
         {
             _modes = modes;
         }
 
-        public void Initialize(SensorSettings settings)
+        [Obsolete("Use Builder instead.")]
+        internal void Initialize(SensorSettings settings)
         {
             _translation = new Translation();
             _scheduler = new Scheduler();

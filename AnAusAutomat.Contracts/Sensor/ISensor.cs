@@ -5,8 +5,6 @@ namespace AnAusAutomat.Contracts.Sensor
 {
     public interface ISensor
     {
-        void Initialize(SensorSettings settings);
-
         void Start();
 
         void Stop();

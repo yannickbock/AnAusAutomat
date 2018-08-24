@@ -2,9 +2,9 @@
 
 namespace AnAusAutomat.Sensors.SoundSniffer.Internals
 {
-    public class SoundSnifferSettings
+    public class SoundSocketSnifferSettings
     {
-        public SoundSnifferSettings(TimeSpan offDelay, TimeSpan minimumSignalDuration)
+        public SoundSocketSnifferSettings(TimeSpan offDelay, TimeSpan minimumSignalDuration)
         {
             OffDelay = offDelay;
             MinimumSignalDuration = minimumSignalDuration;
@@ -24,9 +24,9 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Internals
             return GetHashCode() == obj.GetHashCode();
         }
 
-        public static SoundSnifferSettings GetDefault()
+        public static SoundSocketSnifferSettings GetDefault()
         {
-            return new SoundSnifferSettings(
+            return new SoundSocketSnifferSettings(
                 offDelay: TimeSpan.FromSeconds(300),
                 minimumSignalDuration: TimeSpan.FromSeconds(3));
         }

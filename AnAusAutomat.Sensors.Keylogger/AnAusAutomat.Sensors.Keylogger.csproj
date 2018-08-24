@@ -43,8 +43,9 @@
     <Compile Include="Internals\KeyloggerSettingsParser.cs" />
     <Compile Include="Internals\KeyloggerStateStore.cs" />
     <Compile Include="Keylogger.cs" />
-    <Compile Include="Internals\KeyloggerSettings.cs" />
+    <Compile Include="Internals\KeyloggerSocketSettings.cs" />
     <Compile Include="Internals\User32.cs" />
+    <Compile Include="KeyloggerBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

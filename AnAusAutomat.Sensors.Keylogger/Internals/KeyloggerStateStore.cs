@@ -6,20 +6,20 @@ namespace AnAusAutomat.Sensors.Keylogger.Internals
     public class KeyloggerStateStore
     {
         private Dictionary<Socket, PowerStatus> _states;
-        private Dictionary<Socket, KeyloggerSettings> _settings;
+        private Dictionary<Socket, KeyloggerSocketSettings> _settings;
 
         public KeyloggerStateStore()
         {
             _states = new Dictionary<Socket, PowerStatus>();
-            _settings = new Dictionary<Socket, KeyloggerSettings>();
+            _settings = new Dictionary<Socket, KeyloggerSocketSettings>();
         }
 
-        public KeyloggerSettings GetSettings(Socket socket)
+        public KeyloggerSocketSettings GetSettings(Socket socket)
         {
-            return _settings.ContainsKey(socket) ? _settings[socket] : KeyloggerSettings.GetDefault();
+            return _settings.ContainsKey(socket) ? _settings[socket] : KeyloggerSocketSettings.GetDefault();
         }
 
-        public void SetSettings(Socket socket, KeyloggerSettings settings)
+        public void SetSettings(Socket socket, KeyloggerSocketSettings settings)
         {
             _settings[socket] = settings;
         }
@@ -32,6 +32,11 @@ namespace AnAusAutomat.Sensors.Keylogger.Internals
         public void SetStatus(Socket socket, PowerStatus status)
         {
             _states[socket] = status;
+        }
+
+        public IEnumerable<Socket> GetSockets()
+        {
+            return _settings.Keys;
         }
     }
 }

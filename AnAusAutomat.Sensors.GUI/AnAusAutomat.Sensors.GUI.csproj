@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GUI.cs" />
+    <Compile Include="GUIBuilder.cs" />
     <Compile Include="Internals\Dialogs\ComboBoxScheduleItem.cs" />
     <Compile Include="Internals\Dialogs\MoreOptionsDialog.cs" />
     <Compile Include="Internals\Dialogs\MoreOptionsDialogResult.cs" />
