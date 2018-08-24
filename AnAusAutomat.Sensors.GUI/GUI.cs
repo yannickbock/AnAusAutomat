@@ -1,6 +1,5 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Sensor;
-using AnAusAutomat.Contracts.Sensor.Attributes;
 using AnAusAutomat.Contracts.Sensor.Events;
 using AnAusAutomat.Contracts.Sensor.Features;
 using AnAusAutomat.Sensors.GUI.Internals;
@@ -10,48 +9,31 @@ using AnAusAutomat.Sensors.GUI.Internals.Scheduling;
 using AnAusAutomat.Sensors.GUI.Internals.Scheduling.Events;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace AnAusAutomat.Sensors.GUI
 {
-    [Parameter("StartMinimized", typeof(string), "false")]
-    [Description("...")]
     public class GUI : ISensor, IReceiveStatusChanged, IReceiveStatusForecast, IReceiveModeChanged, ISendModeChanged, ISendExit
     {
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
         public event EventHandler<ModeChangedEventArgs> ModeChanged;
         public event EventHandler<ApplicationExitEventArgs> ApplicationExit;
 
-        private Settings _settings;
-        private IEnumerable<ConditionMode> _modes;
         private TrayIcon _trayIcon;
         private Translation _translation;
         private Scheduler _scheduler;
 
-        [Obsolete("Use Builder instead.")]
-        internal void InitializeModes(IEnumerable<ConditionMode> modes)
-        {
-            _modes = modes;
-        }
-
-        [Obsolete("Use Builder instead.")]
-        internal void Initialize(SensorSettings settings)
+        public GUI(IEnumerable<Socket> sockets, IEnumerable<ConditionMode> modes)
         {
             _translation = new Translation();
-            _scheduler = new Scheduler();
 
-            var parser = new SettingsParser();
-            _settings = parser.Parse(settings.Parameters);
-
-            var builder = new TrayIconBuilder(new Translation());
-            foreach (var socket in settings.Sockets)
+            var builder = new TrayIconBuilder(_translation);
+            foreach (var socket in sockets)
             {
                 builder.AddSocketStrip(socket);
             }
             builder.AddSeparatorStrip();
-            builder.AddModeStrip(_modes);
+            builder.AddModeStrip(modes);
             builder.AddSeparatorStrip();
             builder.AddExitStrip();
 
@@ -61,8 +43,8 @@ namespace AnAusAutomat.Sensors.GUI
             _trayIcon.StatusOnClick += _trayIcon_StatusOnClick;
             _trayIcon.MoreOptionsOnClick += _trayIcon_MoreOptionsOnClick;
 
+            _scheduler = new Scheduler();
             _scheduler.ScheduledTaskReady += _scheduler_ScheduledTaskReady;
-            _scheduler.Start();
         }
 
         private void _scheduler_ScheduledTaskReady(object sender, ScheduledTaskReadyEventArgs e)
@@ -128,11 +110,13 @@ namespace AnAusAutomat.Sensors.GUI
         public void Start()
         {
             _trayIcon.Show();
+            _scheduler.Start();
         }
 
         public void Stop()
         {
             _trayIcon.Hide();
+            _scheduler.Stop();
         }
     }
 }

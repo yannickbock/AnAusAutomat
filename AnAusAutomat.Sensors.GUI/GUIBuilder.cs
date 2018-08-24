@@ -1,7 +1,6 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Sensor;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AnAusAutomat.Sensors.GUI
 {
@@ -35,13 +34,7 @@ namespace AnAusAutomat.Sensors.GUI
 
         public ISensor Build()
         {
-            var temp = _sockets.Select(x => new SocketWithSensorParameters(x.Key.ID, x.Key.Name, x.Value)).ToList();
-            var settings = new SensorSettings("GUI", _parameters, temp);
-
-            var gui = new GUI();
-            gui.InitializeModes(_modes);
-            gui.Initialize(settings);
-            return gui;
+            return new GUI(_sockets.Keys, _modes);
         }
     }
 }
