@@ -10,12 +10,10 @@ namespace AnAusAutomat.Core.Hubs
 {
     public class SensorHub
     {
-        private IStateStore _stateStore;
         private IEnumerable<ISensor> _sensors;
 
-        public SensorHub(IStateStore stateStore, IEnumerable<ISensor> sensors)
+        public SensorHub(IEnumerable<ISensor> sensors)
         {
-            _stateStore = stateStore;
             _sensors = sensors;
 
             foreach (var sensor in _sensors)
@@ -25,6 +23,7 @@ namespace AnAusAutomat.Core.Hubs
         }
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
+        public event EventHandler<ModeChangedEventArgs> ModeChanged;
         public event EventHandler<ApplicationExitEventArgs> ApplicationExit;
 
         private void assignEvents(ISensor sensor)
@@ -80,7 +79,7 @@ namespace AnAusAutomat.Core.Hubs
 
         private void sensor_ModeChanged(object sender, ModeChangedEventArgs e)
         {
-            _stateStore.SetModeState(e.Mode);
+            ModeChanged?.Invoke(sender, e);
 
             var sensorsWithReceiveModeChangedSupport = _sensors.Where(x => x as IReceiveModeChanged != null).Select(x => (IReceiveModeChanged)x).ToList();
             foreach (var sensor in sensorsWithReceiveModeChangedSupport)

@@ -27,7 +27,13 @@ namespace AnAusAutomat.Core
             _appConfig = appConfig;
 
             _sensorHub.StatusChanged += _sensorHub_StatusChanged;
+            _sensorHub.ModeChanged += _sensorHub_ModeChanged;
             _sensorHub.ApplicationExit += _sensorHub_ApplicationExit;
+        }
+
+        private void _sensorHub_ModeChanged(object sender, ModeChangedEventArgs e)
+        {
+            _stateStore.SetModeState(e.Mode);
         }
 
         private void _sensorHub_ApplicationExit(object sender, ApplicationExitEventArgs e)
