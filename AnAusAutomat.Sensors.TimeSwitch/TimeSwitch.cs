@@ -1,20 +1,15 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Sensor;
-using AnAusAutomat.Contracts.Sensor.Attributes;
 using AnAusAutomat.Contracts.Sensor.Events;
 using AnAusAutomat.Sensors.TimeSwitch.Internals;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Timers;
 
 namespace AnAusAutomat.Sensors.TimeSwitch
 {
-    [Parameter("powerOn", typeof(DateTime), "", "HH:mm:ss")]
-    [Parameter("powerOff", typeof(DateTime), "", "HH:mm:ss")]
-    [Description("Fires turn on or turn off event at a specific time.")]
     public class TimeSwitch : ISensor
     {
         private Timer _timer;
