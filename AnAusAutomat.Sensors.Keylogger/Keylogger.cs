@@ -1,20 +1,15 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Sensor;
-using AnAusAutomat.Contracts.Sensor.Attributes;
 using AnAusAutomat.Contracts.Sensor.Events;
 using AnAusAutomat.Contracts.Sensor.Features;
 using AnAusAutomat.Sensors.Keylogger.Internals;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Timers;
 
 namespace AnAusAutomat.Sensors.Keylogger
 {
-    [Parameter("OffDelaySeconds", typeof(uint), "300")]
-    [Description("Fires turn on event if mouse or keyboard input action is detected. " +
-        "Fires turn off event if time since last input has reached OffDelaySeconds.")]
     public class Keylogger : ISensor, ISendStatusForecast
     {
         private Timer _timer;
