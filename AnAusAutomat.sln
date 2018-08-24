@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Core", "AnAusA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Contracts", "AnAusAutomat.Contracts\AnAusAutomat.Contracts.csproj", "{7AFB88F5-83CC-4B32-87D6-2B45F26570BD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AnAusAutomat.Sensors", "AnAusAutomat.Sensors", "{7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sensors", "Sensors", "{7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AnAusAutomat.Controllers", "AnAusAutomat.Controllers", "{799E796C-1AB6-4829-B3A0-33D6F307FE0B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controllers", "Controllers", "{799E796C-1AB6-4829-B3A0-33D6F307FE0B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Toolbox", "AnAusAutomat.Toolbox\AnAusAutomat.Toolbox.csproj", "{6ACA9411-7251-48D4-B764-87FB96D0EF15}"
 EndProject
@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AnAusAutomat.Controllers.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Controllers.Probe.Tests", "AnAusAutomat.Controllers.Probe.Tests\AnAusAutomat.Controllers.Probe.Tests.csproj", "{00F69A17-D5D0-449B-8F80-D8FCD2F1528B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AnAusAutomat.Tests", "AnAusAutomat.Tests", "{62E7B8B6-C7B2-414D-93CB-6A606A5B245A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{62E7B8B6-C7B2-414D-93CB-6A606A5B245A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Toolbox.Tests", "AnAusAutomat.Toolbox.Tests\AnAusAutomat.Toolbox.Tests.csproj", "{E08E2967-7130-4E49-B514-59B0BCA41FD6}"
 EndProject
