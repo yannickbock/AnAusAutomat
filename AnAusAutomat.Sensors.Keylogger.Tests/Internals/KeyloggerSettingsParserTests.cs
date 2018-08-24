@@ -12,7 +12,7 @@ namespace AnAusAutomat.Sensors.Keylogger.Tests.Internals
         public void Parse_OffDelay()
         {
             var parser = new KeyloggerSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>()
+            var result = parser.ParseSocketSettings(new List<SensorParameter>()
             {
                 new SensorParameter("OffDelaySeconds", "60")
             });
@@ -23,9 +23,9 @@ namespace AnAusAutomat.Sensors.Keylogger.Tests.Internals
         [Fact]
         public void Parse_OffDelayNotDefined()
         {
-            var defaultSettings = KeyloggerSettings.GetDefault();
+            var defaultSettings = KeyloggerSocketSettings.GetDefault();
             var parser = new KeyloggerSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>());
+            var result = parser.ParseSocketSettings(new List<SensorParameter>());
 
             Assert.Equal(defaultSettings.OffDelay, result.OffDelay);
         }
@@ -33,9 +33,9 @@ namespace AnAusAutomat.Sensors.Keylogger.Tests.Internals
         [Fact]
         public void Parse_OffDelayMultipleDefined()
         {
-            var defaultSettings = KeyloggerSettings.GetDefault();
+            var defaultSettings = KeyloggerSocketSettings.GetDefault();
             var parser = new KeyloggerSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>()
+            var result = parser.ParseSocketSettings(new List<SensorParameter>()
             {
                 new SensorParameter("OffDelaySeconds", "60"),
                 new SensorParameter("OffDelaySeconds", "90")
@@ -47,9 +47,9 @@ namespace AnAusAutomat.Sensors.Keylogger.Tests.Internals
         [Fact]
         public void Parse_OffDelayInvalidValue()
         {
-            var defaultSettings = KeyloggerSettings.GetDefault();
+            var defaultSettings = KeyloggerSocketSettings.GetDefault();
             var parser = new KeyloggerSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>()
+            var result = parser.ParseSocketSettings(new List<SensorParameter>()
             {
                 new SensorParameter("OffDelaySeconds", "-1")
             });

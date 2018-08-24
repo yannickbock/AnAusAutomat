@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AnAusAutomat.Contracts.Sensor
 {
+    [Obsolete]
     public class SensorSettings
     {
         public SensorSettings(string sensorName, IEnumerable<SensorParameter> parameters, IEnumerable<SocketWithSensorParameters> sockets)

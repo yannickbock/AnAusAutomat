@@ -18,7 +18,6 @@ namespace AnAusAutomat.Sensors.Keylogger
     public class Keylogger : ISensor, ISendStatusForecast
     {
         private Timer _timer;
-        private IEnumerable<Socket> _sockets;
         private Dictionary<Socket, DateTime> _lastStatusForecastEventsFired;
         private User32 _user32;
         private KeyloggerStateStore _stateStore;
@@ -26,33 +25,21 @@ namespace AnAusAutomat.Sensors.Keylogger
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
         public event EventHandler<StatusForecastEventArgs> StatusForecast;
 
-        public Keylogger()
+        public Keylogger(KeyloggerStateStore stateStore, User32 user32)
         {
-            _user32 = new User32();
-            _stateStore = new KeyloggerStateStore();
-            _sockets = new List<Socket>();
+            _user32 = user32;
+            _stateStore = stateStore;
             _timer = new Timer(250);
             _timer.Elapsed += _timer_Elapsed;
             _lastStatusForecastEventsFired = new Dictionary<Socket, DateTime>();
         }
 
-        public void Initialize(SensorSettings settings)
-        {
-            var parser = new KeyloggerSettingsParser();
-            _sockets = settings.Sockets;
-
-            foreach (var socket in settings.Sockets)
-            {
-                var s = parser.Parse(socket.Parameters);
-                _stateStore.SetSettings(socket, s);
-            }
-        }
-
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             var inputIdle = _user32.GetInputIdle();
+            var sockets = _stateStore.GetSockets();
 
-            foreach (var socket in _sockets)
+            foreach (var socket in sockets)
             {
                 var settings = _stateStore.GetSettings(socket);
                 var status = _stateStore.GetStatus(socket);

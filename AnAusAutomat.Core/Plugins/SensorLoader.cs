@@ -17,20 +17,20 @@ namespace AnAusAutomat.Core.Plugins
             _directoryPath = directoryPath;
         }
 
-        public IEnumerable<ISensor> Load(IEnumerable<string> sensorNames)
+        public IEnumerable<ISensorBuilder> Load(IEnumerable<string> sensorNames)
         {
             Logger.Information(string.Format("Searching sensors in directory {0} ...", _directoryPath));
 
             var files = getFiles();
-            var sensors = new List<ISensor>();
+            var sensors = new List<ISensorBuilder>();
             foreach (string file in files)
             {
                 try
                 {
                     var types = Assembly.LoadFrom(file).GetTypes();
-                    var filterResult = types.Where(x => typeof(ISensor).IsAssignableFrom(x));
-                    bool sensorFoundButNotConfigured = filterResult.Any(x => !sensorNames.Contains(x.Name));
-                    int count = filterResult.Count(x => sensorNames.Contains(x.Name));
+                    var filterResult = types.Where(x => typeof(ISensorBuilder).IsAssignableFrom(x));
+                    bool sensorFoundButNotConfigured = filterResult.Any(x => !sensorNames.Contains(x.Name.Replace("Builder", "")));
+                    int count = filterResult.Count(x => sensorNames.Contains(x.Name.Replace("Builder", "")));
 
                     Logger.Debug(string.Format("Searching for sensor in {0}", file));
 
@@ -46,8 +46,8 @@ namespace AnAusAutomat.Core.Plugins
 
                     if (count >= 1)
                     {
-                        var sensorType = types.FirstOrDefault(x => typeof(ISensor).IsAssignableFrom(x));
-                        var sensor = Activator.CreateInstance(sensorType) as ISensor;
+                        var sensorType = types.FirstOrDefault(x => typeof(ISensorBuilder).IsAssignableFrom(x));
+                        var sensor = Activator.CreateInstance(sensorType) as ISensorBuilder;
 
                         Logger.Information(string.Format("Found {0} sensor.", sensorType.Name.Replace("Sensor", "")));
                         sensors.Add(sensor);

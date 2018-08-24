@@ -11,7 +11,7 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Tests.Internals
         public void GetSettings_DefaultValue()
         {
             var socket = new Socket(1, "Test");
-            var defaultSettings = SoundSnifferSettings.GetDefault();
+            var defaultSettings = SoundSocketSnifferSettings.GetDefault();
             var stateStore = new SoundSnifferStateStore();
 
             Assert.Equal(defaultSettings, stateStore.GetSettings(socket));
@@ -21,7 +21,7 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Tests.Internals
         public void GetSettings_SetAndGet()
         {
             var socket = new Socket(1, "Test");
-            var settings = new SoundSnifferSettings(TimeSpan.FromSeconds(50), TimeSpan.FromSeconds(7));
+            var settings = new SoundSocketSnifferSettings(TimeSpan.FromSeconds(50), TimeSpan.FromSeconds(7));
             var stateStore = new SoundSnifferStateStore();
             stateStore.SetSettings(socket, settings);
 

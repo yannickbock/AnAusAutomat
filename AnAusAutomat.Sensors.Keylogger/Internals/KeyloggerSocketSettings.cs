@@ -2,9 +2,9 @@
 
 namespace AnAusAutomat.Sensors.Keylogger.Internals
 {
-    public class KeyloggerSettings
+    public class KeyloggerSocketSettings
     {
-        public KeyloggerSettings(TimeSpan offDelay)
+        public KeyloggerSocketSettings(TimeSpan offDelay)
         {
             OffDelay = offDelay;
         }
@@ -21,9 +21,9 @@ namespace AnAusAutomat.Sensors.Keylogger.Internals
             return GetHashCode() == obj.GetHashCode();
         }
 
-        public static KeyloggerSettings GetDefault()
+        public static KeyloggerSocketSettings GetDefault()
         {
-            return new KeyloggerSettings(TimeSpan.FromSeconds(300));
+            return new KeyloggerSocketSettings(TimeSpan.FromSeconds(300));
         }
     }
 }

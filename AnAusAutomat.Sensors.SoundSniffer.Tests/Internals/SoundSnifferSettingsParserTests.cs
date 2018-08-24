@@ -12,7 +12,7 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Tests.Internals
         public void Parse_OffDelay()
         {
             var parser = new SoundSnifferSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>()
+            var result = parser.ParseSocketSettings(new List<SensorParameter>()
             {
                 new SensorParameter("OffDelaySeconds", "60")
             });
@@ -24,7 +24,7 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Tests.Internals
         public void Parse_MinimumSignalDuration()
         {
             var parser = new SoundSnifferSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>()
+            var result = parser.ParseSocketSettings(new List<SensorParameter>()
             {
                 new SensorParameter("MinimumSignalSeconds", "5")
             });
@@ -35,9 +35,9 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Tests.Internals
         [Fact]
         public void Parse_OffDelayNotDefined()
         {
-            var defaultSettings = SoundSnifferSettings.GetDefault();
+            var defaultSettings = SoundSocketSnifferSettings.GetDefault();
             var parser = new SoundSnifferSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>());
+            var result = parser.ParseSocketSettings(new List<SensorParameter>());
 
             Assert.Equal(defaultSettings.OffDelay, result.OffDelay);
         }
@@ -45,9 +45,9 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Tests.Internals
         [Fact]
         public void Parse_MinimumSignalDurationNotDefined()
         {
-            var defaultSettings = SoundSnifferSettings.GetDefault();
+            var defaultSettings = SoundSocketSnifferSettings.GetDefault();
             var parser = new SoundSnifferSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>());
+            var result = parser.ParseSocketSettings(new List<SensorParameter>());
 
             Assert.Equal(defaultSettings.MinimumSignalDuration, result.MinimumSignalDuration);
         }
@@ -55,9 +55,9 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Tests.Internals
         [Fact]
         public void Parse_OffDelayMultipleDefined()
         {
-            var defaultSettings = SoundSnifferSettings.GetDefault();
+            var defaultSettings = SoundSocketSnifferSettings.GetDefault();
             var parser = new SoundSnifferSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>()
+            var result = parser.ParseSocketSettings(new List<SensorParameter>()
             {
                 new SensorParameter("OffDelaySeconds", "60"),
                 new SensorParameter("OffDelaySeconds", "90")
@@ -69,9 +69,9 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Tests.Internals
         [Fact]
         public void Parse_MinimumSignalDurationMultipleDefined()
         {
-            var defaultSettings = SoundSnifferSettings.GetDefault();
+            var defaultSettings = SoundSocketSnifferSettings.GetDefault();
             var parser = new SoundSnifferSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>()
+            var result = parser.ParseSocketSettings(new List<SensorParameter>()
             {
                 new SensorParameter("MinimumSignalSeconds", "6"),
                 new SensorParameter("MinimumSignalSeconds", "2")
@@ -83,9 +83,9 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Tests.Internals
         [Fact]
         public void Parse_OffDelayInvalidValue()
         {
-            var defaultSettings = SoundSnifferSettings.GetDefault();
+            var defaultSettings = SoundSocketSnifferSettings.GetDefault();
             var parser = new SoundSnifferSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>()
+            var result = parser.ParseSocketSettings(new List<SensorParameter>()
             {
                 new SensorParameter("OffDelaySeconds", "-1")
             });
@@ -96,9 +96,9 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Tests.Internals
         [Fact]
         public void Parse_MinimumSignalDurationInvalidValue()
         {
-            var defaultSettings = SoundSnifferSettings.GetDefault();
+            var defaultSettings = SoundSocketSnifferSettings.GetDefault();
             var parser = new SoundSnifferSettingsParser();
-            var result = parser.Parse(new List<SensorParameter>()
+            var result = parser.ParseSocketSettings(new List<SensorParameter>()
             {
                 new SensorParameter("MinimumSignalSeconds", "-1")
             });

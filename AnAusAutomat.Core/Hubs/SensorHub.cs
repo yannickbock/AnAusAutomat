@@ -10,66 +10,43 @@ namespace AnAusAutomat.Core.Hubs
 {
     public class SensorHub
     {
-        private IStateStore _stateStore;
         private IEnumerable<ISensor> _sensors;
 
-        public SensorHub(IStateStore stateStore, IEnumerable<ISensor> sensors)
+        public SensorHub(IEnumerable<ISensor> sensors)
         {
-            _stateStore = stateStore;
             _sensors = sensors;
+
+            foreach (var sensor in _sensors)
+            {
+                assignEvents(sensor);
+            }
         }
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
+        public event EventHandler<ModeChangedEventArgs> ModeChanged;
         public event EventHandler<ApplicationExitEventArgs> ApplicationExit;
 
-        public void Initialize(IEnumerable<SensorSettings> settings)
+        private void assignEvents(ISensor sensor)
         {
-            foreach (var sensor in _sensors)
+            if (sensor != null)
             {
-                string sensorName = sensor.GetType().Name;
-                Logger.Information(string.Format("Initializing sensor {0} ...", sensorName));
+                sensor.StatusChanged += sensor_StatusChanged;
 
-                var s = settings.FirstOrDefault(x => x.SensorName == sensorName);
-
-                if (s != null)
+                if (sensor as ISendModeChanged != null)
                 {
-                    sensor.StatusChanged += sensor_StatusChanged;
-
-                    initializeFeatures(sensor);
-                    sensor.Initialize(s);
-                }
-            }
-        }
-
-        private void initializeFeatures(ISensor sensor)
-        {
-            bool hasSendModeChangedSupport = sensor as ISendModeChanged != null;
-            bool hasReceiveModeChangedSupport = sensor as IReceiveModeChanged != null;
-
-            if (hasSendModeChangedSupport || hasReceiveModeChangedSupport)
-            {
-                var modes = _stateStore.GetModes();
-
-                // Call InitializeModes() only once.
-                if (hasSendModeChangedSupport)
-                {
-                    ((ISendModeChanged)sensor).InitializeModes(modes);
                     ((ISendModeChanged)sensor).ModeChanged += sensor_ModeChanged;
                 }
-                else if (hasReceiveModeChangedSupport)
+                if (sensor as ISendStatusForecast != null)
                 {
-                    ((IReceiveModeChanged)sensor).InitializeModes(modes);
+                    ((ISendStatusForecast)sensor).StatusForecast += sensor_StatusForecast;
+                }
+                if (sensor as ISendExit != null)
+                {
+                    ((ISendExit)sensor).ApplicationExit += sensor_ApplicationExit;
                 }
             }
 
-            if (sensor as ISendStatusForecast != null)
-            {
-                ((ISendStatusForecast)sensor).StatusForecast += sensor_StatusForecast;
-            }
-            if (sensor as ISendExit != null)
-            {
-                ((ISendExit)sensor).ApplicationExit += sensor_ApplicationExit;
-            }
+            //TODO else logging.
         }
 
         private void sensor_ApplicationExit(object sender, ApplicationExitEventArgs e)
@@ -102,7 +79,7 @@ namespace AnAusAutomat.Core.Hubs
 
         private void sensor_ModeChanged(object sender, ModeChangedEventArgs e)
         {
-            _stateStore.SetModeState(e.Mode);
+            ModeChanged?.Invoke(sender, e);
 
             var sensorsWithReceiveModeChangedSupport = _sensors.Where(x => x as IReceiveModeChanged != null).Select(x => (IReceiveModeChanged)x).ToList();
             foreach (var sensor in sensorsWithReceiveModeChangedSupport)

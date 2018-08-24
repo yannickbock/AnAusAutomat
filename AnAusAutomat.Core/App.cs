@@ -19,15 +19,20 @@ namespace AnAusAutomat.Core
         private ConditionFilter _conditionFilter;
         private IStateStore _stateStore;
 
-        public App(IStateStore stateStore, SensorHub sensorHub, ControllerHub controllerHub, AppConfig appConfig)
+        public App(IStateStore stateStore, SensorHub sensorHub, ControllerHub controllerHub)
         {
             _stateStore = stateStore;
             _sensorHub = sensorHub;
             _controllerHub = controllerHub;
-            _appConfig = appConfig;
 
             _sensorHub.StatusChanged += _sensorHub_StatusChanged;
+            _sensorHub.ModeChanged += _sensorHub_ModeChanged;
             _sensorHub.ApplicationExit += _sensorHub_ApplicationExit;
+        }
+
+        private void _sensorHub_ModeChanged(object sender, ModeChangedEventArgs e)
+        {
+            _stateStore.SetModeState(e.Mode);
         }
 
         private void _sensorHub_ApplicationExit(object sender, ApplicationExitEventArgs e)
@@ -45,12 +50,7 @@ namespace AnAusAutomat.Core
             {
                 Logger.Information(string.Format("{0} = True", condition));
 
-                turnOnOrOff(
-                    socket: e.Socket,
-                    status: condition.ResultingStatus,
-                    condition: condition.Text,
-                    message: e.Message,
-                    sender: sender);
+                turnOnOrOff(e.Socket, condition.ResultingStatus, condition.Text, e.Message, sender);
 
                 var relatedConditions = _conditionFilter.FilterByRelatedSocket(e.Socket);
                 if (relatedConditions.Any())
@@ -59,24 +59,19 @@ namespace AnAusAutomat.Core
                     {
                         Logger.Information(string.Format("{0} = True", x));
 
-                        turnOnOrOff(
-                            x.Socket,
-                            x.ResultingStatus,
-                            x.Text,
-                            e.Message,
-                            sender);
+                        turnOnOrOff(x.Socket, x.ResultingStatus, x.Text, e.Message, sender);
                     }
                 }
             }
         }
 
-        public void Initialize()
+        public void Initialize(AppConfig appConfig)
         {
+            _appConfig = appConfig;
+
             var conditionCompiler = new ConditionCompiler();
             var conditions = conditionCompiler.Compile(_appConfig.Conditions.Where(x => x.Type == ConditionType.Regular));
             _conditionFilter = new ConditionFilter(_stateStore, conditions);
-
-            _sensorHub.Initialize(_appConfig.Sensors);
         }
 
         public void Start()
@@ -106,12 +101,7 @@ namespace AnAusAutomat.Core
         {
             foreach (var status in startupOrShutdownConditions)
             {
-                turnOnOrOff(
-                    socket: status.Socket,
-                    status: status.ResultingStatus,
-                    condition: status.Type.ToString(),
-                    message: "",
-                    sender: this);
+                turnOnOrOff(status.Socket, status.ResultingStatus, status.Type.ToString(), "", this);
             }
         }
 

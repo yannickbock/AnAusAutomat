@@ -20,7 +20,6 @@ namespace AnAusAutomat.ConsoleApp
             var appConfig = loadConfigurationOrExitApplicationOnError(commandLineOptions.ConfigurationFile);
 
             var app = AppFactory.Create(appConfig);
-            app.Initialize();
             app.Start();
 
             Console.CancelKeyPress += (sender, e) => { app.Stop(); };

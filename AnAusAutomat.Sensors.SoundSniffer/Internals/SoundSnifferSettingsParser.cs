@@ -8,16 +8,16 @@ namespace AnAusAutomat.Sensors.SoundSniffer.Internals
 {
     public class SoundSnifferSettingsParser
     {
-        private SoundSnifferSettings _defaultSettings;
+        private SoundSocketSnifferSettings _defaultSettings;
 
         public SoundSnifferSettingsParser()
         {
-            _defaultSettings = SoundSnifferSettings.GetDefault();
+            _defaultSettings = SoundSocketSnifferSettings.GetDefault();
         }
 
-        public SoundSnifferSettings Parse(IEnumerable<SensorParameter> parameters)
+        public SoundSocketSnifferSettings ParseSocketSettings(IEnumerable<SensorParameter> parameters)
         {
-            return new SoundSnifferSettings(
+            return new SoundSocketSnifferSettings(
                 offDelay: parseOffDelay(parameters),
                 minimumSignalDuration: parseMinimumSignalDuration(parameters));
         }
