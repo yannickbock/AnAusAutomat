@@ -12,10 +12,6 @@ using System.Timers;
 
 namespace AnAusAutomat.Sensors.SoundSniffer
 {
-    [Parameter("MinimumSignalSeconds", typeof(uint), "3")]
-    [Parameter("OffDelaySeconds", typeof(uint), "300")]
-    [Description("Fires turn on event after MinimumSignalSeconds of music without a break." +
-        "Fires turn off event after OffDelaySeconds without music.")]
     public class SoundSniffer : ISensor, ISendStatusForecast
     {
         private ISystemAudio _systemAudio;
