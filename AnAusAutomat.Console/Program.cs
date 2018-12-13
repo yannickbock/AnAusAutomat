@@ -4,6 +4,7 @@ using AnAusAutomat.Toolbox.Logging;
 using Serilog;
 using Serilog.Events;
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace AnAusAutomat.ConsoleApp
@@ -29,7 +30,9 @@ namespace AnAusAutomat.ConsoleApp
 
         private static void setConsoleOptions()
         {
-            Console.Title = "AnAusAutomat.Console";
+            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+            Console.Title = string.Format("AnAusAutomat.Console {0}", version);
             Console.WindowWidth = (int)(Console.LargestWindowWidth * 0.9);
             Console.WindowHeight = (int)(Console.LargestWindowHeight * 0.6);
         }
