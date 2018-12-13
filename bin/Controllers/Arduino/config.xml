@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+  <devices>
+    <!--TODO: numberOfConectRetries, ignoreConnectionLost(do not throw exception)-->
+    <device name="Frodo">
+     <pin socketId="1" name="Relay" logic="Negative">2</pin>
+     <pin socketId="1" name="LED" logic="Positive">9</pin>
+     <pin socketId="2" name="Relay" logic="Positive">3</pin>
+     <pin socketId="2" name="LED" logic="Positive">10</pin>
+     <pin socketId="3" name="Relay" logic="Positive">4</pin>
+     <pin socketId="3" name="LED" logic="Positive">11</pin>
+    </device>
+  </devices>
+</config>

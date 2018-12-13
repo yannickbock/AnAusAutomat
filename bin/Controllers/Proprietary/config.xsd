@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="config">
+    <xs:complexType>
+      <xs:all>
+
+        <xs:element name="devices">
+          <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="device">
+                <xs:complexType>
+
+                  <xs:sequence minOccurs="0" maxOccurs="unbounded">
+
+                    <xs:element name="mapping" minOccurs="0">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:integer">
+                            <xs:attribute name="socketId" type="xs:integer"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+
+                  </xs:sequence>
+
+                  <xs:attribute name="name" type="xs:string"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+      </xs:all>
+
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

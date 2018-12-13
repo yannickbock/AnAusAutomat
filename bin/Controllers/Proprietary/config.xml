@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+  <devices>
+    <!--<device name="Sam">
+      <mapping socketId="1">1</mapping>
+      <mapping socketId="2">2</mapping>
+      <mapping socketId="3">3</mapping>
+      <mapping socketId="4">4</mapping>
+    </device>-->
+  </devices>
+</config>
