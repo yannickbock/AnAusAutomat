@@ -18,7 +18,7 @@ namespace AnAusAutomat.Controllers.Serial.Internals
         {
             if (socketId < 0 || socketId > 63)
             {
-                throw new ArgumentOutOfRangeException("pin", socketId, "Value must be between 0 and 63.");
+                throw new ArgumentOutOfRangeException("socketId", socketId, "Value must be between 0 and 63.");
             }
 
             return new byte[] { Decrypt(Method.TurnOff, socketId) };
@@ -28,7 +28,7 @@ namespace AnAusAutomat.Controllers.Serial.Internals
         {
             if (socketId < 0 || socketId > 63)
             {
-                throw new ArgumentOutOfRangeException("pin", socketId, "Value must be between 0 and 63.");
+                throw new ArgumentOutOfRangeException("socketId", socketId, "Value must be between 0 and 63.");
             }
 
             return new byte[] { Decrypt(Method.TurnOn, socketId) };

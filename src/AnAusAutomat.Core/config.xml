@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <modes>
-    <mode active="true">Arbeit</mode>
-    <mode active="true">Musik</mode>
-    <mode active="false">Video</mode>
   </modes>
   <sensors>
     <sensor name="GUI">
@@ -11,73 +8,22 @@
     </sensor>
   </sensors>
   <sockets>
-    <socket id="1" name="Monitor">
+    <socket id="1" name="Dings">
       <sensors>
-        <sensor name="SoundSniffer">
-          <parameter name="MinimumSignalSeconds">5</parameter>
-          <parameter name="OffDelaySeconds">600</parameter>
-        </sensor>
-        <sensor name="Keylogger">
-          <parameter name="OffDelaySeconds">600</parameter>
-        </sensor>
         <sensor name="GUI" />
       </sensors>
       <conditions startupState="On" shutdownState="On">
-        <powerOn>Socket.IsOff AND (Keylogger.PowerOn OR GUI.PowerOn)</powerOn>
-        <powerOff mode="Arbeit">Socket.IsOn AND Keylogger.PowerOff</powerOff>
-        <powerOff mode="Musik">Socket.IsOn AND Keylogger.PowerOff AND (SoundSniffer.PowerOff OR SoundSniffer.Undefined)</powerOff>
-        <powerOff mode="Video">Socket.IsOn AND Keylogger.PowerOff AND (SoundSniffer.PowerOff OR SoundSniffer.Undefined)</powerOff>
-        <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
-      </conditions>
-    </socket>
-    <socket id="2" name="Verstärker">
-      <sensors>
-        <sensor name="SoundSniffer">
-          <parameter name="MinimumSignalSeconds">5</parameter>
-          <parameter name="OffDelaySeconds">900</parameter>
-        </sensor>
-        <sensor name="GUI" />
-      </sensors>
-      <conditions startupState="Off" shutdownState="Off">
-        <powerOn>Socket.IsOff AND SoundSniffer.PowerOn AND GUI.Undefined</powerOn>
-        <powerOff>Socket.IsOn AND SoundSniffer.PowerOff AND GUI.Undefined</powerOff>
         <powerOn>Socket.IsOff AND GUI.PowerOn</powerOn>
         <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
       </conditions>
     </socket>
-    <socket id="3" name="Lampe">
-      <sensors>
-        <sensor name="Keylogger">
-          <parameter name="OffDelaySeconds">570</parameter>
-        </sensor>
-        <sensor name="GUI" />
-      </sensors>
-      <conditions startupState="On" shutdownState="Off">
-        <powerOn>Socket.IsOff AND Keylogger.PowerOn AND GUI.Undefined</powerOn>
-        <powerOff>Socket.IsOn AND Keylogger.PowerOff AND GUI.Undefined</powerOff>
-        <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
-      </conditions>
-    </socket>
-    <socket id="4" name="Externe HDDs">
+    <socket id="2" name="Bums">
       <sensors>
         <sensor name="GUI" />
-        <sensor name="SoundSniffer">
-          <parameter name="MinimumSignalSeconds">5</parameter>
-          <parameter name="OffDelaySeconds">600</parameter>
-        </sensor>
-        <sensor name="TimeSwitch">
-          <parameter name="On">17:45:00</parameter>
-          <parameter name="Off">18:00:00</parameter>
-          <parameter name="On">18:15:00</parameter>
-          <parameter name="Off">18:30:00</parameter>
-        </sensor>
       </sensors>
-      <conditions startupState="Off" shutdownState="Off">
+      <conditions startupState="Off" shutdownState="On">
         <powerOn>Socket.IsOff AND GUI.PowerOn</powerOn>
-        <powerOn>Socket.IsOff AND TimeSwitch.PowerOn</powerOn>
-        <powerOff mode="Arbeit">Socket.IsOn AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
-        <powerOff mode="Musik">Socket.IsOn AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
-        <powerOff mode="Video">Socket.IsOn AND SoundSniffer.PowerOff AND (GUI.Undefined OR GUI.PowerOff)</powerOff>
+        <powerOff>Socket.IsOn AND GUI.PowerOff</powerOff>
       </conditions>
     </socket>
   </sockets>

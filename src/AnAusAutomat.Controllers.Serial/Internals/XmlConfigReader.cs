@@ -1,8 +1,5 @@
 ﻿using AnAusAutomat.Toolbox.Logging;
-using AnAusAutomat.Toolbox.Xml;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -10,46 +7,36 @@ namespace AnAusAutomat.Controllers.Serial.Internals
 {
     public class XmlConfigReader
     {
-        private string _schemaFilePath;
-        private string _configFilePath;
-        private XmlSchemaValidator _xmlSchemaValidator;
         private XDocument _xDocument;
 
-        public XmlConfigReader()
+        public XmlConfigReader(string configFilePath)
         {
-            string currentAssemblyFilePath = new Uri(typeof(XmlConfigReader).Assembly.CodeBase).LocalPath;
-            string currentAssemblyDirectoryPath = Path.GetDirectoryName(currentAssemblyFilePath);
-
-            _schemaFilePath = currentAssemblyDirectoryPath + "\\config.xsd";
-            _configFilePath = currentAssemblyDirectoryPath + "\\config.xml";
-
-            _xmlSchemaValidator = new XmlSchemaValidator(_schemaFilePath, _configFilePath);
-        }
-
-        public bool Validate()
-        {
-            return _xmlSchemaValidator.Validate(out string message);
+            _xDocument = XDocument.Load(configFilePath);
         }
 
         public IEnumerable<DeviceSettings> Read()
         {
             Logger.Information("Loading Serial controller settings ...");
-            _xDocument = XDocument.Load(_configFilePath);
-
+            
             return readDeviceSettings();
         }
 
         private IEnumerable<DeviceSettings> readDeviceSettings()
         {
-            return _xDocument.Root.Element("devices").Elements("device").Select(deviceNode =>
+            var deviceNodes = _xDocument.Root.Element("devices").Elements("device");
+            Logger.Debug(string.Format("Found settings for {0} device(s).", deviceNodes.Count()));
+
+            return deviceNodes.Select(deviceNode =>
             {
+                Logger.Information(string.Format("Reading settings for {0} ...", deviceNode.Attribute("name").Value));
+
                 return new DeviceSettings(
                     name: deviceNode.Attribute("name").Value,
-                    mapping: readPins(deviceNode));
+                    mapping: readMapping(deviceNode));
             }).ToList();
         }
 
-        private Dictionary<int, int> readPins(XElement deviceNode)
+        private Dictionary<int, int> readMapping(XElement deviceNode)
         {
             return deviceNode.Elements("mapping").ToDictionary(x => int.Parse(x.Attribute("socketId").Value), y => int.Parse(y.Value));
         }

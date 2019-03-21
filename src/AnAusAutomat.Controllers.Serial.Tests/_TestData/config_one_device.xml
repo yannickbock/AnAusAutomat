@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+  <devices>
+    <device name="Dings">
+      <mapping socketId="1">111</mapping>
+      <mapping socketId="2">222</mapping>
+    </device>
+  </devices>
+</config>
