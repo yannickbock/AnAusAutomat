@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Sensors.SoundS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Sensors.SoundSniffer.Tests", "AnAusAutomat.Sensors.SoundSniffer.Tests\AnAusAutomat.Sensors.SoundSniffer.Tests.csproj", "{B48F7E73-4253-4FF3-9976-B7F08B6C7D1F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Controllers.Serial.Tests", "AnAusAutomat.Controllers.Serial.Tests\AnAusAutomat.Controllers.Serial.Tests.csproj", "{5DA828D7-3EE2-4624-9925-DED82FDBAEAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,10 @@ Global
 		{B48F7E73-4253-4FF3-9976-B7F08B6C7D1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B48F7E73-4253-4FF3-9976-B7F08B6C7D1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B48F7E73-4253-4FF3-9976-B7F08B6C7D1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DA828D7-3EE2-4624-9925-DED82FDBAEAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DA828D7-3EE2-4624-9925-DED82FDBAEAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DA828D7-3EE2-4624-9925-DED82FDBAEAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DA828D7-3EE2-4624-9925-DED82FDBAEAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,6 +147,7 @@ Global
 		{C6CA9A1E-1B60-4344-B90E-2896B38DCA9A} = {DBC795B0-74D6-4C95-9274-4E692D7CF776}
 		{53DD49C7-DE34-4289-A8D3-5533C2369723} = {7B2DA60C-C912-4997-B90A-7BFD8E9C2C74}
 		{B48F7E73-4253-4FF3-9976-B7F08B6C7D1F} = {DBC795B0-74D6-4C95-9274-4E692D7CF776}
+		{5DA828D7-3EE2-4624-9925-DED82FDBAEAB} = {17CA8184-7B21-4EE5-AB9B-7216022368F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98FB91DA-8377-4531-B65D-986E71B016AA}
