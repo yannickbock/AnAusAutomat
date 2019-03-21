@@ -33,7 +33,7 @@ namespace AnAusAutomat.Controllers.Serial.Internals
 
         public IEnumerable<DeviceSettings> Read()
         {
-            Logger.Information("Loading proprietary controller settings ...");
+            Logger.Information("Loading Serial controller settings ...");
             _xDocument = XDocument.Load(_configFilePath);
 
             return readDeviceSettings();

@@ -121,7 +121,7 @@ namespace AnAusAutomat.Core.Hubs
             foreach (var sensor in _sensors)
             {
                 string sensorName = sensor.GetType().Name;
-                Logger.Information(string.Format("Starting sensor {0} ...", sensorName));
+                Logger.Information(string.Format("Starting {0} sensor ...", sensorName));
                 sensor.Start();
             }
         }
@@ -131,7 +131,7 @@ namespace AnAusAutomat.Core.Hubs
             foreach (var sensor in _sensors)
             {
                 string sensorName = sensor.GetType().Name;
-                Logger.Information(string.Format("Stopping sensor {0} ...", sensorName));
+                Logger.Information(string.Format("Stopping {0} sensor ...", sensorName));
                 sensor.Stop();
             }
         }
