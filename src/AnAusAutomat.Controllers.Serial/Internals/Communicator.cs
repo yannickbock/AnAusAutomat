@@ -39,8 +39,6 @@ namespace AnAusAutomat.Controllers.Serial.Internals
                     Thread.Sleep(15);
                     response = connection.ReadExisting();
                     connection.Close();
-
-                    Console.WriteLine(response);
                     
                     bool successful = parser.ParseHello(response, out string name, out IEnumerable<int> sockets);
                     if (successful)

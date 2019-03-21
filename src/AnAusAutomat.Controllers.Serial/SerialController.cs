@@ -1,6 +1,7 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Controller;
 using AnAusAutomat.Controllers.Serial.Internals;
+using AnAusAutomat.Toolbox.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace AnAusAutomat.Controllers.Serial
         private bool _activeFlag = false;
         private int _sessionId;
         private Dictionary<int, bool> _socketStates;
+
+        private bool _connectionLostMessageWritten = false;
 
         public IDevice Device { get; private set; }
 
@@ -77,18 +80,31 @@ namespace AnAusAutomat.Controllers.Serial
 
                 if (connectionLost)
                 {
+                    if (!_connectionLostMessageWritten)
+                    {
+                        Logger.Warning(String.Format("Connection to {0} lost.", _device.Name));
+                        _connectionLostMessageWritten = true;
+                    }
+
                     var device = _communicator.Search(_device.Name);
 
                     if (device != null)
                     {
+                        Logger.Information(String.Format("Establishing connection to {0} ...", _device.Name));
+
                         _device = device;
                         Connect();
                     }
                 }
                 else if (connectionRestored)
                 {
+                    Logger.Information(String.Format("Connection to {0} restored.", _device.Name));
+                    _connectionLostMessageWritten = false;
+
                     try
                     {
+                        Logger.Information(String.Format("Resending states to {0}.", _device.Name));
+
                         foreach (var socketState in _socketStates)
                         {
                             bool powerOn = socketState.Value;
