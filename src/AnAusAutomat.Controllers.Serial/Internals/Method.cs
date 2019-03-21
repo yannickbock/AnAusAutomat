@@ -1,4 +1,4 @@
-﻿namespace AnAusAutomat.Controllers.Proprietary.Internals
+﻿namespace AnAusAutomat.Controllers.Serial.Internals
 {
     public enum Method
     {

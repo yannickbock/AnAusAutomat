@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace AnAusAutomat.Controllers.Proprietary.Internals
+namespace AnAusAutomat.Controllers.Serial.Internals
 {
     public class Communicator
     {
@@ -17,18 +15,18 @@ namespace AnAusAutomat.Controllers.Proprietary.Internals
 
         }     
 
-        public ProprietaryDevice Search(string name)
+        public SerialDevice Search(string name)
         {
             var result = Search();
             return result.Any(x => x.Name == name) ? result.FirstOrDefault(x => x.Name == name) : null;
         }
 
-        public IEnumerable<ProprietaryDevice> Search()
+        public IEnumerable<SerialDevice> Search()
         {
             var bytes = ByteBuilder.Hello();
             var parser = new ResponseParser();
 
-            var list = new List<ProprietaryDevice>();
+            var list = new List<SerialDevice>();
             foreach (var serialPort in SerialPort.GetPortNames())
             {
                 var connection = buildConnection(serialPort);
@@ -47,7 +45,7 @@ namespace AnAusAutomat.Controllers.Proprietary.Internals
                     bool successful = parser.ParseHello(response, out string name, out IEnumerable<int> sockets);
                     if (successful)
                     {
-                        list.Add(new ProprietaryDevice(name, sockets, serialPort));
+                        list.Add(new SerialDevice(name, sockets, serialPort));
                     }
                 }
                 catch (Exception)

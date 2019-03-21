@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Sensors.TimeSw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Sensors.GUI", "AnAusAutomat.Sensors.GUI\AnAusAutomat.Sensors.GUI.csproj", "{A34959ED-EAB3-4046-8D25-B7B502D28A4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Controllers.Proprietary", "AnAusAutomat.Controllers.Proprietary\AnAusAutomat.Controllers.Proprietary.csproj", "{784B3D9E-6E49-41EF-BDD2-3557B58DE162}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Controllers.Serial", "AnAusAutomat.Controllers.Serial\AnAusAutomat.Controllers.Serial.csproj", "{784B3D9E-6E49-41EF-BDD2-3557B58DE162}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnAusAutomat.Controllers.Arduino.Tests", "AnAusAutomat.Controllers.Arduino.Tests\AnAusAutomat.Controllers.Arduino.Tests.csproj", "{0B94BB3E-CF81-418B-9BBB-34C5C74F52F5}"
 EndProject

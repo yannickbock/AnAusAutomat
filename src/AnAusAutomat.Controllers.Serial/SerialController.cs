@@ -1,17 +1,17 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Controller;
-using AnAusAutomat.Controllers.Proprietary.Internals;
+using AnAusAutomat.Controllers.Serial.Internals;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TimersTimer = System.Timers.Timer;
 
-namespace AnAusAutomat.Controllers.Proprietary
+namespace AnAusAutomat.Controllers.Serial
 {
-    public class ProprietaryController : IController
+    public class SerialController : IController
     {
         private DeviceSettings _settings;
-        private ProprietaryDevice _device;
+        private SerialDevice _device;
         private TimersTimer _timer;
 
         private Communicator _communicator;
@@ -22,7 +22,7 @@ namespace AnAusAutomat.Controllers.Proprietary
 
         public IDevice Device { get; private set; }
 
-        public ProprietaryController(DeviceSettings settings)
+        public SerialController(DeviceSettings settings)
         {
             _settings = settings;
             _communicator = new Communicator();

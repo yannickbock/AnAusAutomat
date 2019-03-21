@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnAusAutomat.Controllers.Proprietary.Internals
+namespace AnAusAutomat.Controllers.Serial.Internals
 {
     public static class ByteBuilder
     {

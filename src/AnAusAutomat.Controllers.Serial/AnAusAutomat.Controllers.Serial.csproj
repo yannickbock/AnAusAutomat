@@ -7,8 +7,8 @@
     <ProjectGuid>{784B3D9E-6E49-41EF-BDD2-3557B58DE162}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AnAusAutomat.Controllers.Proprietary</RootNamespace>
-    <AssemblyName>Proprietary</AssemblyName>
+    <RootNamespace>AnAusAutomat.Controllers.Serial</RootNamespace>
+    <AssemblyName>Serial</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\_bin\Controllers\Proprietary\</OutputPath>
+    <OutputPath>..\_bin\Controllers\Serial\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -43,15 +43,14 @@
   <ItemGroup>
     <Compile Include="Internals\ByteBuilder.cs" />
     <Compile Include="Internals\Communicator.cs" />
-    <Compile Include="Internals\Device.cs" />
     <Compile Include="Internals\DeviceSettings.cs" />
     <Compile Include="Internals\Method.cs" />
-    <Compile Include="Internals\ProprietaryDevice.cs" />
+    <Compile Include="Internals\SerialDevice.cs" />
     <Compile Include="Internals\ResponseParser.cs" />
     <Compile Include="Internals\XmlConfigReader.cs" />
-    <Compile Include="ProprietaryController.cs" />
+    <Compile Include="SerialController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProprietaryControllerFactory.cs" />
+    <Compile Include="SerialControllerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AnAusAutomat.Contracts\AnAusAutomat.Contracts.csproj">

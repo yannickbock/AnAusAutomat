@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AnAusAutomat.Controllers.Proprietary.Internals
+namespace AnAusAutomat.Controllers.Serial.Internals
 {
     public class ResponseParser
     {

@@ -11,9 +11,12 @@ typedef struct
   int Id;
   int OutputPin;
   int InputPin;
+  int LEDRedPin;
+  int LEDBluePin;
+  int LEDGreenPin;
 } Socket;
 
-Socket Sockets[4];
+Socket Sockets[2];
 String DeviceName;
 String NO_NOT_DELETE; // else you can´t concat strings... very strange...
 int NumberOfSockets;
@@ -21,23 +24,21 @@ long SessionId;
 
 void setup()
 {
-  DeviceName = "Sam";
+  DeviceName = "Bilbo";
 
   Sockets[0].Id = 1;
-  Sockets[0].InputPin = 5;
-  Sockets[0].OutputPin = 6;
+  Sockets[0].InputPin = 12;
+  Sockets[0].OutputPin = 10;
+  Sockets[0].LEDBluePin = 8;
+  Sockets[0].LEDRedPin = 7;
+  Sockets[0].LEDGreenPin = 6;
 
   Sockets[1].Id = 2;
-  Sockets[1].InputPin = 7;
-  Sockets[1].OutputPin = 8;
-
-  Sockets[2].Id = 3;
-  Sockets[2].InputPin = 9;
-  Sockets[2].OutputPin = 10;
-
-  Sockets[3].Id = 4;
-  Sockets[3].InputPin = 11;
-  Sockets[3].OutputPin = 12;
+  Sockets[1].InputPin = 11;
+  Sockets[1].OutputPin = 9;
+  Sockets[1].LEDBluePin = 5;
+  Sockets[1].LEDRedPin = 4;
+  Sockets[1].LEDGreenPin = 3;
 
   setupSockets();
   generateSessionId();
@@ -61,6 +62,13 @@ void setupSockets()
   {
     pinMode(Sockets[i].OutputPin, OUTPUT);
     pinMode(Sockets[i].InputPin, INPUT);
+
+    pinMode(Sockets[i].LEDBluePin, OUTPUT);
+    pinMode(Sockets[i].LEDRedPin, OUTPUT);
+    pinMode(Sockets[i].LEDGreenPin, OUTPUT);
+
+delay(10);
+    switchSocket(Sockets[i].Id, digitalRead(Sockets[i].InputPin));
   }
 }
 
@@ -119,6 +127,10 @@ bool switchSocket(int id, bool powerOn)
   bool switchToHigh = powerOn != isActiveLow;
 
   digitalWrite(socket.OutputPin, switchToHigh);
+
+  //digitalWrite(socket.LEDGreenPin, powerOn);
+  //digitalWrite(socket.LEDBluePin, powerOn);
+  digitalWrite(socket.LEDRedPin, powerOn);
 
   return digitalReadOutputPin(socket.OutputPin) == switchToHigh;
 }

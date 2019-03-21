@@ -1,12 +1,12 @@
 ﻿using AnAusAutomat.Contracts.Controller;
-using AnAusAutomat.Controllers.Proprietary.Internals;
+using AnAusAutomat.Controllers.Serial.Internals;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 
-namespace AnAusAutomat.Controllers.Proprietary
+namespace AnAusAutomat.Controllers.Serial
 {
-    public class ProprietaryControllerFactory : IControllerFactory
+    public class SerialControllerFactory : IControllerFactory
     {
         public IEnumerable<IController> Create()
         {
@@ -16,12 +16,12 @@ namespace AnAusAutomat.Controllers.Proprietary
 
             if (!isValid)
             {
-                throw new ConfigurationErrorsException("Proprietary controller configuration is not valid.");
+                throw new ConfigurationErrorsException("Serial controller configuration is not valid.");
             }
 
             var devices = xmlConfigReader.Read();
 
-            return devices.Select(x => new ProprietaryController(x)).ToList();
+            return devices.Select(x => new SerialController(x)).ToList();
         }
     }
 }

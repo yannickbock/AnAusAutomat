@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace AnAusAutomat.Controllers.Proprietary.Internals
+namespace AnAusAutomat.Controllers.Serial.Internals
 {
     public class XmlConfigReader
     {

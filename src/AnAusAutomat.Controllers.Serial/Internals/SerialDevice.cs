@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AnAusAutomat.Controllers.Proprietary.Internals
+namespace AnAusAutomat.Controllers.Serial.Internals
 {
-    public class ProprietaryDevice : IEquatable<ProprietaryDevice>
+    public class SerialDevice : IEquatable<SerialDevice>
     {
-        public ProprietaryDevice(string name, IEnumerable<int> socketIDs, string serialPort)
+        public SerialDevice(string name, IEnumerable<int> socketIDs, string serialPort)
         {
             Name = name;
             SerialPort = serialPort;
@@ -18,7 +18,7 @@ namespace AnAusAutomat.Controllers.Proprietary.Internals
 
         public string SerialPort { get; private set; }
 
-        public bool Equals(ProprietaryDevice other)
+        public bool Equals(SerialDevice other)
         {
             return Name == other.Name && SerialPort == other.SerialPort;
         }

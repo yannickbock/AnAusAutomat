@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AnAusAutomat.Controllers.Proprietary.Internals
+namespace AnAusAutomat.Controllers.Serial.Internals
 {
     public class DeviceSettings
     {
