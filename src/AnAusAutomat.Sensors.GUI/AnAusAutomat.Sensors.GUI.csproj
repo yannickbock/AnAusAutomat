@@ -51,6 +51,9 @@
     <Compile Include="Internals\Events\ModeOnClickEventArgs.cs" />
     <Compile Include="Internals\Events\MoreOptionsOnClickEventArgs.cs" />
     <Compile Include="Internals\Events\StatusOnClickEventArgs.cs" />
+    <Compile Include="Internals\HotKeys\HotKeyEventArgs.cs" />
+    <Compile Include="Internals\HotKeys\HotKeyNotifier.cs" />
+    <Compile Include="Internals\HotKeys\KeyModifiers.cs" />
     <Compile Include="Internals\Scheduling\Events\ScheduledTaskReadyEventArgs.cs" />
     <Compile Include="Internals\Scheduling\ScheduledTask.cs" />
     <Compile Include="Internals\Scheduling\Scheduler.cs" />
