@@ -1,5 +1,4 @@
 ﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Sensors.GUI.Internals.Events;
 using AnAusAutomat.Sensors.GUI.Properties;
 using System;
 using System.Collections.Generic;
@@ -7,9 +6,9 @@ using System.Linq;
 using System.Windows.Forms;
 using SensorPowerStatus = AnAusAutomat.Contracts.PowerStatus;
 
-namespace AnAusAutomat.Sensors.GUI.Internals
+namespace AnAusAutomat.Sensors.GUI.TrayIcon
 {
-    public class TrayIcon
+    public class TrayIconMenu : ITrayIconMenu
     {
         private NotifyIcon _notifyIcon;
         private Translation _translation;
@@ -22,7 +21,7 @@ namespace AnAusAutomat.Sensors.GUI.Internals
 
         public event EventHandler<ExitOnClickEventArgs> ExitOnClick;
 
-        public TrayIcon(NotifyIcon notifyIcon, Translation translation)
+        public TrayIconMenu(NotifyIcon notifyIcon, Translation translation)
         {
             _notifyIcon = notifyIcon;
             _translation = translation;

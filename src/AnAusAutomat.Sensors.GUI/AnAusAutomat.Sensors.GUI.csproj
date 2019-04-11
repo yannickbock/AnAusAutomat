@@ -44,24 +44,33 @@
   <ItemGroup>
     <Compile Include="GUI.cs" />
     <Compile Include="GUIBuilder.cs" />
-    <Compile Include="Internals\Dialogs\ComboBoxScheduleItem.cs" />
-    <Compile Include="Internals\Dialogs\MoreOptionsDialog.cs" />
-    <Compile Include="Internals\Dialogs\MoreOptionsDialogResult.cs" />
-    <Compile Include="Internals\Events\ExitOnClickEventArgs.cs" />
-    <Compile Include="Internals\Events\ModeOnClickEventArgs.cs" />
-    <Compile Include="Internals\Events\MoreOptionsOnClickEventArgs.cs" />
-    <Compile Include="Internals\Events\StatusOnClickEventArgs.cs" />
-    <Compile Include="Internals\HotKeys\HotKeyEventArgs.cs" />
-    <Compile Include="Internals\HotKeys\HotKeyNotifier.cs" />
-    <Compile Include="Internals\HotKeys\KeyModifiers.cs" />
-    <Compile Include="Internals\Scheduling\Events\ScheduledTaskReadyEventArgs.cs" />
-    <Compile Include="Internals\Scheduling\ScheduledTask.cs" />
-    <Compile Include="Internals\Scheduling\Scheduler.cs" />
-    <Compile Include="Internals\Settings.cs" />
-    <Compile Include="Internals\SettingsParser.cs" />
-    <Compile Include="Internals\Translations.cs" />
-    <Compile Include="Internals\TrayIcon.cs" />
-    <Compile Include="Internals\TrayIconBuilder.cs" />
+    <Compile Include="Dialogs\ComboBoxScheduleItem.cs" />
+    <Compile Include="Dialogs\MoreOptionsDialog.cs" />
+    <Compile Include="Dialogs\MoreOptionsDialogResult.cs" />
+    <Compile Include="HotKeys\HotKeyPressedEventArgs.cs" />
+    <Compile Include="HotKeys\IHotKeyHandler.cs" />
+    <Compile Include="HotKeys\IHotKeyNotifier.cs" />
+    <Compile Include="ITranslation.cs" />
+    <Compile Include="Scheduling\IScheduler.cs" />
+    <Compile Include="TrayIcon\ExitOnClickEventArgs.cs" />
+    <Compile Include="TrayIcon\ITrayIconMenu.cs" />
+    <Compile Include="TrayIcon\ModeOnClickEventArgs.cs" />
+    <Compile Include="TrayIcon\MoreOptionsOnClickEventArgs.cs" />
+    <Compile Include="TrayIcon\StatusOnClickEventArgs.cs" />
+    <Compile Include="HotKeys\HotKey.cs" />
+    <Compile Include="HotKeys\HotKeyEventArgs.cs" />
+    <Compile Include="HotKeys\HotKeyHandler.cs" />
+    <Compile Include="HotKeys\HotKeyNotifier.cs" />
+    <Compile Include="HotKeys\HotKeySettings.cs" />
+    <Compile Include="HotKeys\KeyModifiers.cs" />
+    <Compile Include="Scheduling\ScheduledTaskReadyEventArgs.cs" />
+    <Compile Include="Scheduling\ScheduledTask.cs" />
+    <Compile Include="Scheduling\Scheduler.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="SettingsParser.cs" />
+    <Compile Include="Translations.cs" />
+    <Compile Include="TrayIcon\TrayIconMenu.cs" />
+    <Compile Include="TrayIcon\TrayIconMenuBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -73,6 +82,10 @@
     <ProjectReference Include="..\AnAusAutomat.Contracts\AnAusAutomat.Contracts.csproj">
       <Project>{7AFB88F5-83CC-4B32-87D6-2B45F26570BD}</Project>
       <Name>AnAusAutomat.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnAusAutomat.Toolbox\AnAusAutomat.Toolbox.csproj">
+      <Project>{6ACA9411-7251-48D4-B764-87FB96D0EF15}</Project>
+      <Name>AnAusAutomat.Toolbox</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

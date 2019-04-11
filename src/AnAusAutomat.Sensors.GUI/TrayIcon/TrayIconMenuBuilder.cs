@@ -6,14 +6,14 @@ using System.Linq;
 using System.Windows.Forms;
 using SensorPowerStatus = AnAusAutomat.Contracts.PowerStatus;
 
-namespace AnAusAutomat.Sensors.GUI.Internals
+namespace AnAusAutomat.Sensors.GUI.TrayIcon
 {
-    public class TrayIconBuilder
+    public class TrayIconMenuBuilder
     {
         private Translation _translation;
         private List<ToolStripItem> _notifyIconItems = new List<ToolStripItem>();
 
-        public TrayIconBuilder(Translation translation)
+        public TrayIconMenuBuilder(Translation translation)
         {
             _translation = translation;
         }
@@ -135,12 +135,12 @@ namespace AnAusAutomat.Sensors.GUI.Internals
             _notifyIconItems.Add(new ToolStripSeparator());
         }
 
-        public TrayIcon Build()
+        public TrayIconMenu Build()
         {
             var notifyIcon = createNotifyIcon();
             notifyIcon.ContextMenuStrip.Items.AddRange(_notifyIconItems.ToArray());
 
-            return new TrayIcon(notifyIcon, _translation);
+            return new TrayIconMenu(notifyIcon, _translation);
         }
     }
 }

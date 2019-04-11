@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <config>
   <devices>
-    <device name="Bilbo">
+    <!--<device name="Bilbo">
       <mapping socketId="1">1</mapping>
       <mapping socketId="2">2</mapping>
-    </device>
+    </device>-->
   </devices>
 </config>

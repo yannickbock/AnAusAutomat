@@ -5,12 +5,17 @@
   <sensors>
     <sensor name="GUI">
       <parameter name="StartMinimized">True</parameter>
+      <parameter name="PowerOnHotKey">Alt + F5</parameter>
+      <parameter name="PowerOffHotKey">Alt + F6</parameter>
+      <parameter name="UndefinedHotKey">Alt + F7</parameter>
     </sensor>
   </sensors>
   <sockets>
     <socket id="1" name="Dings">
       <sensors>
-        <sensor name="GUI" />
+        <sensor name="GUI">
+          <parameter name="HotKey">Alt + 1</parameter>
+        </sensor>
       </sensors>
       <conditions startupState="On" shutdownState="On">
         <powerOn>Socket.IsOff AND GUI.PowerOn</powerOn>

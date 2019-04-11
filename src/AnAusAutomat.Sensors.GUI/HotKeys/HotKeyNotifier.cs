@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace AnAusAutomat.Sensors.GUI.Internals.HotKeys
+namespace AnAusAutomat.Sensors.GUI.HotKeys
 {
-    public class HotKeyNotifier
+    public class HotKeyNotifier : IHotKeyNotifier
     {
         private static int _id = 0;
         private static volatile MessageWindow _wnd;
@@ -32,7 +32,7 @@ namespace AnAusAutomat.Sensors.GUI.Internals.HotKeys
             messageLoop.Start();
         }
 
-        public int RegisterHotKey(Keys key, KeyModifiers modifiers)
+        public int RegisterHotKey(KeyModifiers modifiers, Keys key)
         {
             _windowReadyEvent.WaitOne();
             int id = Interlocked.Increment(ref _id);

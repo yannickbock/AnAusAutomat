@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnAusAutomat.Sensors.GUI.Internals.Scheduling.Events
+namespace AnAusAutomat.Sensors.GUI.Scheduling
 {
     public class ScheduledTaskReadyEventArgs : EventArgs
     {

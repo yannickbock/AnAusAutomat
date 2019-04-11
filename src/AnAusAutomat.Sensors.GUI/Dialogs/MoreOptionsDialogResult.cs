@@ -1,8 +1,7 @@
 ﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Contracts.Sensor;
 using System;
 
-namespace AnAusAutomat.Sensors.GUI.Internals.Dialogs
+namespace AnAusAutomat.Sensors.GUI.Dialogs
 {
     public class MoreOptionsDialogResult
     {

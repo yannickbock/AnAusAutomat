@@ -1,8 +1,7 @@
 ﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Contracts.Sensor;
 using System;
 
-namespace AnAusAutomat.Sensors.GUI.Internals.Events
+namespace AnAusAutomat.Sensors.GUI.TrayIcon
 {
     public class StatusOnClickEventArgs : EventArgs
     {

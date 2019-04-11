@@ -1,8 +1,7 @@
 ﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Contracts.Sensor;
 using System;
 
-namespace AnAusAutomat.Sensors.GUI.Internals.Scheduling
+namespace AnAusAutomat.Sensors.GUI.Scheduling
 {
     public class ScheduledTask
     {

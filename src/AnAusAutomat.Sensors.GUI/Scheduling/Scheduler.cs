@@ -1,12 +1,11 @@
-﻿using AnAusAutomat.Sensors.GUI.Internals.Scheduling.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 
-namespace AnAusAutomat.Sensors.GUI.Internals.Scheduling
+namespace AnAusAutomat.Sensors.GUI.Scheduling
 {
-    public class Scheduler
+    public class Scheduler : IScheduler
     {
         private Timer _timer;
         private List<ScheduledTask> _scheduledTasks;

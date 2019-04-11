@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AnAusAutomat.Sensors.GUI.Internals.HotKeys
+namespace AnAusAutomat.Sensors.GUI.HotKeys
 {
     public class HotKeyEventArgs : EventArgs
     {
-        public readonly Keys Key;
-        public readonly KeyModifiers Modifiers;
+        public Keys Key { get; private set; }
+        public KeyModifiers Modifiers { get; private set; }
 
         public HotKeyEventArgs(Keys key, KeyModifiers modifiers)
         {

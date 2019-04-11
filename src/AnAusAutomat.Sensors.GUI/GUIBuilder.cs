@@ -1,5 +1,8 @@
 ﻿using AnAusAutomat.Contracts;
 using AnAusAutomat.Contracts.Sensor;
+using AnAusAutomat.Sensors.GUI.HotKeys;
+using AnAusAutomat.Sensors.GUI.Scheduling;
+using AnAusAutomat.Sensors.GUI.TrayIcon;
 using System.Collections.Generic;
 
 namespace AnAusAutomat.Sensors.GUI
@@ -34,7 +37,26 @@ namespace AnAusAutomat.Sensors.GUI
 
         public ISensor Build()
         {
-            return new GUI(_sockets.Keys, _modes);
+            var parser = new SettingsParser(_parameters, _sockets);
+            var settings = parser.Parse();
+
+            var translation = new Translation();
+            var scheduler = new Scheduler();
+
+            var builder = new TrayIconMenuBuilder(translation);
+            foreach (var socket in _sockets)
+            {
+                builder.AddSocketStrip(socket.Key);
+            }
+            builder.AddSeparatorStrip();
+            builder.AddModeStrip(_modes);
+            builder.AddSeparatorStrip();
+            builder.AddExitStrip();
+            var trayIcon = builder.Build();
+
+            var hotKeyHandler = new HotKeyHandler(new HotKeyNotifier(), settings.HotKeys);
+
+            return new GUI(translation, scheduler, trayIcon, hotKeyHandler);
         }
     }
 }

@@ -4,14 +4,14 @@ using System.Drawing;
 using System.Windows.Forms;
 using SensorPowerStatus = AnAusAutomat.Contracts.PowerStatus;
 
-namespace AnAusAutomat.Sensors.GUI.Internals.Dialogs
+namespace AnAusAutomat.Sensors.GUI.Dialogs
 {
     public class MoreOptionsDialog
     {
         private readonly Font regularFont = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
         private readonly Font boldFont = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
 
-        private Translation _translation;
+        private ITranslation _translation;
         private Form _form;
         private Button _btnOn;
         private Button _btnOff;
@@ -23,7 +23,7 @@ namespace AnAusAutomat.Sensors.GUI.Internals.Dialogs
         private SensorPowerStatus _status;
         private TimeSpan _timeSpan;
 
-        public MoreOptionsDialog(Translation translation)
+        public MoreOptionsDialog(ITranslation translation)
         {
             _translation = translation;
         }

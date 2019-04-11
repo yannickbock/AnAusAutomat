@@ -5,9 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 
-namespace AnAusAutomat.Sensors.GUI.Internals
+namespace AnAusAutomat.Sensors.GUI
 {
-    public class Translation
+    public class Translation : ITranslation
     {
         private CultureInfo _culture;
 

@@ -1,14 +1,11 @@
-﻿using AnAusAutomat.Contracts;
-using AnAusAutomat.Contracts.Sensor;
+﻿using AnAusAutomat.Contracts.Sensor;
 using AnAusAutomat.Contracts.Sensor.Events;
 using AnAusAutomat.Contracts.Sensor.Features;
-using AnAusAutomat.Sensors.GUI.Internals;
-using AnAusAutomat.Sensors.GUI.Internals.Dialogs;
-using AnAusAutomat.Sensors.GUI.Internals.Events;
-using AnAusAutomat.Sensors.GUI.Internals.Scheduling;
-using AnAusAutomat.Sensors.GUI.Internals.Scheduling.Events;
+using AnAusAutomat.Sensors.GUI.Dialogs;
+using AnAusAutomat.Sensors.GUI.HotKeys;
+using AnAusAutomat.Sensors.GUI.Scheduling;
+using AnAusAutomat.Sensors.GUI.TrayIcon;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace AnAusAutomat.Sensors.GUI
@@ -19,32 +16,31 @@ namespace AnAusAutomat.Sensors.GUI
         public event EventHandler<ModeChangedEventArgs> ModeChanged;
         public event EventHandler<ApplicationExitEventArgs> ApplicationExit;
 
-        private TrayIcon _trayIcon;
-        private Translation _translation;
-        private Scheduler _scheduler;
+        private ITranslation _translation;
+        private IScheduler _scheduler;
+        private ITrayIconMenu _trayIcon;
+        private IHotKeyHandler _hotKeyHandler;
 
-        public GUI(IEnumerable<Socket> sockets, IEnumerable<ConditionMode> modes)
+        public GUI(ITranslation translation, IScheduler scheduler, ITrayIconMenu trayIcon, IHotKeyHandler hotKeyHandler)
         {
-            _translation = new Translation();
+            _translation = translation;
+            _scheduler = scheduler;
+            _trayIcon = trayIcon;
+            _hotKeyHandler = hotKeyHandler;
 
-            var builder = new TrayIconBuilder(_translation);
-            foreach (var socket in sockets)
-            {
-                builder.AddSocketStrip(socket);
-            }
-            builder.AddSeparatorStrip();
-            builder.AddModeStrip(modes);
-            builder.AddSeparatorStrip();
-            builder.AddExitStrip();
+            _scheduler.ScheduledTaskReady += _scheduler_ScheduledTaskReady;
 
-            _trayIcon = builder.Build();
             _trayIcon.ModeOnClick += _trayIcon_ModeOnClick;
             _trayIcon.ExitOnClick += _trayIcon_ExitOnClick;
             _trayIcon.StatusOnClick += _trayIcon_StatusOnClick;
             _trayIcon.MoreOptionsOnClick += _trayIcon_MoreOptionsOnClick;
 
-            _scheduler = new Scheduler();
-            _scheduler.ScheduledTaskReady += _scheduler_ScheduledTaskReady;
+            _hotKeyHandler.HotKeyPressed += _hotKeyHandler_HotKeyPressed;
+        }
+
+        private void _hotKeyHandler_HotKeyPressed(object sender, HotKeyPressedEventArgs e)
+        {
+            StatusChanged?.Invoke(this, new StatusChangedEventArgs("HotKey.", "", e.Socket, e.Status));
         }
 
         private void _scheduler_ScheduledTaskReady(object sender, ScheduledTaskReadyEventArgs e)
@@ -68,7 +64,7 @@ namespace AnAusAutomat.Sensors.GUI
 
         private void _trayIcon_StatusOnClick(object sender, StatusOnClickEventArgs e)
         {
-            StatusChanged?.Invoke(this, new StatusChangedEventArgs("", "", e.Socket, e.Status));
+            StatusChanged?.Invoke(this, new StatusChangedEventArgs("TrayIcon.", "", e.Socket, e.Status));
         }
 
         private void _trayIcon_ExitOnClick(object sender, ExitOnClickEventArgs e)
@@ -111,12 +107,14 @@ namespace AnAusAutomat.Sensors.GUI
         {
             _trayIcon.Show();
             _scheduler.Start();
+            _hotKeyHandler.Start();
         }
 
         public void Stop()
         {
             _trayIcon.Hide();
             _scheduler.Stop();
+            _hotKeyHandler.Stop();
         }
     }
 }
